@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绛唇解语花 - VR虚拟现实训练</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #vr-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .vr-enter-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .vr-logo {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .vr-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .vr-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .vr-enter-btn {
+            padding: 18px 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .vr-enter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .vr-requirements {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .vr-requirements p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .vr-hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        .vr-hud.active {
+            display: block;
+        }
+
+        .vr-crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+
+        .vr-crosshair::before,
+        .vr-crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .vr-crosshair::before {
+            top: 50%;
+            left: -10px;
+            right: -10px;
+            height: 2px;
+            transform: translateY(-50%);
+        }
+
+        .vr-crosshair::after {
+            left: 50%;
+            top: -10px;
+            bottom: -10px;
+            width: 2px;
+            transform: translateX(-50%);
+        }
+
+        .vr-info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 250px;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .vr-info-title {
+            font-size: 16px;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .vr-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .vr-info-value {
+            color: #feca57;
+            font-weight: bold;
+        }
+
+        .vr-menu {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .vr-menu-item {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vr-menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ff6b9d;
+            transform: translateY(-5px);
+        }
+
+        .vr-menu-item.active {
+            background: linear-gradient(135deg, #ff6b9d 0%, #feca57 100%);
+            border-color: transparent;
+        }
+
+        .vr-menu-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .vr-menu-label {
+            font-size: 10px;
+        }
+
+        .vr-controls-hint {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 200px;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .vr-control-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .vr-control-key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .vr-training-mode {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c471ed 100%);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: auto;
+        }
+
+        .vr-score {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .vr-score-title {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .vr-score-value {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #feca57 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vr-hand-controller {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .vr-hand-controller.left {
+            border: 2px solid #4a90e2;
+        }
+
+        .vr-hand-controller.right {
+            border: 2px solid #ff6b9d;
+        }
+
+        .vr-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 50px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff6b9d;
+            display: none;
+            pointer-events: auto;
+        }
+
+        .vr-notification.show {
+            display: block;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .vr-notification-title {
+            font-size: 24px;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .vr-notification-text {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .vr-split-view {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .vr-split-view.active {
+            display: flex;
+        }
+
+        .vr-eye-view {
+            flex: 1;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vr-eye-view canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .vr-divider {
+            width: 2px;
+            height: 100%;
+            background: #000;
+        }
+
+        @media (max-width: 768px) {
+            .vr-enter-btn {
+                padding: 15px 40px;
+                font-size: 16px;
+            }
+
+            .vr-title {
+                font-size: 28px;
+            }
+
+            .vr-subtitle {
+                font-size: 16px;
+            }
+
+            .vr-controls-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="vr-container">
+        <!-- VR入口界面 -->
+        <div class="vr-enter-screen" id="vr-enter">
+            <div class="vr-logo">🥽</div>
+            <h1 class="vr-title">VR训练模式</h1>
+            <p class="vr-subtitle">沉浸式唇部美容注射训练系统</p>
+            <button class="vr-enter-btn" onclick="enterVR()">进入VR模式</button>
+
+            <div class="vr-requirements">
+                <p>支持设备：Meta Quest、HTC Vive、Pico等</p>
+                <p>也可使用手机VR盒子体验</p>
+            </div>
+        </div>
+
+        <!-- VR分屏视图 -->
+        <div class="vr-split-view" id="vr-split">
+            <div class="vr-eye-view" id="left-eye"></div>
+            <div class="vr-divider"></div>
+            <div class="vr-eye-view" id="right-eye"></div>
+        </div>
+
+        <!-- VR HUD界面 -->
+        <div class="vr-hud" id="vr-hud">
+            <div class="vr-crosshair"></div>
+
+            <div class="vr-info-panel">
+                <div class="vr-info-title">训练信息</div>
+                <div class="vr-info-item">
+                    <span>当前工具：</span>
+                    <span class="vr-info-value">注射器</span>
+                </div>
+                <div class="vr-info-item">
+                    <span>填充剂：</span>
+                    <span class="vr-info-value">玻尿酸</span>
+                </div>
+                <div class="vr-info-item">
+                    <span>剩余量：</span>
+                    <span class="vr-info-value">0.8ml</span>
+                </div>
+                <div class="vr-info-item">
+                    <span>注射深度：</span>
+                    <span class="vr-info-value">2.5mm</span>
+                </div>
+            </div>
+
+            <div class="vr-training-mode">
+                🎯 基础注射训练
+            </div>
+
+            <div class="vr-score">
+                <div class="vr-score-title">准确度</div>
+                <div class="vr-score-value">95%</div>
+            </div>
+
+            <div class="vr-menu">
+                <div class="vr-menu-item active" data-tool="syringe">
+                    <span class="vr-menu-icon">💉</span>
+                    <span class="vr-menu-label">注射器</span>
+                </div>
+                <div class="vr-menu-item" data-tool="marker">
+                    <span class="vr-menu-icon">✏️</span>
+                    <span class="vr-menu-label">标记</span>
+                </div>
+                <div class="vr-menu-item" data-tool="measure">
+                    <span class="vr-menu-icon">📏</span>
+                    <span class="vr-menu-label">测量</span>
+                </div>
+                <div class="vr-menu-item" data-tool="xray">
+                    <span class="vr-menu-icon">🔍</span>
+                    <span class="vr-menu-label">透视</span>
+                </div>
+                <div class="vr-menu-item" data-tool="info">
+                    <span class="vr-menu-icon">ℹ️</span>
+                    <span class="vr-menu-label">信息</span>
+                </div>
+            </div>
+
+            <div class="vr-controls-hint">
+                <div class="vr-control-item">
+                    <span class="vr-control-key">扳机</span>
+                    <span>注射</span>
+                </div>
+                <div class="vr-control-item">
+                    <span class="vr-control-key">握持</span>
+                    <span>抓取</span>
+                </div>
+                <div class="vr-control-item">
+                    <span class="vr-control-key">A按钮</span>
+                    <span>切换工具</span>
+                </div>
+                <div class="vr-control-item">
+                    <span class="vr-control-key">B按钮</span>
+                    <span>菜单</span>
+                </div>
+            </div>
+
+            <div class="vr-hand-controller left" id="left-controller"></div>
+            <div class="vr-hand-controller right" id="right-controller"></div>
+
+            <div class="vr-notification" id="notification">
+                <div class="vr-notification-title">完美注射！</div>
+                <div class="vr-notification-text">您成功完成了上唇注射，位置精准，深度适中。</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
+
+        // VR训练应用
+        class LipVRTraining {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.leftCamera = null;
+                this.rightCamera = null;
+                this.controllers = [];
+                this.lipModel = null;
+                this.currentTool = 'syringe';
+                this.score = 95;
+                this.isVRMode = false;
+                this.raycaster = new THREE.Raycaster();
+
+                this.init();
+            }
+
+            init() {
+                // 创建场景
+                this.setupScene();
+
+                // 创建相机
+                this.setupCameras();
+
+                // 创建渲染器
+                this.setupRenderer();
+
+                // 创建灯光
+                this.setupLights();
+
+                // 创建3D模型
+                this.create3DModels();
+
+                // 设置VR
+                this.setupVR();
+
+                // 绑定事件
+                this.bindEvents();
+
+                // 开始动画循环
+                this.animate();
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+
+                // 创建VR环境
+                const envGeometry = new THREE.SphereGeometry(50, 60, 40);
+                envGeometry.scale(-1, 1, 1);
+
+                const envMaterial = new THREE.MeshBasicMaterial({
+                    map: this.createGradientTexture(),
+                    side: THREE.BackSide
+                });
+
+                const environment = new THREE.Mesh(envGeometry, envMaterial);
+                this.scene.add(environment);
+
+                // 添加雾效果
+                this.scene.fog = new THREE.Fog(0x1e1e2e, 10, 50);
+            }
+
+            createGradientTexture() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 512;
+                const context = canvas.getContext('2d');
+
+                const gradient = context.createLinearGradient(0, 0, 0, 512);
+                gradient.addColorStop(0, '#667eea');
+                gradient.addColorStop(0.5, '#764ba2');
+                gradient.addColorStop(1, '#1e1e2e');
+
+                context.fillStyle = gradient;
+                context.fillRect(0, 0, 512, 512);
+
+                const texture = new THREE.CanvasTexture(canvas);
+                return texture;
+            }
+
+            setupCameras() {
+                // 主相机（VR模式）
+                this.camera = new THREE.PerspectiveCamera(
+                    75,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                this.camera.position.set(0, 1.6, 3);
+                this.camera.lookAt(0, 1, 0);
+
+                // 左眼相机
+                this.leftCamera = new THREE.PerspectiveCamera(
+                    75,
+                    (window.innerWidth / 2) / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                this.leftCamera.position.copy(this.camera.position);
+                this.leftCamera.position.x -= 0.032; // 瞳距调整
+
+                // 右眼相机
+                this.rightCamera = new THREE.PerspectiveCamera(
+                    75,
+                    (window.innerWidth / 2) / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                this.rightCamera.position.copy(this.camera.position);
+                this.rightCamera.position.x += 0.032; // 瞳距调整
+            }
+
+            setupRenderer() {
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(window.devicePixelRatio);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.xr.enabled = true;
+
+                document.getElementById('vr-container').appendChild(this.renderer.domElement);
+            }
+
+            setupLights() {
+                // 环境光
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                // 主光源
+                const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                mainLight.position.set(5, 10, 5);
+                mainLight.castShadow = true;
+                mainLight.shadow.camera.near = 0.1;
+                mainLight.shadow.camera.far = 50;
+                mainLight.shadow.mapSize.set(2048, 2048);
+                this.scene.add(mainLight);
+
+                // 点光源（模拟手术灯）
+                const spotLight = new THREE.SpotLight(0xffffff, 1);
+                spotLight.position.set(0, 3, 0);
+                spotLight.angle = Math.PI / 4;
+                spotLight.penumbra = 0.2;
+                spotLight.castShadow = true;
+                this.scene.add(spotLight);
+            }
+
+            create3DModels() {
+                // 创建唇部模型
+                this.createLipModel();
+
+                // 创建训练台
+                this.createTrainingTable();
+
+                // 创建工具
+                this.createTools();
+
+                // 创建UI元素
+                this.create3DUI();
+            }
+
+            createLipModel() {
+                // 创建主要唇形
+                const shape = new THREE.Shape();
+                shape.moveTo(-2, 0);
+                shape.bezierCurveTo(-2, 1, -1.5, 1.5, -0.5, 1.5);
+                shape.bezierCurveTo(0, 1.8, 0, 1.8, 0, 1.8);
+                shape.bezierCurveTo(0.5, 1.5, 1.5, 1.5, 2, 0);
+                shape.bezierCurveTo(1.5, -0.8, 1, -1.5, 0, -1.8);
+                shape.bezierCurveTo(-1, -1.5, -1.5, -0.8, -2, 0);
+
+                const extrudeSettings = {
+                    depth: 1,
+                    bevelEnabled: true,
+                    bevelSegments: 10,
+                    steps: 20,
+                    bevelSize: 0.1,
+                    bevelThickness: 0.1
+                };
+
+                const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+                geometry.center();
+
+                const material = new THREE.MeshPhysicalMaterial({
+                    color: 0xff6b9d,
+                    roughness: 0.3,
+                    metalness: 0,
+                    clearcoat: 0.4,
+                    clearcoatRoughness: 0.2,
+                    transmission: 0.1,
+                    thickness: 0.5
+                });
+
+                this.lipModel = new THREE.Mesh(geometry, material);
+                this.lipModel.position.set(0, 1, 0);
+                this.lipModel.castShadow = true;
+                this.lipModel.receiveShadow = true;
+                this.scene.add(this.lipModel);
+
+                // 添加注射点标记
+                this.addInjectionPoints();
+            }
+
+            addInjectionPoints() {
+                const points = [
+                    { x: -0.8, y: 0.5, z: 0.5, name: '上唇左' },
+                    { x: 0.8, y: 0.5, z: 0.5, name: '上唇右' },
+                    { x: 0, y: 0.6, z: 0.5, name: '唇珠' },
+                    { x: -0.6, y: -0.5, z: 0.5, name: '下唇左' },
+                    { x: 0.6, y: -0.5, z: 0.5, name: '下唇右' }
+                ];
+
+                const sphereGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+                const sphereMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00ff00,
+                    emissive: 0x00ff00,
+                    emissiveIntensity: 0.5,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                points.forEach(point => {
+                    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial.clone());
+                    sphere.position.set(point.x, point.y, point.z);
+                    sphere.userData = { name: point.name, type: 'injection_point' };
+                    this.lipModel.add(sphere);
+
+                    // 添加脉冲动画
+                    this.animateInjectionPoint(sphere);
+                });
+            }
+
+            animateInjectionPoint(point) {
+                const pulse = () => {
+                    const scale = 1 + Math.sin(Date.now() * 0.003) * 0.2;
+                    point.scale.set(scale, scale, scale);
+                    requestAnimationFrame(pulse);
+                };
+                pulse();
+            }
+
+            createTrainingTable() {
+                // 创建训练台
+                const tableGeometry = new THREE.BoxGeometry(4, 0.1, 3);
+                const tableMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x333344,
+                    specular: 0x222222,
+                    shininess: 30
+                });
+
+                const table = new THREE.Mesh(tableGeometry, tableMaterial);
+                table.position.y = 0.5;
+                table.receiveShadow = true;
+                this.scene.add(table);
+
+                // 添加网格
+                const gridHelper = new THREE.GridHelper(4, 20, 0x444444, 0x222222);
+                gridHelper.position.y = 0.55;
+                this.scene.add(gridHelper);
+            }
+
+            createTools() {
+                // 创建注射器模型
+                const syringeGroup = new THREE.Group();
+
+                // 注射器筒体
+                const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, 0.3, 16);
+                const cylinderMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xcccccc,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+                syringeGroup.add(cylinder);
+
+                // 注射器针头
+                const needleGeometry = new THREE.CylinderGeometry(0.002, 0.002, 0.1, 8);
+                const needleMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x888888,
+                    metalness: 1,
+                    roughness: 0.2
+                });
+                const needle = new THREE.Mesh(needleGeometry, needleMaterial);
+                needle.position.y = -0.2;
+                syringeGroup.add(needle);
+
+                // 活塞
+                const pistonGeometry = new THREE.CylinderGeometry(0.025, 0.025, 0.05, 16);
+                const pistonMaterial = new THREE.MeshPhongMaterial({ color: 0x4444ff });
+                const piston = new THREE.Mesh(pistonGeometry, pistonMaterial);
+                piston.position.y = 0.1;
+                syringeGroup.add(piston);
+
+                syringeGroup.position.set(0.5, 1.5, 1);
+                this.scene.add(syringeGroup);
+                this.syringe = syringeGroup;
+            }
+
+            create3DUI() {
+                // 创建3D信息面板
+                const panelGeometry = new THREE.PlaneGeometry(1, 0.6);
+                const panelMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x000000,
+                    transparent: true,
+                    opacity: 0.8,
+                    side: THREE.DoubleSide
+                });
+
+                const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+                panel.position.set(-2, 2, 0);
+                panel.rotation.y = Math.PI / 6;
+                this.scene.add(panel);
+
+                // 添加文字（使用Canvas纹理）
+                this.createTextPanel(panel);
+            }
+
+            createTextPanel(panel) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 256;
+                const ctx = canvas.getContext('2d');
+
+                // 背景
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(0, 0, 512, 256);
+
+                // 文字
+                ctx.fillStyle = '#ff6b9d';
+                ctx.font = 'bold 32px Arial';
+                ctx.fillText('训练模式', 20, 40);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Arial';
+                ctx.fillText('• 选择注射点', 20, 80);
+                ctx.fillText('• 控制深度', 20, 110);
+                ctx.fillText('• 注意角度', 20, 140);
+                ctx.fillText('• 均匀分布', 20, 170);
+
+                ctx.fillStyle = '#feca57';
+                ctx.font = 'bold 24px Arial';
+                ctx.fillText('得分: 95%', 20, 220);
+
+                const texture = new THREE.CanvasTexture(canvas);
+                panel.material.map = texture;
+                panel.material.needsUpdate = true;
+            }
+
+            setupVR() {
+                // 添加VR按钮
+                const vrButton = VRButton.createButton(this.renderer);
+                document.body.appendChild(vrButton);
+
+                // 设置控制器
+                this.setupControllers();
+            }
+
+            setupControllers() {
+                const controllerModelFactory = new XRControllerModelFactory();
+
+                // 控制器1
+                const controller1 = this.renderer.xr.getController(0);
+                controller1.addEventListener('selectstart', () => this.onSelectStart(controller1));
+                controller1.addEventListener('selectend', () => this.onSelectEnd(controller1));
+                this.scene.add(controller1);
+
+                const controllerGrip1 = this.renderer.xr.getControllerGrip(0);
+                controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
+                this.scene.add(controllerGrip1);
+
+                // 控制器2
+                const controller2 = this.renderer.xr.getController(1);
+                controller2.addEventListener('selectstart', () => this.onSelectStart(controller2));
+                controller2.addEventListener('selectend', () => this.onSelectEnd(controller2));
+                this.scene.add(controller2);
+
+                const controllerGrip2 = this.renderer.xr.getControllerGrip(1);
+                controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
+                this.scene.add(controllerGrip2);
+
+                // 添加射线
+                const geometry = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(0, 0, 0),
+                    new THREE.Vector3(0, 0, -1)
+                ]);
+
+                const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({
+                    color: 0xff6b9d,
+                    linewidth: 2
+                }));
+                line.scale.z = 5;
+
+                controller1.add(line.clone());
+                controller2.add(line.clone());
+
+                this.controllers = [controller1, controller2];
+            }
+
+            onSelectStart(controller) {
+                if (this.currentTool === 'syringe') {
+                    this.performInjection(controller);
+                }
+            }
+
+            onSelectEnd(controller) {
+                // 结束操作
+            }
+
+            performInjection(controller) {
+                // 获取控制器位置和方向
+                const tempMatrix = new THREE.Matrix4();
+                tempMatrix.identity().extractRotation(controller.matrixWorld);
+
+                const raycaster = new THREE.Raycaster();
+                raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
+                raycaster.ray.direction.set(0, 0, -1).applyMatrix4(tempMatrix);
+
+                // 检测相交
+                const intersects = raycaster.intersectObject(this.lipModel, true);
+
+                if (intersects.length > 0) {
+                    const point = intersects[0].point;
+                    this.createInjectionEffect(point);
+                    this.updateScore();
+                    this.showNotification('注射成功！');
+
+                    // 触觉反馈（如果支持）
+                    if (controller.gamepad && controller.gamepad.hapticActuators) {
+                        controller.gamepad.hapticActuators[0].pulse(0.8, 100);
+                    }
+                }
+            }
+
+            createInjectionEffect(point) {
+                // 创建注射效果
+                const geometry = new THREE.SphereGeometry(0.1, 16, 16);
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0xff00ff,
+                    transparent: true,
+                    opacity: 0.6,
+                    emissive: 0xff00ff,
+                    emissiveIntensity: 0.5
+                });
+
+                const effect = new THREE.Mesh(geometry, material);
+                effect.position.copy(point);
+                this.scene.add(effect);
+
+                // 扩散动画
+                let scale = 0.1;
+                const animate = () => {
+                    scale += 0.05;
+                    effect.scale.set(scale, scale, scale);
+                    material.opacity = Math.max(0, 0.6 - scale * 0.15);
+
+                    if (material.opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        this.scene.remove(effect);
+                    }
+                };
+                animate();
+            }
+
+            updateScore() {
+                this.score = Math.min(100, this.score + 1);
+                const scoreElement = document.querySelector('.vr-score-value');
+                if (scoreElement) {
+                    scoreElement.textContent = `${this.score}%`;
+                }
+            }
+
+            showNotification(text) {
+                const notification = document.getElementById('notification');
+                notification.querySelector('.vr-notification-text').textContent = text;
+                notification.classList.add('show');
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            bindEvents() {
+                // 窗口调整
+                window.addEventListener('resize', () => this.onWindowResize());
+
+                // 工具切换
+                document.querySelectorAll('.vr-menu-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        document.querySelectorAll('.vr-menu-item').forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                        this.currentTool = item.dataset.tool;
+                    });
+                });
+
+                // VR会话事件
+                this.renderer.xr.addEventListener('sessionstart', () => {
+                    this.isVRMode = true;
+                    console.log('VR session started');
+                });
+
+                this.renderer.xr.addEventListener('sessionend', () => {
+                    this.isVRMode = false;
+                    console.log('VR session ended');
+                });
+            }
+
+            onWindowResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+
+                if (this.leftCamera && this.rightCamera) {
+                    this.leftCamera.aspect = (window.innerWidth / 2) / window.innerHeight;
+                    this.leftCamera.updateProjectionMatrix();
+
+                    this.rightCamera.aspect = (window.innerWidth / 2) / window.innerHeight;
+                    this.rightCamera.updateProjectionMatrix();
+                }
+
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            animate() {
+                this.renderer.setAnimationLoop(() => {
+                    // 更新控制器
+                    if (this.controllers.length > 0) {
+                        // 更新控制器可视化
+                    }
+
+                    // 旋转模型
+                    if (this.lipModel && !this.isVRMode) {
+                        this.lipModel.rotation.y += 0.002;
+                    }
+
+                    // 更新注射器位置（跟随鼠标或控制器）
+                    if (this.syringe && this.currentTool === 'syringe') {
+                        this.syringe.rotation.z = Math.sin(Date.now() * 0.001) * 0.1;
+                    }
+
+                    // 渲染场景
+                    this.renderer.render(this.scene, this.camera);
+                });
+            }
+
+            enterVRMode() {
+                // 切换到VR模式
+                document.getElementById('vr-enter').style.display = 'none';
+                document.getElementById('vr-hud').classList.add('active');
+
+                // 如果不支持WebXR，使用分屏模式
+                if (!('xr' in navigator)) {
+                    this.enterSplitScreenMode();
+                }
+            }
+
+            enterSplitScreenMode() {
+                // 分屏模式（用于手机VR盒子）
+                document.getElementById('vr-split').classList.add('active');
+
+                // 创建左右眼视图
+                this.renderStereo();
+            }
+
+            renderStereo() {
+                const animate = () => {
+                    requestAnimationFrame(animate);
+
+                    // 渲染左眼
+                    this.renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
+                    this.renderer.setScissor(0, 0, window.innerWidth / 2, window.innerHeight);
+                    this.renderer.setScissorTest(true);
+                    this.renderer.render(this.scene, this.leftCamera);
+
+                    // 渲染右眼
+                    this.renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+                    this.renderer.setScissor(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+                    this.renderer.render(this.scene, this.rightCamera);
+                };
+                animate();
+            }
+        }
+
+        // 初始化VR应用
+        let vrApp = null;
+
+        window.enterVR = function() {
+            vrApp = new LipVRTraining();
+            vrApp.enterVRMode();
+        };
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            // 检查WebXR支持
+            if ('xr' in navigator) {
+                navigator.xr.isSessionSupported('immersive-vr').then(supported => {
+                    if (supported) {
+                        console.log('VR is supported');
+                    } else {
+                        console.log('VR not supported, using fallback mode');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

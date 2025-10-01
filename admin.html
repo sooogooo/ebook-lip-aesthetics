@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画廊管理后台 - 绛唇解语花</title>
+    <link rel="stylesheet" href="gallery.css">
+    <style>
+        /* 管理后台专用样式 */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-1);
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .admin-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .admin-btn.secondary {
+            background: var(--secondary-color);
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--divider);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xxl);
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            transition: all var(--duration-normal);
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--text-hint);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .upload-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-hint);
+        }
+
+        .admin-table {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-1);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .table-control {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .table-control:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .data-table th {
+            background: var(--background);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: var(--text-primary);
+        }
+
+        .table-image {
+            width: 60px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .table-action-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all var(--duration-normal);
+        }
+
+        .table-action-btn.edit {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .table-action-btn.delete {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .table-action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .status-badge {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-published {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status-draft {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .status-archived {
+            background: var(--text-hint);
+            color: white;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--duration-normal);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-4);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-hint);
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+        }
+
+        .modal-close:hover {
+            background: var(--divider);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color var(--duration-normal);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            min-height: 50px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 0;
+            margin-left: var(--spacing-xs);
+        }
+
+        .tag-add-input {
+            flex: 1;
+            min-width: 120px;
+            border: none;
+            background: transparent;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .modal-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration-normal);
+        }
+
+        .modal-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: var(--divider);
+            color: var(--text-primary);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: stretch;
+            }
+
+            .admin-actions {
+                justify-content: center;
+            }
+
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .data-table {
+                font-size: 0.875rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: var(--spacing-sm);
+            }
+
+            .modal-content {
+                margin: var(--spacing-md);
+                width: calc(100% - 32px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 头部 -->
+        <header class="admin-header">
+            <h1 class="admin-title">📸 画廊管理后台</h1>
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="openUploadModal()">
+                    <span>📤</span>
+                    批量上传
+                </button>
+                <button class="admin-btn secondary" onclick="exportData()">
+                    <span>📊</span>
+                    导出数据
+                </button>
+                <button class="admin-btn secondary" onclick="openSettings()">
+                    <span>⚙️</span>
+                    设置
+                </button>
+            </div>
+        </header>
+
+        <!-- 统计面板 -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-images">0</div>
+                <div class="stat-label">总图片数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="published-count">0</div>
+                <div class="stat-label">已发布</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="draft-count">0</div>
+                <div class="stat-label">草稿</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-views">0</div>
+                <div class="stat-label">总浏览量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avg-rating">0.0</div>
+                <div class="stat-label">平均评分</div>
+            </div>
+        </div>
+
+        <!-- 上传区域 -->
+        <div class="upload-area" onclick="triggerFileUpload()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">点击或拖拽上传图片</div>
+            <div class="upload-hint">支持 JPG、PNG、WebP 格式，单文件最大 10MB</div>
+            <input type="file" id="file-upload" multiple accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="admin-table">
+            <div class="table-header">
+                <h2 class="table-title">图片管理</h2>
+                <div class="table-controls">
+                    <select class="table-control" id="status-filter" onchange="filterByStatus()">
+                        <option value="">全部状态</option>
+                        <option value="published">已发布</option>
+                        <option value="draft">草稿</option>
+                        <option value="archived">已归档</option>
+                    </select>
+                    <select class="table-control" id="type-filter" onchange="filterByType()">
+                        <option value="">全部类型</option>
+                        <option value="before-after">前后对比</option>
+                        <option value="process">治疗过程</option>
+                        <option value="result">最终效果</option>
+                    </select>
+                    <button class="table-control" onclick="refreshTable()">🔄 刷新</button>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all" onchange="toggleSelectAll()"></th>
+                        <th>预览</th>
+                        <th>标题</th>
+                        <th>类型</th>
+                        <th>状态</th>
+                        <th>医生</th>
+                        <th>上传时间</th>
+                        <th>浏览量</th>
+                        <th>评分</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- 数据将通过 JavaScript 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 编辑模态框 -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑图片信息</h3>
+                <button class="modal-close" onclick="closeModal('edit-modal')">&times;</button>
+            </div>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label class="form-label">标题</label>
+                    <input type="text" class="form-input" id="edit-title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">描述</label>
+                    <textarea class="form-textarea" id="edit-description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">治疗类型</label>
+                    <select class="form-select" id="edit-type">
+                        <option value="lip-filler">唇部填充</option>
+                        <option value="lip-reduction">唇部缩小</option>
+                        <option value="lip-lift">唇部提升</option>
+                        <option value="lip-reconstruction">唇部重建</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">医生姓名</label>
+                    <input type="text" class="form-input" id="edit-doctor">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">诊所名称</label>
+                    <input type="text" class="form-input" id="edit-clinic">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">患者年龄</label>
+                    <input type="number" class="form-input" id="edit-age" min="18" max="80">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">标签</label>
+                    <div class="tag-input" id="edit-tags">
+                        <input type="text" class="tag-add-input" placeholder="输入标签后按回车" onkeypress="addTag(event)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">状态</label>
+                    <select class="form-select" id="edit-status">
+                        <option value="draft">草稿</option>
+                        <option value="published">已发布</option>
+                        <option value="archived">已归档</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary" onclick="closeModal('edit-modal')">取消</button>
+                    <button type="submit" class="modal-btn primary">保存更改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 上传模态框 -->
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">批量上传图片</h3>
+                <button class="modal-close" onclick="closeModal('upload-modal')">&times;</button>
+            </div>
+            <div class="upload-area" onclick="triggerBatchUpload()">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">选择多个文件上传</div>
+                <div class="upload-hint">可以同时选择多个图片文件</div>
+                <input type="file" id="batch-upload" multiple accept="image/*" style="display: none;" onchange="handleBatchUpload(event)">
+            </div>
+            <div id="upload-progress" style="display: none;">
+                <div style="margin: 20px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                    <div>上传进度: <span id="progress-text">0/0</span></div>
+                    <div style="background: #ddd; height: 20px; border-radius: 10px; margin-top: 10px;">
+                        <div id="progress-bar" style="background: #E91E63; height: 100%; border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn secondary" onclick="closeModal('upload-modal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        let galleryData = [
+            {
+                id: '1',
+                title: '自然丰唇案例 - 张女士',
+                description: '25岁女性，追求自然饱满的唇形效果',
+                type: 'lip-filler',
+                status: 'published',
+                doctor: '李医生',
+                clinic: '美丽诊所',
+                age: 25,
+                uploadDate: '2024-03-15',
+                views: 1234,
+                rating: 4.8,
+                tags: ['自然', '丰唇', '玻尿酸'],
+                imageUrl: 'https://via.placeholder.com/300x200/E91E63/FFFFFF?text=案例1'
+            },
+            {
+                id: '2',
+                title: '唇部重建手术 - 王女士',
+                description: '意外创伤后的唇部重建修复',
+                type: 'lip-reconstruction',
+                status: 'published',
+                doctor: '陈医生',
+                clinic: '专业整形医院',
+                age: 32,
+                uploadDate: '2024-03-10',
+                views: 856,
+                rating: 4.9,
+                tags: ['重建', '修复', '创伤'],
+                imageUrl: 'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=案例2'
+            },
+            {
+                id: '3',
+                title: '唇部提升术 - 刘女士',
+                description: '改善唇部下垂，提升整体面部年轻化',
+                type: 'lip-lift',
+                status: 'draft',
+                doctor: '张医生',
+                clinic: '时尚美容中心',
+                age: 45,
+                uploadDate: '2024-03-08',
+                views: 423,
+                rating: 4.6,
+                tags: ['提升', '抗衰老', '年轻化'],
+                imageUrl: 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=案例3'
+            }
+        ];
+
+        // 当前编辑的项目ID
+        let currentEditId = null;
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            renderTable();
+        });
+
+        // 更新统计数据
+        function updateStats() {
+            const totalImages = galleryData.length;
+            const publishedCount = galleryData.filter(item => item.status === 'published').length;
+            const draftCount = galleryData.filter(item => item.status === 'draft').length;
+            const totalViews = galleryData.reduce((sum, item) => sum + item.views, 0);
+            const avgRating = galleryData.reduce((sum, item) => sum + item.rating, 0) / totalImages;
+
+            document.getElementById('total-images').textContent = totalImages;
+            document.getElementById('published-count').textContent = publishedCount;
+            document.getElementById('draft-count').textContent = draftCount;
+            document.getElementById('total-views').textContent = totalViews.toLocaleString();
+            document.getElementById('avg-rating').textContent = avgRating.toFixed(1);
+        }
+
+        // 渲染表格
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            galleryData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="checkbox" value="${item.id}" onchange="updateSelection()"></td>
+                    <td><img src="${item.imageUrl}" alt="${item.title}" class="table-image"></td>
+                    <td>${item.title}</td>
+                    <td>${getTypeLabel(item.type)}</td>
+                    <td><span class="status-badge status-${item.status}">${getStatusLabel(item.status)}</span></td>
+                    <td>${item.doctor}</td>
+                    <td>${item.uploadDate}</td>
+                    <td>${item.views.toLocaleString()}</td>
+                    <td>⭐ ${item.rating}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="table-action-btn edit" onclick="editItem('${item.id}')">编辑</button>
+                            <button class="table-action-btn delete" onclick="deleteItem('${item.id}')">删除</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 获取类型标签
+        function getTypeLabel(type) {
+            const labels = {
+                'lip-filler': '唇部填充',
+                'lip-reduction': '唇部缩小',
+                'lip-lift': '唇部提升',
+                'lip-reconstruction': '唇部重建'
+            };
+            return labels[type] || type;
+        }
+
+        // 获取状态标签
+        function getStatusLabel(status) {
+            const labels = {
+                'published': '已发布',
+                'draft': '草稿',
+                'archived': '已归档'
+            };
+            return labels[status] || status;
+        }
+
+        // 编辑项目
+        function editItem(id) {
+            const item = galleryData.find(item => item.id === id);
+            if (!item) return;
+
+            currentEditId = id;
+
+            // 填充表单数据
+            document.getElementById('edit-title').value = item.title;
+            document.getElementById('edit-description').value = item.description;
+            document.getElementById('edit-type').value = item.type;
+            document.getElementById('edit-doctor').value = item.doctor;
+            document.getElementById('edit-clinic').value = item.clinic;
+            document.getElementById('edit-age').value = item.age;
+            document.getElementById('edit-status').value = item.status;
+
+            // 填充标签
+            const tagsContainer = document.getElementById('edit-tags');
+            tagsContainer.innerHTML = '';
+            item.tags.forEach(tag => {
+                addTagToContainer(tag, tagsContainer);
+            });
+            // 添加输入框
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'tag-add-input';
+            input.placeholder = '输入标签后按回车';
+            input.onkeypress = addTag;
+            tagsContainer.appendChild(input);
+
+            openModal('edit-modal');
+        }
+
+        // 删除项目
+        function deleteItem(id) {
+            if (confirm('确定要删除这个项目吗？')) {
+                galleryData = galleryData.filter(item => item.id !== id);
+                updateStats();
+                renderTable();
+            }
+        }
+
+        // 添加标签到容器
+        function addTagToContainer(tagText, container) {
+            const tagElement = document.createElement('div');
+            tagElement.className = 'tag-item';
+            tagElement.innerHTML = `
+                <span>${tagText}</span>
+                <button type="button" class="tag-remove" onclick="removeTag(this)">×</button>
+            `;
+            container.appendChild(tagElement);
+        }
+
+        // 添加标签
+        function addTag(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = event.target;
+                const tagText = input.value.trim();
+                if (tagText) {
+                    addTagToContainer(tagText, input.parentElement);
+                    input.value = '';
+                }
+            }
+        }
+
+        // 移除标签
+        function removeTag(button) {
+            button.parentElement.remove();
+        }
+
+        // 打开模态框
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // 打开上传模态框
+        function openUploadModal() {
+            openModal('upload-modal');
+        }
+
+        // 触发文件上传
+        function triggerFileUpload() {
+            document.getElementById('file-upload').click();
+        }
+
+        // 触发批量上传
+        function triggerBatchUpload() {
+            document.getElementById('batch-upload').click();
+        }
+
+        // 处理文件选择
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
+        }
+
+        // 处理批量上传
+        function handleBatchUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                showUploadProgress();
+                uploadFiles(files);
+            }
+        }
+
+        // 处理拖拽
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
+        }
+
+        // 显示上传进度
+        function showUploadProgress() {
+            document.getElementById('upload-progress').style.display = 'block';
+        }
+
+        // 上传文件
+        function uploadFiles(files) {
+            const totalFiles = files.length;
+            let uploadedFiles = 0;
+
+            Array.from(files).forEach((file, index) => {
+                setTimeout(() => {
+                    // 模拟上传过程
+                    const newItem = {
+                        id: Date.now() + '-' + index,
+                        title: `新上传图片 - ${file.name}`,
+                        description: '待完善描述信息',
+                        type: 'lip-filler',
+                        status: 'draft',
+                        doctor: '待分配',
+                        clinic: '待分配',
+                        age: 0,
+                        uploadDate: new Date().toISOString().split('T')[0],
+                        views: 0,
+                        rating: 0,
+                        tags: ['新上传'],
+                        imageUrl: URL.createObjectURL(file)
+                    };
+
+                    galleryData.unshift(newItem);
+                    uploadedFiles++;
+
+                    // 更新进度
+                    if (document.getElementById('upload-progress').style.display !== 'none') {
+                        document.getElementById('progress-text').textContent = `${uploadedFiles}/${totalFiles}`;
+                        document.getElementById('progress-bar').style.width = `${(uploadedFiles / totalFiles) * 100}%`;
+                    }
+
+                    // 完成时更新界面
+                    if (uploadedFiles === totalFiles) {
+                        updateStats();
+                        renderTable();
+                        setTimeout(() => {
+                            if (document.getElementById('upload-modal').classList.contains('active')) {
+                                document.getElementById('upload-progress').style.display = 'none';
+                                document.getElementById('progress-bar').style.width = '0%';
+                            }
+                        }, 1000);
+                    }
+                }, index * 500); // 模拟上传延迟
+            });
+        }
+
+        // 表单提交处理
+        document.getElementById('edit-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (!currentEditId) return;
+
+            const item = galleryData.find(item => item.id === currentEditId);
+            if (!item) return;
+
+            // 更新数据
+            item.title = document.getElementById('edit-title').value;
+            item.description = document.getElementById('edit-description').value;
+            item.type = document.getElementById('edit-type').value;
+            item.doctor = document.getElementById('edit-doctor').value;
+            item.clinic = document.getElementById('edit-clinic').value;
+            item.age = parseInt(document.getElementById('edit-age').value);
+            item.status = document.getElementById('edit-status').value;
+
+            // 更新标签
+            const tagElements = document.getElementById('edit-tags').querySelectorAll('.tag-item span');
+            item.tags = Array.from(tagElements).map(span => span.textContent);
+
+            updateStats();
+            renderTable();
+            closeModal('edit-modal');
+        });
+
+        // 筛选功能
+        function filterByStatus() {
+            // 实现状态筛选逻辑
+            console.log('按状态筛选');
+        }
+
+        function filterByType() {
+            // 实现类型筛选逻辑
+            console.log('按类型筛选');
+        }
+
+        // 刷新表格
+        function refreshTable() {
+            renderTable();
+        }
+
+        // 全选功能
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('#table-body input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            updateSelection();
+        }
+
+        // 更新选择状态
+        function updateSelection() {
+            const checkboxes = document.querySelectorAll('#table-body input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('#table-body input[type="checkbox"]:checked');
+            const selectAll = document.getElementById('select-all');
+
+            if (checkedBoxes.length === 0) {
+                selectAll.indeterminate = false;
+                selectAll.checked = false;
+            } else if (checkedBoxes.length === checkboxes.length) {
+                selectAll.indeterminate = false;
+                selectAll.checked = true;
+            } else {
+                selectAll.indeterminate = true;
+                selectAll.checked = false;
+            }
+        }
+
+        // 导出数据
+        function exportData() {
+            const dataStr = JSON.stringify(galleryData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'gallery-data.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 打开设置
+        function openSettings() {
+            alert('设置功能开发中...');
+        }
+    </script>
+</body>
+</html>

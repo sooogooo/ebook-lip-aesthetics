@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优化画廊 - 懒加载与图片优化</title>
+
+    <!-- Critical CSS inline -->
+    <style>
+        :root {
+            --primary: #d4af37;
+            --bg: #1a1a2e;
+            --surface: #16213e;
+            --text: #e8e8e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--primary);
+            color: var(--text);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: var(--surface);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        .gallery-item img.loaded {
+            opacity: 1;
+        }
+
+        .gallery-item .placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2a2a3e, #16213e);
+        }
+
+        .gallery-item .placeholder.shimmer {
+            background: linear-gradient(90deg, #2a2a3e 0%, #3a3a4e 50%, #2a2a3e 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .gallery-item-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-item-info {
+            transform: translateY(0);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .loading-more {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .load-more-btn {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212,175,55,0.3);
+        }
+
+        .performance-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(22,33,62,0.95);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <header class="gallery-header">
+            <h1>优化案例画廊</h1>
+            <p>高性能图片懒加载与渐进式增强</p>
+        </header>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="before-after">前后对比</button>
+            <button class="filter-btn" data-filter="procedures">手术案例</button>
+            <button class="filter-btn" data-filter="3d-models">3D模型</button>
+            <button class="filter-btn" data-filter="testimonials">患者评价</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Load More -->
+        <div class="loading-more" id="loading-more">
+            <button class="load-more-btn" onclick="loadMoreImages()">加载更多</button>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
+        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</button>
+        <div class="lightbox-content">
+            <img id="lightbox-image" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Performance Info -->
+    <div class="performance-info">
+        <div>已加载: <span id="images-loaded">0</span></div>
+        <div>缓存命中: <span id="cache-hits">0</span></div>
+        <div>总大小: <span id="total-size">0</span> KB</div>
+    </div>
+
+    <script type="module">
+        class OptimizedGallery {
+            constructor() {
+                this.images = [];
+                this.loadedImages = 0;
+                this.cacheHits = 0;
+                this.totalSize = 0;
+                this.currentFilter = 'all';
+                this.currentLightboxIndex = -1;
+                this.intersectionObserver = null;
+                this.performanceObserver = null;
+                this.imageCache = new Map();
+                this.batchSize = 12;
+                this.currentBatch = 0;
+
+                this.init();
+            }
+
+            async init() {
+                // Generate sample images
+                this.generateSampleImages();
+
+                // Setup intersection observer for lazy loading
+                this.setupIntersectionObserver();
+
+                // Setup performance observer
+                this.setupPerformanceObserver();
+
+                // Setup event listeners
+                this.setupEventListeners();
+
+                // Load initial batch
+                this.loadBatch();
+            }
+
+            generateSampleImages() {
+                const categories = ['before-after', 'procedures', '3d-models', 'testimonials'];
+                const baseImages = 50; // Total images to generate
+
+                for (let i = 1; i <= baseImages; i++) {
+                    this.images.push({
+                        id: i,
+                        src: `https://picsum.photos/400/300?random=${i}`,
+                        srcset: `
+                            https://picsum.photos/400/300?random=${i} 1x,
+                            https://picsum.photos/800/600?random=${i} 2x
+                        `,
+                        thumbnail: `https://picsum.photos/40/30?random=${i}`,
+                        title: `案例 #${i}`,
+                        category: categories[i % categories.length],
+                        description: `专业唇部美学案例展示 ${i}`,
+                        date: new Date(Date.now() - Math.random() * 10000000000).toLocaleDateString()
+                    });
+                }
+            }
+
+            setupIntersectionObserver() {
+                const options = {
+                    root: null,
+                    rootMargin: '50px',
+                    threshold: 0.01
+                };
+
+                this.intersectionObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.lazyLoadImage(entry.target);
+                        }
+                    });
+                }, options);
+            }
+
+            setupPerformanceObserver() {
+                if ('PerformanceObserver' in window) {
+                    try {
+                        this.performanceObserver = new PerformanceObserver((list) => {
+                            list.getEntries().forEach(entry => {
+                                if (entry.entryType === 'resource' && entry.name.includes('picsum')) {
+                                    // Track image loading performance
+                                    const size = entry.transferSize || entry.encodedBodySize || 0;
+                                    this.totalSize += Math.round(size / 1024);
+                                    this.updatePerformanceInfo();
+                                }
+                            });
+                        });
+                        this.performanceObserver.observe({ entryTypes: ['resource'] });
+                    } catch (e) {
+                        console.warn('Performance observation not supported');
+                    }
+                }
+            }
+
+            setupEventListeners() {
+                // Filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.filterImages(e.target.dataset.filter);
+                    });
+                });
+
+                // Keyboard navigation for lightbox
+                document.addEventListener('keydown', (e) => {
+                    if (this.currentLightboxIndex >= 0) {
+                        if (e.key === 'ArrowLeft') this.navigateLightbox(-1);
+                        else if (e.key === 'ArrowRight') this.navigateLightbox(1);
+                        else if (e.key === 'Escape') this.closeLightbox();
+                    }
+                });
+
+                // Close lightbox on background click
+                document.getElementById('lightbox').addEventListener('click', (e) => {
+                    if (e.target.id === 'lightbox') {
+                        this.closeLightbox();
+                    }
+                });
+            }
+
+            loadBatch() {
+                const grid = document.getElementById('gallery-grid');
+                const start = this.currentBatch * this.batchSize;
+                const end = Math.min(start + this.batchSize, this.images.length);
+                const fragment = document.createDocumentFragment();
+
+                for (let i = start; i < end; i++) {
+                    const image = this.images[i];
+                    if (this.currentFilter === 'all' || image.category === this.currentFilter) {
+                        const item = this.createGalleryItem(image);
+                        fragment.appendChild(item);
+                    }
+                }
+
+                grid.appendChild(fragment);
+                this.currentBatch++;
+
+                // Observe new items for lazy loading
+                grid.querySelectorAll('.gallery-item:not([data-observed])').forEach(item => {
+                    this.intersectionObserver.observe(item);
+                    item.setAttribute('data-observed', 'true');
+                });
+
+                // Hide load more button if all images loaded
+                if (end >= this.images.length) {
+                    document.getElementById('loading-more').style.display = 'none';
+                }
+            }
+
+            createGalleryItem(image) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.dataset.category = image.category;
+                item.dataset.imageId = image.id;
+
+                item.innerHTML = `
+                    <div class="placeholder shimmer"></div>
+                    <img
+                        data-src="${image.src}"
+                        data-srcset="${image.srcset}"
+                        alt="${image.title}"
+                        loading="lazy"
+                    >
+                    <div class="gallery-item-info">
+                        <h3>${image.title}</h3>
+                        <p>${image.description}</p>
+                        <small>${image.date}</small>
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    this.openLightbox(image.id - 1);
+                });
+
+                return item;
+            }
+
+            async lazyLoadImage(item) {
+                const img = item.querySelector('img');
+                if (!img || img.src) return;
+
+                const src = img.dataset.src;
+                const srcset = img.dataset.srcset;
+
+                // Check cache first
+                if (this.imageCache.has(src)) {
+                    img.src = this.imageCache.get(src);
+                    img.srcset = srcset;
+                    img.classList.add('loaded');
+                    item.querySelector('.placeholder').style.display = 'none';
+                    this.cacheHits++;
+                    this.loadedImages++;
+                    this.updatePerformanceInfo();
+                    return;
+                }
+
+                // Preload image
+                const tempImg = new Image();
+
+                tempImg.onload = () => {
+                    img.src = src;
+                    img.srcset = srcset;
+                    img.classList.add('loaded');
+                    item.querySelector('.placeholder').style.display = 'none';
+
+                    // Cache the image
+                    this.imageCache.set(src, src);
+
+                    this.loadedImages++;
+                    this.updatePerformanceInfo();
+                };
+
+                tempImg.onerror = () => {
+                    console.error('Failed to load image:', src);
+                    item.querySelector('.placeholder').innerHTML = '❌';
+                };
+
+                tempImg.src = src;
+
+                // Stop observing this item
+                this.intersectionObserver.unobserve(item);
+            }
+
+            filterImages(filter) {
+                this.currentFilter = filter;
+                this.currentBatch = 0;
+
+                // Update button states
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === filter);
+                });
+
+                // Clear and reload grid
+                const grid = document.getElementById('gallery-grid');
+                grid.innerHTML = '';
+                this.loadBatch();
+
+                // Show load more button
+                document.getElementById('loading-more').style.display = 'block';
+            }
+
+            openLightbox(index) {
+                this.currentLightboxIndex = index;
+                const image = this.images[index];
+                const lightbox = document.getElementById('lightbox');
+                const lightboxImage = document.getElementById('lightbox-image');
+
+                // Preload high-res image
+                const highResImg = new Image();
+                highResImg.onload = () => {
+                    lightboxImage.src = highResImg.src;
+                };
+                highResImg.src = image.src.replace('400/300', '1200/900');
+
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeLightbox() {
+                document.getElementById('lightbox').classList.remove('active');
+                document.body.style.overflow = '';
+                this.currentLightboxIndex = -1;
+            }
+
+            navigateLightbox(direction) {
+                const newIndex = this.currentLightboxIndex + direction;
+                if (newIndex >= 0 && newIndex < this.images.length) {
+                    this.openLightbox(newIndex);
+                }
+            }
+
+            updatePerformanceInfo() {
+                document.getElementById('images-loaded').textContent = this.loadedImages;
+                document.getElementById('cache-hits').textContent = this.cacheHits;
+                document.getElementById('total-size').textContent = this.totalSize;
+            }
+        }
+
+        // Initialize gallery
+        const gallery = new OptimizedGallery();
+
+        // Expose methods to global scope
+        window.loadMoreImages = () => gallery.loadBatch();
+        window.closeLightbox = () => gallery.closeLightbox();
+        window.navigateLightbox = (dir) => gallery.navigateLightbox(dir);
+
+        // Prefetch images on idle
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                // Prefetch next batch of images during idle time
+                const links = gallery.images.slice(gallery.batchSize, gallery.batchSize * 2).map(img => {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = img.src;
+                    return link;
+                });
+                links.forEach(link => document.head.appendChild(link));
+            });
+        }
+    </script>
+</body>
+</html>

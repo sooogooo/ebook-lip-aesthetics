@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绛唇解语花 - 可视化集成中心 (精简版)</title>
+    <meta name="description" content="唇部美容医学可视化工具集成平台">
+    <link rel="manifest" href="pwa_manifest.json">
+    <link rel="icon" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="apple-touch-icon" href="https://docs.bccsw.cn/logo.png">
+    <style>
+        :root{--p:#E91E63;--pd:#AD1457;--pl:#F8BBD9;--bg:#FAFAFA;--card:#FFF;--text:#212121;--ts:#757575;--shadow:0 2px 8px rgba(0,0,0,.1);--radius:8px;--spacing:16px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font:14px/1.5 system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+        .container{max-width:1200px;margin:0 auto;padding:var(--spacing)}
+        .header{background:var(--card);box-shadow:var(--shadow);margin-bottom:var(--spacing);padding:var(--spacing);border-radius:var(--radius)}
+        .title{color:var(--p);font-size:24px;font-weight:600;text-align:center}
+        .subtitle{color:var(--ts);text-align:center;margin-top:8px}
+        .search{margin:var(--spacing) 0;text-align:center}
+        .search input{padding:12px;border:1px solid #ddd;border-radius:var(--radius);width:300px;max-width:100%}
+        .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--spacing)}
+        .tool{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--spacing);transition:all .3s ease}
+        .tool:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+        .tool-icon{font-size:48px;text-align:center;margin-bottom:12px}
+        .tool-title{font-size:18px;font-weight:600;color:var(--p);margin-bottom:8px}
+        .tool-desc{color:var(--ts);font-size:13px;margin-bottom:16px}
+        .tool-btn{background:var(--p);color:white;border:none;padding:10px 20px;border-radius:var(--radius);cursor:pointer;width:100%;transition:background .3s}
+        .tool-btn:hover{background:var(--pd)}
+        .status{position:fixed;bottom:20px;right:20px;background:var(--p);color:white;padding:8px 16px;border-radius:var(--radius);font-size:12px}
+        @media(max-width:768px){.container{padding:8px}.tools{grid-template-columns:1fr}.search input{width:100%}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🌸 绛唇解语花</h1>
+            <p class="subtitle">可视化集成中心 - 精简版</p>
+        </header>
+
+        <div class="search">
+            <input type="search" placeholder="🔍 搜索工具..." id="search">
+        </div>
+
+        <main class="tools" id="tools">
+            <div class="tool" data-name="3D解剖模型">
+                <div class="tool-icon">🫁</div>
+                <h3 class="tool-title">3D解剖模型</h3>
+                <p class="tool-desc">交互式三维唇部解剖结构展示</p>
+                <button class="tool-btn" onclick="open('enhanced_3d_anatomy.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="医疗数据面板">
+                <div class="tool-icon">📊</div>
+                <h3 class="tool-title">医疗数据面板</h3>
+                <p class="tool-desc">实时医疗数据分析与可视化</p>
+                <button class="tool-btn" onclick="open('medical_dashboard.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="案例研究">
+                <div class="tool-icon">📋</div>
+                <h3 class="tool-title">案例研究可视化</h3>
+                <p class="tool-desc">医疗案例分析与对比工具</p>
+                <button class="tool-btn" onclick="open('case_study_visualizer.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="AR演示">
+                <div class="tool-icon">🥽</div>
+                <h3 class="tool-title">AR演示</h3>
+                <p class="tool-desc">增强现实解剖教学工具</p>
+                <button class="tool-btn" onclick="open('ar_demonstration.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="手术模拟">
+                <div class="tool-icon">⚕️</div>
+                <h3 class="tool-title">手术模拟器</h3>
+                <p class="tool-desc">虚拟手术操作训练平台</p>
+                <button class="tool-btn" onclick="open('surgical_simulator.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="风险评估">
+                <div class="tool-icon">⚠️</div>
+                <h3 class="tool-title">风险评估工具</h3>
+                <p class="tool-desc">智能风险分析与预测系统</p>
+                <button class="tool-btn" onclick="open('risk_assessment.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="移动优化">
+                <div class="tool-icon">📱</div>
+                <h3 class="tool-title">移动端优化</h3>
+                <p class="tool-desc">移动设备专用界面</p>
+                <button class="tool-btn" onclick="open('mobile_camera_integration.html')">打开工具</button>
+            </div>
+
+            <div class="tool" data-name="性能监控">
+                <div class="tool-icon">📈</div>
+                <h3 class="tool-title">性能监控</h3>
+                <p class="tool-desc">实时性能指标监控</p>
+                <button class="tool-btn" onclick="open('performance-dashboard.html')">打开工具</button>
+            </div>
+        </main>
+
+        <div class="status" id="status">
+            系统就绪 ✅
+        </div>
+    </div>
+
+    <script>
+        const search=document.getElementById('search');
+        const tools=document.querySelectorAll('.tool');
+
+        search.addEventListener('input',e=>{
+            const query=e.target.value.toLowerCase();
+            tools.forEach(tool=>{
+                const name=tool.dataset.name.toLowerCase();
+                const title=tool.querySelector('.tool-title').textContent.toLowerCase();
+                const desc=tool.querySelector('.tool-desc').textContent.toLowerCase();
+                tool.style.display=(name.includes(query)||title.includes(query)||desc.includes(query))?'block':'none';
+            });
+        });
+
+        function open(url){
+            document.getElementById('status').textContent='正在加载...';
+            window.open(url,'_blank');
+            setTimeout(()=>document.getElementById('status').textContent='系统就绪 ✅',2000);
+        }
+
+        // PWA安装提示
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt',e=>{
+            e.preventDefault();
+            deferredPrompt=e;
+            const installBtn=document.createElement('button');
+            installBtn.textContent='📲 安装应用';
+            installBtn.className='tool-btn';
+            installBtn.style.position='fixed';
+            installBtn.style.top='20px';
+            installBtn.style.right='20px';
+            installBtn.onclick=()=>{
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(()=>installBtn.remove());
+            };
+            document.body.appendChild(installBtn);
+        });
+
+        // Service Worker注册
+        if('serviceWorker' in navigator){
+            navigator.serviceWorker.register('service_worker.js');
+        }
+    </script>
+</body>
+</html>

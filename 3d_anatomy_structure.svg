@@ -1,0 +1,252 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- 3D Lip Anatomy Structure SVG -->
+    <!-- Medical-grade anatomical illustration showing layered lip structure -->
+
+    <defs>
+        <!-- Background gradient -->
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Skin texture pattern -->
+        <pattern id="skinTexture" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="0.5" fill="#f4b4a0" opacity="0.3"/>
+        </pattern>
+
+        <!-- Shadow filter for 3D effect -->
+        <filter id="shadow3D" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+            <feOffset dx="3" dy="3" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.3"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- Gradient for depth -->
+        <radialGradient id="depthGradient">
+            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+            <stop offset="100%" style="stop-color:#000000;stop-opacity:0.2" />
+        </radialGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="600" fill="url(#bgGradient)"/>
+
+    <!-- Main 3D structure group -->
+    <g id="lipStructure3D" transform="translate(400,300)">
+
+        <!-- Deep muscle layer (back) -->
+        <g id="deepMuscleLayer" opacity="0.9">
+            <ellipse cx="0" cy="-10" rx="145" ry="58" fill="#cc3344" filter="url(#shadow3D)"/>
+            <ellipse cx="0" cy="10" rx="145" ry="48" fill="#cc3344" filter="url(#shadow3D)"/>
+
+            <!-- Muscle fiber details -->
+            <g stroke="#aa2233" stroke-width="1.5" opacity="0.8">
+                <path d="M -130,-15 Q -65,-20 0,-15 Q 65,-20 130,-15"/>
+                <path d="M -130,-5 Q -65,-10 0,-5 Q 65,-10 130,-5"/>
+                <path d="M -130,5 Q -65,0 0,5 Q 65,0 130,5"/>
+                <path d="M -130,15 Q -65,10 0,15 Q 65,10 130,15"/>
+            </g>
+        </g>
+
+        <!-- Vascular network layer -->
+        <g id="vascularLayer" opacity="0.85">
+            <!-- Major arteries -->
+            <g stroke="#ff4444" fill="none">
+                <!-- Superior labial artery with pulsation -->
+                <path d="M -185,-35 Q -100,-40 0,-35 Q 100,-40 185,-35" stroke-width="3.5">
+                    <animate attributeName="stroke-width" values="3.5;4.5;3.5" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+                <!-- Inferior labial artery with pulsation -->
+                <path d="M -185,35 Q -100,40 0,35 Q 100,40 185,35" stroke-width="3.5">
+                    <animate attributeName="stroke-width" values="3.5;4.5;3.5" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+            </g>
+
+            <!-- Veins -->
+            <g stroke="#4444ff" stroke-width="2.5" fill="none" opacity="0.7">
+                <path d="M -185,-28 Q -100,-33 0,-28 Q 100,-33 185,-28"/>
+                <path d="M -185,28 Q -100,33 0,28 Q 100,33 185,28"/>
+            </g>
+
+            <!-- Capillary network -->
+            <g fill="#ff8888" opacity="0.5">
+                <circle cx="-60" cy="-25" r="2.5"/>
+                <circle cx="-30" cy="-22" r="2"/>
+                <circle cx="0" cy="-20" r="2.5"/>
+                <circle cx="30" cy="-22" r="2"/>
+                <circle cx="60" cy="-25" r="2.5"/>
+                <circle cx="-60" cy="25" r="2.5"/>
+                <circle cx="-30" cy="22" r="2"/>
+                <circle cx="0" cy="20" r="2.5"/>
+                <circle cx="30" cy="22" r="2"/>
+                <circle cx="60" cy="25" r="2.5"/>
+            </g>
+        </g>
+
+        <!-- Intermediate muscle layer -->
+        <g id="intermediateMuscle" opacity="0.8">
+            <ellipse cx="0" cy="-8" rx="140" ry="55" fill="#ff6b7a" filter="url(#shadow3D)"/>
+            <ellipse cx="0" cy="8" rx="140" ry="45" fill="#ff6b7a" filter="url(#shadow3D)"/>
+
+            <!-- Orbicularis oris detail -->
+            <ellipse cx="0" cy="0" rx="125" ry="50" fill="none" stroke="#e55565" stroke-width="8" opacity="0.6"/>
+        </g>
+
+        <!-- Nerve distribution layer -->
+        <g id="nerveLayer" opacity="0.75">
+            <!-- Infraorbital nerve branches -->
+            <g stroke="#ffcc00" stroke-width="2.5" fill="none">
+                <path d="M -105,-85 L -85,-45 L -65,-25 L -45,-15">
+                    <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                </path>
+                <path d="M 105,-85 L 85,-45 L 65,-25 L 45,-15">
+                    <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                </path>
+            </g>
+
+            <!-- Mental nerve branches -->
+            <g stroke="#ffcc00" stroke-width="2.5" fill="none">
+                <path d="M -105,85 L -85,45 L -65,25 L -45,15">
+                    <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                </path>
+                <path d="M 105,85 L 85,45 L 65,25 L 45,15">
+                    <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                </path>
+            </g>
+
+            <!-- Nerve endpoints -->
+            <g fill="#ff9900">
+                <circle cx="-45" cy="-15" r="3.5"/>
+                <circle cx="45" cy="-15" r="3.5"/>
+                <circle cx="-45" cy="15" r="3.5"/>
+                <circle cx="45" cy="15" r="3.5"/>
+                <circle cx="0" cy="-10" r="3"/>
+                <circle cx="0" cy="10" r="3"/>
+            </g>
+        </g>
+
+        <!-- Subcutaneous layer -->
+        <g id="subcutaneousLayer" opacity="0.7">
+            <ellipse cx="0" cy="-5" rx="135" ry="52" fill="#ffd4aa" filter="url(#shadow3D)"/>
+            <ellipse cx="0" cy="5" rx="135" ry="42" fill="#ffd4aa" filter="url(#shadow3D)"/>
+        </g>
+
+        <!-- Dermal layer -->
+        <g id="dermalLayer" opacity="0.75">
+            <path d="M -155,0 Q -105,-65 -52,-72 Q 0,-77 52,-72 Q 105,-65 155,0 Q 105,-22 52,-27 Q 0,-30 -52,-27 Q -105,-22 -155,0 Z"
+                  fill="#f4a6a0" stroke="#e89690" stroke-width="1.5" filter="url(#shadow3D)"/>
+            <path d="M -155,0 Q -105,52 -52,68 Q 0,73 52,68 Q 105,52 155,0 Q 105,32 52,37 Q 0,40 -52,37 Q -105,32 -155,0 Z"
+                  fill="#f2a290" stroke="#e89690" stroke-width="1.5" filter="url(#shadow3D)"/>
+        </g>
+
+        <!-- Epidermal layer (top) -->
+        <g id="epidermalLayer" opacity="0.9">
+            <!-- Upper lip epidermis -->
+            <path d="M -150,0 Q -100,-60 -50,-70 Q 0,-75 50,-70 Q 100,-60 150,0 Q 100,-20 50,-25 Q 0,-27 -50,-25 Q -100,-20 -150,0 Z"
+                  fill="#f4b4a0" stroke="#e8a090" stroke-width="2" filter="url(#shadow3D)"/>
+
+            <!-- Lower lip epidermis -->
+            <path d="M -150,0 Q -100,50 -50,65 Q 0,70 50,65 Q 100,50 150,0 Q 100,30 50,35 Q 0,37 -50,35 Q -100,30 -150,0 Z"
+                  fill="#f2a896" stroke="#e8a090" stroke-width="2" filter="url(#shadow3D)"/>
+
+            <!-- Cupid's bow detail -->
+            <path d="M -50,-25 Q -25,-35 0,-30 Q 25,-35 50,-25"
+                  fill="none" stroke="#e8a090" stroke-width="2.5"/>
+
+            <!-- Vermillion border -->
+            <path d="M -150,0 Q -100,-20 -50,-25 Q 0,-27 50,-25 Q 100,-20 150,0"
+                  fill="none" stroke="#d48080" stroke-width="1.5" opacity="0.8"/>
+            <path d="M -150,0 Q -100,30 -50,35 Q 0,37 50,35 Q 100,30 150,0"
+                  fill="none" stroke="#d48080" stroke-width="1.5" opacity="0.8"/>
+        </g>
+
+        <!-- Surface details and highlights -->
+        <g id="surfaceDetails">
+            <!-- Light reflection for 3D effect -->
+            <ellipse cx="-30" cy="-35" rx="25" ry="12" fill="url(#depthGradient)" opacity="0.5"/>
+            <ellipse cx="30" cy="-35" rx="25" ry="12" fill="url(#depthGradient)" opacity="0.5"/>
+            <ellipse cx="0" cy="40" rx="30" ry="15" fill="url(#depthGradient)" opacity="0.4"/>
+        </g>
+
+        <!-- Modiolus points (muscle convergence) -->
+        <g id="modiolusPoints">
+            <circle cx="-148" cy="0" r="10" fill="#d63447" opacity="0.9" filter="url(#shadow3D)"/>
+            <circle cx="148" cy="0" r="10" fill="#d63447" opacity="0.9" filter="url(#shadow3D)"/>
+            <text x="-148" y="-20" text-anchor="middle" font-size="10" fill="#666">蜗轴点</text>
+            <text x="148" y="-20" text-anchor="middle" font-size="10" fill="#666">蜗轴点</text>
+        </g>
+
+        <!-- Interactive labels (initially visible) -->
+        <g id="anatomicalLabels" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">
+            <!-- Upper lip labels -->
+            <line x1="0" y1="-30" x2="0" y2="-90" stroke="#999" stroke-width="0.5"/>
+            <text x="0" y="-95" text-anchor="middle" font-weight="bold">丘比特弓</text>
+
+            <line x1="-50" y1="-60" x2="-120" y2="-100" stroke="#999" stroke-width="0.5"/>
+            <text x="-120" y="-105" text-anchor="middle">上唇动脉</text>
+
+            <line x1="50" y1="-60" x2="120" y2="-100" stroke="#999" stroke-width="0.5"/>
+            <text x="120" y="-105" text-anchor="middle">眶下神经</text>
+
+            <!-- Central labels -->
+            <line x1="-100" y1="0" x2="-180" y2="-30" stroke="#999" stroke-width="0.5"/>
+            <text x="-180" y="-35" text-anchor="middle">口轮匝肌</text>
+
+            <!-- Lower lip labels -->
+            <line x1="-50" y1="60" x2="-120" y2="100" stroke="#999" stroke-width="0.5"/>
+            <text x="-120" y="105" text-anchor="middle">下唇动脉</text>
+
+            <line x1="50" y1="60" x2="120" y2="100" stroke="#999" stroke-width="0.5"/>
+            <text x="120" y="105" text-anchor="middle">颏神经</text>
+
+            <line x1="0" y1="35" x2="0" y2="90" stroke="#999" stroke-width="0.5"/>
+            <text x="0" y="95" text-anchor="middle">下唇结节</text>
+        </g>
+    </g>
+
+    <!-- Title and description -->
+    <text x="400" y="35" text-anchor="middle" font-size="26" font-weight="bold" fill="#2c3e50">
+        唇部3D解剖结构
+    </text>
+    <text x="400" y="60" text-anchor="middle" font-size="14" fill="#7f8c8d">
+        多层次解剖展示：表皮 • 真皮 • 皮下 • 肌肉 • 血管 • 神经
+    </text>
+
+    <!-- Legend -->
+    <g transform="translate(50,480)" font-size="11">
+        <text x="0" y="0" font-weight="bold" fill="#2c3e50">图层说明：</text>
+        <rect x="0" y="10" width="20" height="12" fill="#f4b4a0"/>
+        <text x="25" y="20" fill="#666">表皮层</text>
+
+        <rect x="100" y="10" width="20" height="12" fill="#f4a6a0"/>
+        <text x="125" y="20" fill="#666">真皮层</text>
+
+        <rect x="200" y="10" width="20" height="12" fill="#ffd4aa"/>
+        <text x="225" y="20" fill="#666">皮下组织</text>
+
+        <rect x="0" y="30" width="20" height="12" fill="#ff6b7a"/>
+        <text x="25" y="40" fill="#666">肌肉层</text>
+
+        <rect x="100" y="30" width="20" height="12" fill="#ff4444"/>
+        <text x="125" y="40" fill="#666">动脉</text>
+
+        <rect x="200" y="30" width="20" height="12" fill="#4444ff"/>
+        <text x="225" y="40" fill="#666">静脉</text>
+
+        <rect x="300" y="30" width="20" height="12" fill="#ffcc00"/>
+        <text x="325" y="40" fill="#666">神经</text>
+
+        <rect x="400" y="30" width="20" height="12" fill="#d63447"/>
+        <text x="425" y="40" fill="#666">蜗轴点</text>
+    </g>
+
+    <!-- Interactive hint -->
+    <text x="400" y="580" text-anchor="middle" font-size="12" fill="#999" font-style="italic">
+        医学级精准解剖图 - 可用于教学和临床参考
+    </text>
+</svg>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绛唇解语花 - 专业唇部美学案例画廊</title>
+    <meta name="description" content="绛唇解语花专业唇部美学案例展示，包含丰富的前后对比案例、技术解析和美学指导">
+    <meta name="keywords" content="唇部美学,唇形设计,美学案例,医美,整形,唇部整形">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="gallery.css" as="style">
+    <link rel="preload" href="gallery.js" as="script">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="gallery.css">
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#d4af37">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="绛唇解语花 - 专业唇部美学案例画廊">
+    <meta property="og:description" content="专业唇部美学案例展示，美学设计与技术完美结合">
+    <meta property="og:image" content="./assets/og-image.jpg">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1 class="brand-title">绛唇解语花</h1>
+                <span class="brand-subtitle">专业唇部美学案例画廊</span>
+            </div>
+
+            <div class="nav-controls">
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="搜索案例、医生、技术..." id="searchInput">
+                    <button class="search-btn" id="searchBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- View Mode Toggle -->
+                <div class="view-modes">
+                    <button class="view-btn active" data-view="masonry" title="瀑布流">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 2h4v20H4V2zm6 8h4v12h-4V10zm6-6h4v18h-4V4z"/>
+                        </svg>
+                    </button>
+                    <button class="view-btn" data-view="grid" title="网格">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/>
+                        </svg>
+                    </button>
+                    <button class="view-btn" data-view="list" title="列表">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>
+                        </svg>
+                    </button>
+                    <button class="view-btn" data-view="hero" title="大图">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10.5-7L8 16h8l-2.5-3.5-1.5 2z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Column Control -->
+                <div class="column-control">
+                    <label for="columnSlider" class="column-label">列数:</label>
+                    <input type="range" id="columnSlider" class="column-slider" min="2" max="6" value="3">
+                    <span class="column-value">3</span>
+                </div>
+
+                <!-- Filter Toggle -->
+                <button class="filter-toggle" id="filterToggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                    </svg>
+                    筛选
+                </button>
+
+                <!-- Admin Link -->
+                <a href="admin.html" class="admin-link" title="管理后台">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 4V6C15 7.66 13.66 9 12 9S9 7.66 9 6V4L3 7V9H21ZM12 10C14.76 10 17 12.24 17 15V16H19V20C19 21.1 18.1 22 17 22H7C5.9 22 5 21.1 5 20V16H7V15C7 12.24 9.24 10 12 10Z"/>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+            <h3>高级筛选</h3>
+            <button class="filter-close" id="filterClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="filter-content">
+            <!-- Treatment Type Filter -->
+            <div class="filter-group">
+                <h4>治疗类型</h4>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="lip-enhancement" checked>
+                        <span class="checkmark"></span>
+                        唇部增强
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="lip-reduction" checked>
+                        <span class="checkmark"></span>
+                        唇部缩小
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="lip-shape" checked>
+                        <span class="checkmark"></span>
+                        唇形矫正
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="lip-color" checked>
+                        <span class="checkmark"></span>
+                        唇色调整
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="lip-tattoo" checked>
+                        <span class="checkmark"></span>
+                        唇部纹绣
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="education" checked>
+                        <span class="checkmark"></span>
+                        医学教育
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="safety" checked>
+                        <span class="checkmark"></span>
+                        安全指导
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="technique" checked>
+                        <span class="checkmark"></span>
+                        技术操作
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="design" checked>
+                        <span class="checkmark"></span>
+                        美学设计
+                    </label>
+                </div>
+            </div>
+
+            <!-- Medical Category Filter -->
+            <div class="filter-group">
+                <h4>医学分类</h4>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="anatomy" checked>
+                        <span class="checkmark"></span>
+                        解剖结构
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="injection" checked>
+                        <span class="checkmark"></span>
+                        注射技术
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="case-study" checked>
+                        <span class="checkmark"></span>
+                        临床案例
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="complication" checked>
+                        <span class="checkmark"></span>
+                        并发症
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="procedure" checked>
+                        <span class="checkmark"></span>
+                        手术流程
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="aesthetic" checked>
+                        <span class="checkmark"></span>
+                        美学标准
+                    </label>
+                </div>
+            </div>
+
+            <!-- Age Range Filter -->
+            <div class="filter-group">
+                <h4>年龄段</h4>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="18-25" checked>
+                        <span class="checkmark"></span>
+                        18-25岁
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="26-35" checked>
+                        <span class="checkmark"></span>
+                        26-35岁
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="36-45" checked>
+                        <span class="checkmark"></span>
+                        36-45岁
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="46+" checked>
+                        <span class="checkmark"></span>
+                        46岁以上
+                    </label>
+                </div>
+            </div>
+
+            <!-- Doctor Filter -->
+            <div class="filter-group">
+                <h4>主治医生</h4>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="dr-wang" checked>
+                        <span class="checkmark"></span>
+                        王主任
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="dr-li" checked>
+                        <span class="checkmark"></span>
+                        李医生
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="dr-chen" checked>
+                        <span class="checkmark"></span>
+                        陈教授
+                    </label>
+                </div>
+            </div>
+
+            <!-- Time Range Filter -->
+            <div class="filter-group">
+                <h4>时间范围</h4>
+                <div class="date-range">
+                    <input type="date" id="startDate" class="date-input">
+                    <span class="date-separator">至</span>
+                    <input type="date" id="endDate" class="date-input">
+                </div>
+            </div>
+
+            <!-- Satisfaction Rating Filter -->
+            <div class="filter-group">
+                <h4>满意度评分</h4>
+                <div class="rating-filter">
+                    <input type="range" id="ratingSlider" class="rating-slider" min="1" max="5" value="1" step="0.5">
+                    <div class="rating-display">
+                        <span id="ratingValue">1.0</span> 星及以上
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Actions -->
+            <div class="filter-actions">
+                <button class="btn btn-primary" id="applyFilters">应用筛选</button>
+                <button class="btn btn-secondary" id="resetFilters">重置</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <span class="result-count" id="resultCount">共 <strong>0</strong> 个案例</span>
+                <div class="sort-options">
+                    <label for="sortSelect">排序:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="newest">最新优先</option>
+                        <option value="oldest">最早优先</option>
+                        <option value="rating">评分最高</option>
+                        <option value="views">浏览最多</option>
+                        <option value="name">名称 A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="toolbar-right">
+                <button class="btn btn-secondary" id="selectAllBtn">全选</button>
+                <button class="btn btn-secondary" id="batchDownloadBtn" disabled>批量下载</button>
+                <div class="view-toggle">
+                    <button class="toggle-btn" id="favoriteToggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        只看收藏
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Container -->
+        <div class="gallery-container" id="galleryContainer">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be dynamically inserted here -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="spinner"></div>
+                <span>加载中...</span>
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9.5 3C7.01 3 5 5.01 5 7.5c0 2.49 2.01 4.5 4.5 4.5s4.5-2.01 4.5-4.5C14 5.01 11.99 3 9.5 3zM15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <h3>未找到匹配的案例</h3>
+                <p>请尝试调整筛选条件或搜索关键词</p>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container" id="loadMoreContainer">
+            <button class="btn btn-primary load-more-btn" id="loadMoreBtn">加载更多</button>
+        </div>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <div class="lightbox-overlay" id="lightboxOverlay"></div>
+        <div class="lightbox-content">
+            <div class="lightbox-header">
+                <div class="lightbox-title">
+                    <h3 id="lightboxTitle">案例详情</h3>
+                    <div class="lightbox-meta">
+                        <span id="lightboxDate">2023-12-01</span>
+                        <span class="separator">•</span>
+                        <span id="lightboxDoctor">王主任</span>
+                    </div>
+                </div>
+                <div class="lightbox-actions">
+                    <button class="lightbox-btn" id="toggleCompareBtn" title="前后对比">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM8 16H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V6h2v2zm7 8h-2V6h2v10zm7 0h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V6h2v2z"/>
+                        </svg>
+                    </button>
+                    <button class="lightbox-btn" id="favoriteBtn" title="收藏">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </button>
+                    <button class="lightbox-btn" id="shareBtn" title="分享">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.50-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"/>
+                        </svg>
+                    </button>
+                    <button class="lightbox-btn" id="fullscreenBtn" title="全屏">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                        </svg>
+                    </button>
+                    <button class="lightbox-btn" id="downloadBtn" title="下载">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                    </button>
+                    <button class="lightbox-btn lightbox-close" id="lightboxClose" title="关闭">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="lightbox-body">
+                <div class="lightbox-image-container">
+                    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                        </svg>
+                    </button>
+
+                    <div class="lightbox-image-wrapper">
+                        <img id="lightboxImage" class="lightbox-image" alt="">
+                        <div class="lightbox-zoom-controls">
+                            <button class="zoom-btn" id="zoomInBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                    <path d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z"/>
+                                </svg>
+                            </button>
+                            <button class="zoom-btn" id="zoomOutBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                    <path d="M7 9h5v1H7z"/>
+                                </svg>
+                            </button>
+                            <button class="zoom-btn" id="resetZoomBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M8 12h8v-1H8z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="lightbox-nav lightbox-next" id="lightboxNext">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="lightbox-info">
+                    <div class="case-details">
+                        <h4>案例信息</h4>
+                        <div class="detail-item">
+                            <span class="label">治疗类型:</span>
+                            <span class="value" id="treatmentType">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">患者年龄:</span>
+                            <span class="value" id="patientAge">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">手术时间:</span>
+                            <span class="value" id="surgeryDuration">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">恢复周期:</span>
+                            <span class="value" id="recoveryTime">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">满意度:</span>
+                            <span class="value rating" id="satisfactionRating">
+                                <div class="stars"></div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="case-description">
+                        <h4>案例描述</h4>
+                        <p id="caseDescription">-</p>
+                    </div>
+
+                    <div class="case-tags">
+                        <h4>相关标签</h4>
+                        <div class="tags-container" id="caseTags"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-overlay"></div>
+        <div class="share-content">
+            <div class="share-header">
+                <h3>分享案例</h3>
+                <button class="share-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="share-options">
+                <button class="share-option" data-platform="wechat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#1AAD19">
+                        <path d="M8.5 6C5.46 6 3 8.13 3 10.75c0 1.67 1.12 3.14 2.84 3.98L5.5 16l1.54-.75C7.65 15.42 8.06 15.5 8.5 15.5c3.04 0 5.5-2.13 5.5-4.75S11.54 6 8.5 6z"/>
+                        <path d="M16.5 12c-.19 0-.38.01-.56.03-.69-1.18-1.97-2.03-3.44-2.03-2.28 0-4.13 1.61-4.13 3.59 0 .99.44 1.9 1.16 2.56L9.2 17l1.32-.65c.32.08.66.15 1 .15 2.28 0 4.13-1.61 4.13-3.59 0-.53-.15-1.04-.41-1.48.09-.01.18-.01.26-.01C18.66 11.42 20 12.58 20 14c0 .71-.38 1.37-1 1.82L19.2 17l-.85-.43c-.21.04-.43.07-.65.07z"/>
+                    </svg>
+                    微信
+                </button>
+                <button class="share-option" data-platform="weibo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#E6162D">
+                        <path d="M8.29 20.25c-4.01 0-7.29-2.59-7.29-5.78 0-3.19 3.28-5.78 7.29-5.78s7.29 2.59 7.29 5.78c0 3.19-3.28 5.78-7.29 5.78z"/>
+                        <path d="M18.5 3.75c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"/>
+                    </svg>
+                    微博
+                </button>
+                <button class="share-option" data-platform="link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#666">
+                        <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+                    </svg>
+                    复制链接
+                </button>
+                <button class="share-option" data-platform="qr">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#666">
+                        <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2zM17 17h2v2h-2zM19 19h2v2h-2z"/>
+                    </svg>
+                    二维码
+                </button>
+            </div>
+            <div class="share-url">
+                <input type="text" class="url-input" readonly>
+                <button class="copy-btn">复制</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" title="回到顶部">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="gallery.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    </script>
+</body>
+</html>

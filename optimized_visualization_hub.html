@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="绛唇解语花专业唇部美学可视化工具集成平台">
+    <title>绛唇解语花 - 优化版可视化中心</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!-- Critical CSS inlined for faster rendering -->
+    <style>
+        /* Critical CSS - minified */
+        :root{--primary:#d4af37;--secondary:#c9a02e;--bg:#1a1a2e;--surface:#16213e;--text:#e8e8e8;--accent:#ff6b9d}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}.loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;justify-content:center;align-items:center;z-index:9999;transition:opacity .3s}.loader{width:60px;height:60px;border:3px solid rgba(212,175,55,.2);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.header{background:var(--surface);padding:1rem 2rem;box-shadow:0 2px 10px rgba(0,0,0,.3)}.nav{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:0 auto}.brand-title{font-size:1.5rem;color:var(--primary);font-weight:600}.hide{display:none!important}
+    </style>
+
+    <!-- Defer non-critical CSS -->
+    <link rel="preload" href="optimized_styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="optimized_styles.css"></noscript>
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#d4af37">
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+    <!-- Loading Screen with Progress -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-content">
+            <div class="loader"></div>
+            <div class="loading-text">正在优化加载体验...</div>
+            <div class="loading-progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header with lazy-loaded navigation -->
+    <header class="header" role="banner">
+        <nav class="nav" role="navigation" aria-label="主导航">
+            <div class="nav-brand">
+                <h1 class="brand-title">绛唇解语花</h1>
+                <span class="brand-subtitle">性能优化版</span>
+            </div>
+            <div class="nav-controls" id="nav-controls">
+                <!-- Dynamically loaded -->
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content with Progressive Enhancement -->
+    <main id="main-content" class="main-content" role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h1 id="hero-title">专业唇部美学可视化平台</h1>
+                <p class="hero-description">高性能优化版 - 更快的加载速度，更流畅的体验</p>
+            </div>
+        </section>
+
+        <!-- Visualization Tools Grid - Lazy Loaded -->
+        <section class="tools-section" aria-labelledby="tools-title">
+            <h2 id="tools-title">可视化工具</h2>
+            <div class="tools-grid" id="tools-grid">
+                <!-- Dynamically populated with lazy loading -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Performance Monitoring Display -->
+    <div id="perf-monitor" class="perf-monitor hide">
+        <div class="perf-metric">
+            <span class="perf-label">FPS:</span>
+            <span class="perf-value" id="fps-value">60</span>
+        </div>
+        <div class="perf-metric">
+            <span class="perf-label">内存:</span>
+            <span class="perf-value" id="memory-value">0MB</span>
+        </div>
+        <div class="perf-metric">
+            <span class="perf-label">加载:</span>
+            <span class="perf-value" id="load-time">0ms</span>
+        </div>
+    </div>
+
+    <!-- Optimized JavaScript with module loading -->
+    <script type="module">
+        // Performance monitoring
+        const perfStart = performance.now();
+
+        // Progressive Enhancement Manager
+        class OptimizedVisualizationHub {
+            constructor() {
+                this.loadStart = perfStart;
+                this.criticalLoaded = false;
+                this.lazyLoadQueue = [];
+                this.intersectionObserver = null;
+                this.performanceObserver = null;
+                this.resourceCache = new Map();
+
+                this.init();
+            }
+
+            async init() {
+                // Start performance monitoring
+                this.startPerformanceMonitoring();
+
+                // Load critical resources first
+                await this.loadCriticalResources();
+
+                // Setup lazy loading
+                this.setupLazyLoading();
+
+                // Initialize tools progressively
+                this.initializeTools();
+
+                // Setup service worker for offline support
+                this.setupServiceWorker();
+
+                // Hide loading screen when ready
+                this.onReady();
+            }
+
+            startPerformanceMonitoring() {
+                // Monitor FPS
+                let frameCount = 0;
+                let lastTime = performance.now();
+
+                const measureFPS = () => {
+                    frameCount++;
+                    const now = performance.now();
+
+                    if (now >= lastTime + 1000) {
+                        const fps = Math.round(frameCount * 1000 / (now - lastTime));
+                        document.getElementById('fps-value').textContent = fps;
+                        frameCount = 0;
+                        lastTime = now;
+                    }
+
+                    requestAnimationFrame(measureFPS);
+                };
+
+                // Monitor memory if available
+                if (performance.memory) {
+                    setInterval(() => {
+                        const memory = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                        document.getElementById('memory-value').textContent = memory + 'MB';
+                    }, 2000);
+                }
+
+                // Start FPS monitoring
+                requestAnimationFrame(measureFPS);
+
+                // Monitor resource loading
+                if ('PerformanceObserver' in window) {
+                    this.performanceObserver = new PerformanceObserver((list) => {
+                        for (const entry of list.getEntries()) {
+                            if (entry.entryType === 'resource') {
+                                this.trackResourceLoad(entry);
+                            }
+                        }
+                    });
+
+                    this.performanceObserver.observe({ entryTypes: ['resource', 'navigation'] });
+                }
+            }
+
+            async loadCriticalResources() {
+                // Preload critical scripts with resource hints
+                const criticalScripts = [
+                    { url: 'optimized_core.js', type: 'script' },
+                    { url: 'optimized_styles.css', type: 'style' }
+                ];
+
+                const promises = criticalScripts.map(resource =>
+                    this.loadResource(resource.url, resource.type)
+                );
+
+                await Promise.all(promises);
+                this.criticalLoaded = true;
+            }
+
+            loadResource(url, type) {
+                // Check cache first
+                if (this.resourceCache.has(url)) {
+                    return Promise.resolve(this.resourceCache.get(url));
+                }
+
+                return new Promise((resolve, reject) => {
+                    let element;
+
+                    if (type === 'script') {
+                        element = document.createElement('script');
+                        element.src = url;
+                        element.async = true;
+                    } else if (type === 'style') {
+                        element = document.createElement('link');
+                        element.rel = 'stylesheet';
+                        element.href = url;
+                    }
+
+                    element.onload = () => {
+                        this.resourceCache.set(url, element);
+                        resolve(element);
+                    };
+
+                    element.onerror = () => reject(new Error(`Failed to load ${url}`));
+
+                    document.head.appendChild(element);
+                });
+            }
+
+            setupLazyLoading() {
+                // Setup Intersection Observer for lazy loading
+                const options = {
+                    root: null,
+                    rootMargin: '50px',
+                    threshold: 0.01
+                };
+
+                this.intersectionObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.lazyLoadElement(entry.target);
+                        }
+                    });
+                }, options);
+            }
+
+            lazyLoadElement(element) {
+                // Load images
+                if (element.dataset.src && !element.src) {
+                    const img = new Image();
+                    img.onload = () => {
+                        element.src = element.dataset.src;
+                        element.classList.add('loaded');
+                    };
+                    img.src = element.dataset.src;
+                }
+
+                // Load iframes
+                if (element.dataset.iframe) {
+                    element.src = element.dataset.iframe;
+                    element.removeAttribute('data-iframe');
+                }
+
+                this.intersectionObserver.unobserve(element);
+            }
+
+            initializeTools() {
+                const tools = [
+                    {
+                        id: '3d-viewer',
+                        title: '3D解剖模型',
+                        description: '高性能WebGL渲染',
+                        url: 'optimized_3d_viewer.html',
+                        icon: '🧬',
+                        priority: 'high'
+                    },
+                    {
+                        id: 'ar-viewer',
+                        title: 'AR增强现实',
+                        description: '优化的AR体验',
+                        url: 'optimized_ar_viewer.html',
+                        icon: '📱',
+                        priority: 'medium'
+                    },
+                    {
+                        id: 'gallery',
+                        title: '案例画廊',
+                        description: '懒加载图片库',
+                        url: 'optimized_gallery.html',
+                        icon: '🖼️',
+                        priority: 'low'
+                    },
+                    {
+                        id: 'charts',
+                        title: '数据可视化',
+                        description: '按需加载图表',
+                        url: 'optimized_charts.html',
+                        icon: '📊',
+                        priority: 'medium'
+                    }
+                ];
+
+                const grid = document.getElementById('tools-grid');
+
+                // Sort by priority and render
+                tools.sort((a, b) => {
+                    const priorityOrder = { high: 0, medium: 1, low: 2 };
+                    return priorityOrder[a.priority] - priorityOrder[b.priority];
+                });
+
+                // Use DocumentFragment for better performance
+                const fragment = document.createDocumentFragment();
+
+                tools.forEach((tool, index) => {
+                    const card = this.createToolCard(tool);
+
+                    // Stagger animation for progressive loading feel
+                    card.style.animationDelay = `${index * 50}ms`;
+
+                    fragment.appendChild(card);
+                });
+
+                grid.appendChild(fragment);
+
+                // Observe cards for lazy loading
+                grid.querySelectorAll('.tool-card').forEach(card => {
+                    this.intersectionObserver.observe(card);
+                });
+            }
+
+            createToolCard(tool) {
+                const card = document.createElement('article');
+                card.className = 'tool-card';
+                card.dataset.toolId = tool.id;
+                card.innerHTML = `
+                    <div class="tool-icon">${tool.icon}</div>
+                    <h3 class="tool-title">${tool.title}</h3>
+                    <p class="tool-description">${tool.description}</p>
+                    <a href="${tool.url}" class="tool-link" data-prefetch>
+                        打开工具
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                        </svg>
+                    </a>
+                `;
+
+                // Add prefetch on hover for faster navigation
+                const link = card.querySelector('.tool-link');
+                link.addEventListener('mouseenter', () => {
+                    this.prefetchResource(tool.url);
+                });
+
+                return card;
+            }
+
+            prefetchResource(url) {
+                // Create prefetch link if not exists
+                if (!document.querySelector(`link[rel="prefetch"][href="${url}"]`)) {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = url;
+                    document.head.appendChild(link);
+                }
+            }
+
+            trackResourceLoad(entry) {
+                // Track resource loading performance
+                const loadTime = Math.round(entry.duration);
+                console.log(`Resource loaded: ${entry.name} - ${loadTime}ms`);
+
+                // Update performance display
+                const totalLoadTime = performance.now() - this.loadStart;
+                document.getElementById('load-time').textContent = Math.round(totalLoadTime) + 'ms';
+            }
+
+            setupServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('optimized_sw.js')
+                        .then(registration => {
+                            console.log('Service Worker registered:', registration);
+                        })
+                        .catch(error => {
+                            console.log('Service Worker registration failed:', error);
+                        });
+                }
+            }
+
+            onReady() {
+                // Calculate total load time
+                const loadTime = performance.now() - this.loadStart;
+                console.log(`Total load time: ${loadTime.toFixed(2)}ms`);
+
+                // Update progress bar to 100%
+                const progressBar = document.getElementById('progress-bar');
+                if (progressBar) {
+                    progressBar.style.width = '100%';
+                }
+
+                // Hide loading screen with fade
+                setTimeout(() => {
+                    const loadingScreen = document.getElementById('loading-screen');
+                    loadingScreen.style.opacity = '0';
+
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hide');
+
+                        // Show performance monitor
+                        document.getElementById('perf-monitor').classList.remove('hide');
+                    }, 300);
+                }, 500);
+
+                // Report performance metrics
+                this.reportPerformanceMetrics();
+            }
+
+            reportPerformanceMetrics() {
+                // Use Navigation Timing API
+                if (performance.timing) {
+                    const timing = performance.timing;
+                    const metrics = {
+                        dns: timing.domainLookupEnd - timing.domainLookupStart,
+                        tcp: timing.connectEnd - timing.connectStart,
+                        request: timing.responseEnd - timing.requestStart,
+                        response: timing.responseEnd - timing.responseStart,
+                        dom: timing.domComplete - timing.domLoading,
+                        load: timing.loadEventEnd - timing.navigationStart
+                    };
+
+                    console.table(metrics);
+
+                    // Send to analytics if needed
+                    if (window.gtag) {
+                        window.gtag('event', 'performance', {
+                            event_category: 'Web Vitals',
+                            event_label: 'Page Load',
+                            value: Math.round(metrics.load)
+                        });
+                    }
+                }
+
+                // Core Web Vitals
+                if ('PerformanceObserver' in window) {
+                    // Largest Contentful Paint
+                    new PerformanceObserver((list) => {
+                        const entries = list.getEntries();
+                        const lastEntry = entries[entries.length - 1];
+                        console.log('LCP:', lastEntry.renderTime || lastEntry.loadTime);
+                    }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+                    // First Input Delay
+                    new PerformanceObserver((list) => {
+                        const entries = list.getEntries();
+                        entries.forEach(entry => {
+                            console.log('FID:', entry.processingStart - entry.startTime);
+                        });
+                    }).observe({ entryTypes: ['first-input'] });
+
+                    // Cumulative Layout Shift
+                    let cls = 0;
+                    new PerformanceObserver((list) => {
+                        list.getEntries().forEach(entry => {
+                            if (!entry.hadRecentInput) {
+                                cls += entry.value;
+                                console.log('CLS:', cls);
+                            }
+                        });
+                    }).observe({ entryTypes: ['layout-shift'] });
+                }
+            }
+        }
+
+        // Initialize the optimized hub
+        const hub = new OptimizedVisualizationHub();
+
+        // Expose for debugging
+        window.visualizationHub = hub;
+    </script>
+
+    <!-- Deferred non-critical scripts -->
+    <script defer src="optimized_integration.js"></script>
+</body>
+</html>

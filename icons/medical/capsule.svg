@@ -1,0 +1,6 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 胶囊图标 -->
+  <path d="M15.24 8.76A5 5 0 1 1 8.76 15.24L15.24 8.76Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.76 8.76A5 5 0 1 1 15.24 15.24L8.76 8.76Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(233, 30, 99, 0.3)"/>
+  <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+</svg>

@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#d4af37">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="绛唇解语花">
+
+    <title>绛唇解语花 - 移动端专业唇部美学系统</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="pwa_manifest.json">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%23d4af37'%3E%3Cpath d='M96 16c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 144c-35.35 0-64-28.65-64-64s28.65-64 64-64 64 28.65 64 64-28.65 64-64 64z'/%3E%3C/svg%3E">
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="mobile_optimizations.css">
+    <link rel="stylesheet" href="unified_styles.css">
+    <link rel="stylesheet" href="gallery.css">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="icons.css">
+
+    <style>
+        /* Mobile-specific styles */
+        .mobile-demo-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: var(--mobile-background);
+            overflow-x: hidden;
+        }
+
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--mobile-header-height) + var(--mobile-safe-area-top));
+            background: var(--mobile-surface);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--mobile-border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: var(--mobile-safe-area-top) var(--mobile-spacing-md) 0;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--mobile-nav-height) + var(--mobile-safe-area-bottom));
+            background: var(--mobile-surface);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--mobile-border);
+            z-index: 1000;
+            display: flex;
+            padding: 0 var(--mobile-spacing-sm) var(--mobile-safe-area-bottom);
+        }
+
+        .view-container {
+            display: none;
+            padding-top: calc(var(--mobile-header-height) + var(--mobile-safe-area-top));
+            padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-area-bottom));
+            padding-left: var(--mobile-safe-area-left);
+            padding-right: var(--mobile-safe-area-right);
+            min-height: 100vh;
+        }
+
+        .view-container.active {
+            display: block;
+        }
+
+        .demo-section {
+            padding: var(--mobile-spacing-lg);
+            margin-bottom: var(--mobile-spacing-md);
+            background: var(--mobile-surface);
+            border-radius: 12px;
+            border: 1px solid var(--mobile-border);
+        }
+
+        .demo-title {
+            color: var(--mobile-primary);
+            font-size: var(--mobile-font-lg);
+            font-weight: 600;
+            margin-bottom: var(--mobile-spacing-md);
+        }
+
+        .demo-description {
+            color: var(--mobile-text-secondary);
+            font-size: var(--mobile-font-sm);
+            line-height: 1.6;
+            margin-bottom: var(--mobile-spacing-md);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--mobile-spacing-md);
+        }
+
+        .feature-card {
+            background: var(--mobile-background);
+            border-radius: 8px;
+            padding: var(--mobile-spacing-md);
+            text-align: center;
+            border: 1px solid var(--mobile-border);
+            transition: transform var(--mobile-anim-fast);
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: var(--mobile-spacing-sm);
+        }
+
+        .ar-demo-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: var(--mobile-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: var(--mobile-spacing-md) 0;
+        }
+
+        .ar-placeholder {
+            text-align: center;
+            color: var(--mobile-text-secondary);
+        }
+
+        .control-panel {
+            background: var(--mobile-background);
+            border-radius: 8px;
+            padding: var(--mobile-spacing-md);
+            margin: var(--mobile-spacing-md) 0;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--mobile-spacing-md);
+        }
+
+        .control-label {
+            color: var(--mobile-text-primary);
+            font-size: var(--mobile-font-sm);
+        }
+
+        .mobile-notification {
+            position: fixed;
+            top: calc(var(--mobile-header-height) + var(--mobile-safe-area-top) + 20px);
+            left: 20px;
+            right: 20px;
+            padding: var(--mobile-spacing-md);
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateY(-100px);
+            transition: transform var(--mobile-anim-normal);
+        }
+
+        .mobile-notification.show {
+            transform: translateY(0);
+        }
+
+        .mobile-notification-info {
+            background: #2196F3;
+        }
+
+        .mobile-notification-success {
+            background: #4CAF50;
+        }
+
+        .mobile-notification-warning {
+            background: #FF9800;
+        }
+
+        .mobile-notification-error {
+            background: #F44336;
+        }
+
+        .install-prompt {
+            position: fixed;
+            bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-area-bottom) + 20px);
+            left: 20px;
+            right: 20px;
+            background: var(--mobile-primary);
+            color: white;
+            padding: var(--mobile-spacing-md);
+            border-radius: 8px;
+            display: none;
+            z-index: 9999;
+        }
+
+        .install-prompt.show {
+            display: block;
+        }
+
+        .gesture-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+            border-radius: 20px;
+            font-size: var(--mobile-font-xs);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--mobile-anim-normal);
+        }
+
+        .gesture-hint.show {
+            opacity: 1;
+        }
+
+        .performance-indicator {
+            position: fixed;
+            top: calc(var(--mobile-header-height) + var(--mobile-safe-area-top) + 10px);
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            z-index: 1001;
+        }
+
+        .battery-indicator {
+            position: fixed;
+            top: calc(var(--mobile-header-height) + var(--mobile-safe-area-top) + 30px);
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            z-index: 1001;
+        }
+
+        @media (max-width: 480px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-demo-container">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button class="mobile-header-action" id="menu-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+            <h1 class="mobile-header-title">绛唇解语花</h1>
+            <button class="mobile-header-action" id="install-button" style="display: none;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Performance Indicators -->
+        <div class="performance-indicator" id="performance-indicator">
+            FPS: --
+        </div>
+        <div class="battery-indicator" id="battery-indicator">
+            Battery: --%
+        </div>
+
+        <!-- Gallery View -->
+        <div class="view-container active" data-view="gallery">
+            <div class="demo-section">
+                <h2 class="demo-title">🖼️ 移动端画廊体验</h2>
+                <p class="demo-description">
+                    专为移动设备优化的案例画廊，支持触摸手势、懒加载和离线浏览。
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="mobileHub.switchToView('gallery')">
+                        <div class="feature-icon">📱</div>
+                        <div>触摸优化</div>
+                    </div>
+                    <div class="feature-card" onclick="showGestureDemo('swipe')">
+                        <div class="feature-icon">👆</div>
+                        <div>滑动手势</div>
+                    </div>
+                    <div class="feature-card" onclick="showGestureDemo('pinch')">
+                        <div class="feature-icon">🤏</div>
+                        <div>双指缩放</div>
+                    </div>
+                    <div class="feature-card" onclick="toggleOfflineMode()">
+                        <div class="feature-icon">📴</div>
+                        <div>离线模式</div>
+                    </div>
+                </div>
+
+                <div class="mobile-gallery" id="demo-gallery">
+                    <!-- Gallery items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Viewer -->
+        <div class="view-container" data-view="3d">
+            <div class="demo-section">
+                <h2 class="demo-title">🎯 移动端3D查看器</h2>
+                <p class="demo-description">
+                    高性能移动3D渲染，支持手势控制和自适应质量调整。
+                </p>
+
+                <div class="ar-demo-container" id="3d-container">
+                    <div class="ar-placeholder">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">🦷</div>
+                        <div>3D唇部解剖模型</div>
+                        <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">
+                            触摸旋转 • 双指缩放 • 双击重置
+                        </div>
+                    </div>
+                    <div class="gesture-hint" id="gesture-hint"></div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="control-row">
+                        <span class="control-label">显示层次</span>
+                        <div>
+                            <label><input type="checkbox" checked> 皮肤</label>
+                            <label><input type="checkbox"> 肌肉</label>
+                            <label><input type="checkbox"> 血管</label>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-label">渲染质量</span>
+                        <select class="touch-input" id="quality-select">
+                            <option value="high">高质量</option>
+                            <option value="medium" selected>中等质量</option>
+                            <option value="low">低质量</option>
+                        </select>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-label">透明度</span>
+                        <input type="range" class="touch-slider" min="0" max="100" value="100" id="opacity-slider">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AR Viewer -->
+        <div class="view-container" data-view="ar">
+            <div class="demo-section">
+                <h2 class="demo-title">📱 AR增强现实体验</h2>
+                <p class="demo-description">
+                    实时面部识别和唇部追踪，支持美学评估和注射点推荐。
+                </p>
+
+                <div class="ar-demo-container" id="ar-container">
+                    <div class="ar-placeholder">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">📷</div>
+                        <div>AR唇部分析</div>
+                        <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.7;">
+                            点击启动摄像头
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="control-row">
+                        <button class="touch-button" onclick="startAR()">启动AR</button>
+                        <button class="touch-button" onclick="stopAR()">停止AR</button>
+                        <button class="touch-button" onclick="captureAR()">拍照</button>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-label">AR滤镜</span>
+                        <select class="touch-input" id="filter-select">
+                            <option value="none">无滤镜</option>
+                            <option value="color">颜色增强</option>
+                            <option value="volume">体积预览</option>
+                            <option value="symmetry">对称分析</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics View -->
+        <div class="view-container" data-view="analytics">
+            <div class="demo-section">
+                <h2 class="demo-title">📊 移动端分析面板</h2>
+                <p class="demo-description">
+                    实时性能监控和用户行为分析，针对移动设备优化。
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <div>性能监控</div>
+                        <div id="fps-display">60 FPS</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔋</div>
+                        <div>电池优化</div>
+                        <div id="battery-display">100%</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📶</div>
+                        <div>网络状态</div>
+                        <div id="network-display">在线</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <div>缓存状态</div>
+                        <div id="cache-display">良好</div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="control-row">
+                        <span class="control-label">低功耗模式</span>
+                        <label class="switch">
+                            <input type="checkbox" id="low-power-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-label">离线模式</span>
+                        <label class="switch">
+                            <input type="checkbox" id="offline-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav">
+            <a href="#" class="mobile-nav-item active" data-view="gallery">
+                <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                </svg>
+                <div class="mobile-nav-label">画廊</div>
+            </a>
+            <a href="#" class="mobile-nav-item" data-view="3d">
+                <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <div class="mobile-nav-label">3D</div>
+            </a>
+            <a href="#" class="mobile-nav-item" data-view="ar">
+                <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-4-4h-2v2h2V7zm0-4h-2v2h2V3zm4 4h-2v2h2V7zm0 8h-2v2h2v-2zm-8-8H7v2h2V7zm0 8H7v2h2v-2z"/>
+                </svg>
+                <div class="mobile-nav-label">AR</div>
+            </a>
+            <a href="#" class="mobile-nav-item" data-view="analytics">
+                <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <div class="mobile-nav-label">分析</div>
+            </a>
+        </nav>
+
+        <!-- Install Prompt -->
+        <div class="install-prompt" id="install-prompt">
+            <div style="margin-bottom: 10px;">
+                <strong>安装绛唇解语花应用</strong>
+            </div>
+            <div style="font-size: 0.9rem; margin-bottom: 15px;">
+                将应用添加到主屏幕，享受更好的移动体验
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="touch-button" onclick="installPWA()">安装</button>
+                <button class="touch-button" onclick="dismissInstallPrompt()">稍后</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="mobile_gestures.js"></script>
+    <script src="mobile_ar_handler.js"></script>
+    <script src="mobile_3d_viewer.js"></script>
+    <script src="mobile_integration_hub.js"></script>
+    <script src="gallery.js"></script>
+    <script src="charts.js"></script>
+
+    <script>
+        // Demo-specific JavaScript
+        let isARActive = false;
+        let gestureHintTimeout;
+
+        // Navigation handling
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const view = item.dataset.view;
+                switchToView(view);
+            });
+        });
+
+        function switchToView(view) {
+            // Update navigation
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.view === view);
+            });
+
+            // Update content
+            document.querySelectorAll('.view-container').forEach(container => {
+                container.classList.toggle('active', container.dataset.view === view);
+            });
+
+            // Notify mobile hub
+            if (window.mobileHub) {
+                window.mobileHub.switchToView(view);
+            }
+        }
+
+        // Gesture demonstrations
+        function showGestureDemo(type) {
+            const hint = document.getElementById('gesture-hint');
+
+            switch (type) {
+                case 'swipe':
+                    hint.textContent = '←→ 左右滑动切换图片';
+                    break;
+                case 'pinch':
+                    hint.textContent = '🤏 双指缩放查看详情';
+                    break;
+                case 'rotate':
+                    hint.textContent = '🔄 拖拽旋转3D模型';
+                    break;
+            }
+
+            hint.classList.add('show');
+
+            clearTimeout(gestureHintTimeout);
+            gestureHintTimeout = setTimeout(() => {
+                hint.classList.remove('show');
+            }, 2000);
+        }
+
+        // AR functions with better error handling
+        async function startAR() {
+            try {
+                // Check if components are available
+                if (!window.mobileHub) {
+                    showNotification('系统正在初始化，请稍后重试', 'warning');
+                    return;
+                }
+
+                const arHandler = window.mobileHub.getComponent('ar');
+                if (!arHandler) {
+                    showNotification('AR功能不可用 - 摄像头权限或设备不支持', 'error');
+                    return;
+                }
+
+                // Show loading state
+                showNotification('正在启动AR...', 'info');
+
+                await arHandler.startAR();
+                isARActive = true;
+                showNotification('AR已启动，请将摄像头对准唇部', 'success');
+
+                // Update UI
+                updateARControls(true);
+
+            } catch (error) {
+                console.error('[Demo] AR start failed:', error);
+                let message = 'AR启动失败';
+
+                if (error.message.includes('permission')) {
+                    message = '摄像头权限被拒绝，请在浏览器设置中允许摄像头访问';
+                } else if (error.message.includes('not found')) {
+                    message = '未找到摄像头设备';
+                } else if (error.message.includes('not supported')) {
+                    message = '您的浏览器不支持AR功能';
+                } else {
+                    message = `AR启动失败: ${error.message}`;
+                }
+
+                showNotification(message, 'error');
+            }
+        }
+
+        async function stopAR() {
+            try {
+                if (window.mobileHub) {
+                    const arHandler = window.mobileHub.getComponent('ar');
+                    if (arHandler) {
+                        await arHandler.stopAR();
+                    }
+                }
+                isARActive = false;
+                showNotification('AR已停止', 'info');
+                updateARControls(false);
+
+            } catch (error) {
+                console.error('[Demo] AR stop failed:', error);
+                showNotification('AR停止时出现错误', 'warning');
+            }
+        }
+
+        async function captureAR() {
+            if (!isARActive) {
+                showNotification('请先启动AR', 'warning');
+                return;
+            }
+
+            try {
+                if (window.mobileHub) {
+                    const arHandler = window.mobileHub.getComponent('ar');
+                    if (arHandler) {
+                        await arHandler.capturePhoto();
+                        showNotification('照片已保存', 'success');
+
+                        // Provide haptic feedback
+                        if (navigator.vibrate) {
+                            navigator.vibrate([100, 50, 100]);
+                        }
+                    }
+                } else {
+                    showNotification('照片保存功能演示', 'success');
+                }
+            } catch (error) {
+                console.error('[Demo] Capture failed:', error);
+                showNotification('照片保存失败', 'error');
+            }
+        }
+
+        function updateARControls(isActive) {
+            const startBtn = document.querySelector('button[onclick="startAR()"]');
+            const stopBtn = document.querySelector('button[onclick="stopAR()"]');
+            const captureBtn = document.querySelector('button[onclick="captureAR()"]');
+
+            if (startBtn) startBtn.disabled = isActive;
+            if (stopBtn) stopBtn.disabled = !isActive;
+            if (captureBtn) captureBtn.disabled = !isActive;
+
+            // Update button text
+            if (startBtn) {
+                startBtn.textContent = isActive ? 'AR运行中' : '启动AR';
+            }
+        }
+
+        // PWA functions
+        function installPWA() {
+            if (window.mobileHub && window.mobileHub.deferredPrompt) {
+                window.mobileHub.installPWA();
+            } else {
+                showNotification('PWA安装功能演示', 'info');
+                document.getElementById('install-prompt').classList.remove('show');
+            }
+        }
+
+        function dismissInstallPrompt() {
+            document.getElementById('install-prompt').classList.remove('show');
+        }
+
+        // Utility functions
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `mobile-notification mobile-notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleOfflineMode() {
+            const isOffline = navigator.onLine;
+            showNotification(isOffline ? '切换到离线模式' : '切换到在线模式', 'info');
+        }
+
+        // Enhanced performance monitoring
+        function updatePerformanceIndicators() {
+            try {
+                if (window.mobileHub) {
+                    const metrics = window.mobileHub.getPerformanceMetrics();
+                    const performanceEl = document.getElementById('performance-indicator');
+                    const fpsEl = document.getElementById('fps-display');
+
+                    if (performanceEl) {
+                        performanceEl.textContent = `FPS: ${metrics.fps || '--'}`;
+                    }
+                    if (fpsEl) {
+                        fpsEl.textContent = `${metrics.fps || '--'} FPS`;
+                    }
+
+                    // Update color based on performance
+                    if (metrics.fps < 30) {
+                        performanceEl.style.backgroundColor = 'rgba(244, 67, 54, 0.8)'; // Red
+                    } else if (metrics.fps < 50) {
+                        performanceEl.style.backgroundColor = 'rgba(255, 152, 0, 0.8)'; // Orange
+                    } else {
+                        performanceEl.style.backgroundColor = 'rgba(76, 175, 80, 0.8)'; // Green
+                    }
+                }
+
+                // Battery indicator
+                if (navigator.getBattery) {
+                    navigator.getBattery().then(battery => {
+                        const level = Math.round(battery.level * 100);
+                        const batteryEl = document.getElementById('battery-indicator');
+                        const batteryDisplayEl = document.getElementById('battery-display');
+
+                        if (batteryEl) {
+                            batteryEl.textContent = `Battery: ${level}%`;
+                        }
+                        if (batteryDisplayEl) {
+                            batteryDisplayEl.textContent = `${level}%`;
+                        }
+
+                        // Update battery color
+                        if (level < 20) {
+                            batteryEl.style.backgroundColor = 'rgba(244, 67, 54, 0.8)'; // Red
+                        } else if (level < 50) {
+                            batteryEl.style.backgroundColor = 'rgba(255, 152, 0, 0.8)'; // Orange
+                        } else {
+                            batteryEl.style.backgroundColor = 'rgba(76, 175, 80, 0.8)'; // Green
+                        }
+                    }).catch(error => {
+                        console.warn('[Demo] Battery API not available:', error);
+                    });
+                }
+
+                // Network indicator
+                const networkStatus = navigator.onLine ? '在线' : '离线';
+                const networkEl = document.getElementById('network-display');
+                if (networkEl) {
+                    networkEl.textContent = networkStatus;
+                    networkEl.style.color = navigator.onLine ? '#4CAF50' : '#F44336';
+                }
+
+                // Connection type if available
+                if (navigator.connection) {
+                    const connection = navigator.connection;
+                    const connectionType = connection.effectiveType || 'unknown';
+                    if (networkEl) {
+                        networkEl.textContent = `${networkStatus} (${connectionType})`;
+                    }
+                }
+
+            } catch (error) {
+                console.warn('[Demo] Performance monitoring error:', error);
+            }
+        }
+
+        // Initialize demo gallery
+        function initDemoGallery() {
+            const gallery = document.getElementById('demo-gallery');
+
+            for (let i = 1; i <= 6; i++) {
+                const item = document.createElement('div');
+                item.className = 'mobile-gallery-item';
+                item.innerHTML = `
+                    <div class="mobile-gallery-image" style="background: linear-gradient(45deg, #d4af37, #b8941f); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                        📷 ${i}
+                    </div>
+                    <div class="mobile-gallery-overlay">
+                        <div>案例 ${String(i).padStart(3, '0')}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => {
+                    showNotification(`查看案例 ${i}`, 'info');
+                });
+                gallery.appendChild(item);
+            }
+        }
+
+        // Control handlers
+        document.getElementById('quality-select')?.addEventListener('change', (e) => {
+            showNotification(`渲染质量设置为: ${e.target.value}`, 'info');
+        });
+
+        document.getElementById('opacity-slider')?.addEventListener('input', (e) => {
+            const opacity = e.target.value;
+            // Update 3D model opacity if available
+        });
+
+        document.getElementById('filter-select')?.addEventListener('change', (e) => {
+            showNotification(`AR滤镜: ${e.target.options[e.target.selectedIndex].text}`, 'info');
+        });
+
+        document.getElementById('low-power-toggle')?.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                window.mobileHub?.enterLowPowerMode();
+            } else {
+                window.mobileHub?.exitLowPowerMode();
+            }
+        });
+
+        // Initialize on load with error handling
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                console.log('[Demo] Initializing mobile demo...');
+
+                // Show loading state
+                showNotification('正在初始化系统...', 'info');
+
+                // Initialize demo gallery
+                initDemoGallery();
+
+                // Wait for mobile hub to be ready
+                await waitForMobileHub();
+
+                // Start performance monitoring
+                updatePerformanceIndicators();
+                setInterval(updatePerformanceIndicators, 1000);
+
+                // Initialize UI state
+                updateARControls(false);
+
+                // Show install prompt after delay
+                setTimeout(() => {
+                    if (!window.matchMedia('(display-mode: standalone)').matches) {
+                        const installPrompt = document.getElementById('install-prompt');
+                        if (installPrompt) {
+                            installPrompt.classList.add('show');
+                        }
+                    }
+                }, 3000);
+
+                // Register service worker
+                if ('serviceWorker' in navigator) {
+                    try {
+                        const registration = await navigator.serviceWorker.register('service_worker.js');
+                        console.log('[Demo] Service Worker registered:', registration);
+                    } catch (error) {
+                        console.warn('[Demo] Service Worker registration failed:', error);
+                    }
+                }
+
+                showNotification('系统初始化完成', 'success');
+                console.log('[Demo] Mobile demo initialized successfully');
+
+            } catch (error) {
+                console.error('[Demo] Initialization failed:', error);
+                showNotification('系统初始化失败，某些功能可能不可用', 'error');
+            }
+        });
+
+        async function waitForMobileHub(timeout = 10000) {
+            return new Promise((resolve, reject) => {
+                const startTime = Date.now();
+
+                const checkMobileHub = () => {
+                    if (window.mobileHub && window.mobileHub.isActive !== false) {
+                        resolve(window.mobileHub);
+                    } else if (Date.now() - startTime > timeout) {
+                        reject(new Error('Mobile Hub initialization timeout'));
+                    } else {
+                        setTimeout(checkMobileHub, 100);
+                    }
+                };
+
+                checkMobileHub();
+            });
+        }
+
+        // Handle gestures
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                showGestureDemo('pinch');
+            }
+        });
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                showNotification('屏幕方向已改变', 'info');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 体温计图标 -->
+  <path d="M14 14.76V3.5A2.5 2.5 0 0 0 11.5 1A2.5 2.5 0 0 0 9 3.5V14.76A4.5 4.5 0 1 0 14 14.76Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="11.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2" fill="none"/>
+  <line x1="11.5" y1="6" x2="11.5" y2="14" stroke="currentColor" stroke-width="1"/>
+</svg>

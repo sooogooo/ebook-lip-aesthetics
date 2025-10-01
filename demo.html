@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医学图库演示 - 专业唇部美学案例</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .feature-card h3 {
+            color: #E91E63;
+            margin-top: 0;
+        }
+
+        .medical-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .medical-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .medical-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .medical-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: #f8f9fa;
+        }
+
+        .medical-item-content {
+            padding: 15px;
+        }
+
+        .medical-item h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .medical-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #E91E63;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #E91E63;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #AD1457;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>绛唇解语花</h1>
+            <p>专业医学图库系统 - 唇部美学教育与临床案例展示</p>
+        </div>
+
+        <div class="content">
+            <div class="features">
+                <div class="feature-card">
+                    <h3>🔬 专业解剖结构</h3>
+                    <p>详细的唇部解剖图谱，包括血管分布、神经支配和肌肉层次，为临床操作提供科学依据。</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>💉 安全注射指导</h3>
+                    <p>标准化注射点位图和安全操作指南，明确标注危险区域和推荐路径，降低并发症风险。</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 真实案例分析</h3>
+                    <p>丰富的前后对比案例，展示治疗效果和技术要点，为临床决策提供参考依据。</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⚠️ 并发症预防</h3>
+                    <p>系统的风险识别和紧急处理流程，提高治疗安全性和医疗质量管理水平。</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📐 美学标准参考</h3>
+                    <p>基于黄金比例的美学设计原理，科学的测量方法和评价标准体系。</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔧 标准化流程</h3>
+                    <p>详细的手术步骤图解和技术规范，确保操作的标准化和质量控制。</p>
+                </div>
+            </div>
+
+            <h2>医学内容展示</h2>
+            <div class="medical-content" id="medicalContent">
+                <!-- 医学内容将通过JavaScript动态生成 -->
+            </div>
+
+            <div class="cta">
+                <h3>探索完整医学图库</h3>
+                <p>访问完整版本，体验专业的医学图库管理系统</p>
+                <a href="gallery.html" class="btn">进入图库系统</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简化的医学图库演示脚本
+        class MedicalGalleryDemo {
+            constructor() {
+                this.initDemo();
+            }
+
+            initDemo() {
+                this.generateSampleContent();
+            }
+
+            generateSampleContent() {
+                const container = document.getElementById('medicalContent');
+                const sampleItems = [
+                    {
+                        title: "唇部基础解剖结构图",
+                        category: "解剖学",
+                        description: "详细展示唇部的基本解剖结构，包括上唇、下唇、唇红缘、唇峰等重要解剖标志点。",
+                        svg: this.generateAnatomyDiagram()
+                    },
+                    {
+                        title: "透明质酸注射点位标准图",
+                        category: "注射技术",
+                        description: "展示透明质酸注射的标准点位分布，标注安全注射深度和剂量分配。",
+                        svg: this.generateInjectionDiagram()
+                    },
+                    {
+                        title: "治疗前后效果对比",
+                        category: "临床案例",
+                        description: "25岁女性唇部增强案例，通过精准注射实现自然增厚效果。",
+                        svg: this.generateBeforeAfterDiagram()
+                    },
+                    {
+                        title: "血管栓塞并发症预防",
+                        category: "并发症",
+                        description: "展示血管栓塞的预防措施和紧急处理方案，包含血管分布图。",
+                        svg: this.generateComplicationDiagram()
+                    },
+                    {
+                        title: "黄金比例美学标准",
+                        category: "美学设计",
+                        description: "基于黄金比例理论的唇部美学标准，展示理想的唇部比例关系。",
+                        svg: this.generateAestheticStandard()
+                    },
+                    {
+                        title: "丰唇手术标准流程",
+                        category: "手术流程",
+                        description: "详细展示丰唇手术的完整操作流程和关键技术要点。",
+                        svg: this.generateProcedureDiagram()
+                    }
+                ];
+
+                container.innerHTML = sampleItems.map(item => `
+                    <div class="medical-item">
+                        <img src="data:image/svg+xml;base64,${btoa(item.svg)}" alt="${item.title}">
+                        <div class="medical-item-content">
+                            <div class="category-badge">${item.category}</div>
+                            <h4>${item.title}</h4>
+                            <p>${item.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            generateAnatomyDiagram() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <path d="M 75 90 Q 105 75 150 75 Q 195 75 225 90 L 210 105 Q 150 90 90 105 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <path d="M 90 105 Q 150 135 210 105 L 225 120 Q 150 150 75 120 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <circle cx="120" cy="81" r="2" fill="#E91E63"/>
+                    <circle cx="180" cy="81" r="2" fill="#E91E63"/>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">唇部解剖结构</text>
+                    <text x="100" y="65" font-family="Arial" font-size="10" fill="#666">唇峰</text>
+                    <text x="225" y="110" font-family="Arial" font-size="10" fill="#666">唇红缘</text>
+                </svg>`;
+            }
+
+            generateInjectionDiagram() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <path d="M 75 90 Q 105 75 150 75 Q 195 75 225 90 L 210 105 Q 150 90 90 105 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <path d="M 90 105 Q 150 135 210 105 L 225 120 Q 150 150 75 120 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <ellipse cx="120" cy="97" rx="18" ry="11" fill="rgba(76, 175, 80, 0.2)" stroke="#4CAF50"/>
+                    <ellipse cx="180" cy="97" rx="18" ry="11" fill="rgba(76, 175, 80, 0.2)" stroke="#4CAF50"/>
+                    <circle cx="120" cy="93" r="3" fill="#F44336" stroke="white" stroke-width="1"/>
+                    <circle cx="180" cy="93" r="3" fill="#F44336" stroke="white" stroke-width="1"/>
+                    <circle cx="150" cy="125" r="3" fill="#F44336" stroke="white" stroke-width="1"/>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">注射点位图</text>
+                    <text x="130" y="85" font-family="Arial" font-size="8" fill="#333">0.1ml</text>
+                    <text x="185" y="85" font-family="Arial" font-size="8" fill="#333">0.1ml</text>
+                </svg>`;
+            }
+
+            generateBeforeAfterDiagram() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <g transform="translate(0,0)">
+                        <path d="M 30 90 Q 50 80 75 80 Q 100 80 120 90 L 110 100 Q 75 88 40 100 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="1"/>
+                        <path d="M 40 100 Q 75 115 110 100 L 120 108 Q 75 125 30 108 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="1"/>
+                        <text x="75" y="50" text-anchor="middle" font-family="Arial" font-size="10" fill="#FF9800">治疗前</text>
+                    </g>
+                    <g transform="translate(150,0)">
+                        <path d="M 30 88 Q 55 72 75 72 Q 95 72 120 88 L 115 103 Q 75 85 35 103 Z" fill="#ff9db4" stroke="#E91E63" stroke-width="1"/>
+                        <path d="M 35 103 Q 75 125 115 103 L 120 113 Q 75 135 30 113 Z" fill="#ff9db4" stroke="#E91E63" stroke-width="1"/>
+                        <text x="75" y="50" text-anchor="middle" font-family="Arial" font-size="10" fill="#4CAF50">治疗后</text>
+                    </g>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">前后对比</text>
+                </svg>`;
+            }
+
+            generateComplicationDiagram() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <path d="M 75 90 Q 105 75 150 75 Q 195 75 225 90 L 210 105 Q 150 90 90 105 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <path d="M 90 105 Q 150 135 210 105 L 225 120 Q 150 150 75 120 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <path d="M 82 102 Q 112 98 142 102" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                    <path d="M 158 102 Q 188 98 218 102" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                    <circle cx="135" cy="103" r="6" fill="rgba(244, 67, 54, 0.3)" stroke="#F44336"/>
+                    <ellipse cx="135" cy="108" rx="12" ry="9" fill="rgba(156, 39, 176, 0.4)"/>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#F44336">并发症预防</text>
+                    <text x="140" y="95" font-family="Arial" font-size="8" fill="#F44336">栓塞</text>
+                </svg>`;
+            }
+
+            generateAestheticStandard() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <ellipse cx="150" cy="112" rx="67" ry="82" fill="none" stroke="#ddd"/>
+                    <path d="M 97 97 Q 123 86 150 86 Q 177 86 203 97 L 195 108 Q 150 97 105 108 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <path d="M 105 108 Q 150 131 195 108 L 203 120 Q 150 142 97 120 Z" fill="#ffb3ba" stroke="#E91E63" stroke-width="2"/>
+                    <line x1="97" y1="108" x2="203" y2="108" stroke="#FFD700" stroke-width="2"/>
+                    <line x1="97" y1="120" x2="203" y2="120" stroke="#FFD700" stroke-width="2"/>
+                    <line x1="210" y1="97" x2="210" y2="108" stroke="#2196F3" stroke-dasharray="2,2"/>
+                    <line x1="210" y1="108" x2="210" y2="142" stroke="#2196F3" stroke-dasharray="2,2"/>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">美学标准</text>
+                    <text x="225" y="103" font-family="Arial" font-size="10" fill="#FFD700">1</text>
+                    <text x="225" y="130" font-family="Arial" font-size="10" fill="#FFD700">1.6</text>
+                </svg>`;
+            }
+
+            generateProcedureDiagram() {
+                return `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="300" height="200" fill="#f8f9fa"/>
+                    <circle cx="50" cy="60" r="12" fill="#2196F3"/>
+                    <text x="50" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">1</text>
+                    <circle cx="125" cy="60" r="12" fill="#2196F3"/>
+                    <text x="125" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">2</text>
+                    <circle cx="200" cy="60" r="12" fill="#2196F3"/>
+                    <text x="200" y="65" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">3</text>
+                    <circle cx="50" cy="120" r="12" fill="#2196F3"/>
+                    <text x="50" y="125" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">4</text>
+                    <circle cx="125" cy="120" r="12" fill="#2196F3"/>
+                    <text x="125" y="125" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">5</text>
+                    <circle cx="200" cy="120" r="12" fill="#2196F3"/>
+                    <text x="200" y="125" text-anchor="middle" font-family="Arial" font-size="10" fill="white" font-weight="bold">6</text>
+                    <path d="M 65 60 L 110 60 M 105 55 L 110 60 L 105 65" stroke="#2196F3" stroke-width="2" fill="#2196F3"/>
+                    <path d="M 140 60 L 185 60 M 180 55 L 185 60 L 180 65" stroke="#2196F3" stroke-width="2" fill="#2196F3"/>
+                    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#333">手术流程</text>
+                    <text x="50" y="85" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">准备</text>
+                    <text x="125" y="85" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">消毒</text>
+                    <text x="200" y="85" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">标记</text>
+                    <text x="50" y="145" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">注射</text>
+                    <text x="125" y="145" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">塑形</text>
+                    <text x="200" y="145" text-anchor="middle" font-family="Arial" font-size="8" fill="#333">护理</text>
+                </svg>`;
+            }
+        }
+
+        // 初始化演示
+        document.addEventListener('DOMContentLoaded', () => {
+            new MedicalGalleryDemo();
+        });
+    </script>
+</body>
+</html>

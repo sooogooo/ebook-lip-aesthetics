@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-09-21T09:52:00.993Z",
+  "environment": "production",
+  "optimizations": {
+    "minification": true,
+    "gzip": true,
+    "brotli": true,
+    "caching": true,
+    "lazyLoading": true,
+    "serviceWorker": true,
+    "criticalCSS": true,
+    "treeShaking": true
+  },
+  "performance": {
+    "targetFCP": 1800,
+    "targetLCP": 2500,
+    "targetTTI": 3800,
+    "targetCLS": 0.1,
+    "budgetSize": 1500000
+  },
+  "files": {
+    "css": [
+      "unified_styles.min.css",
+      "gallery.min.css",
+      "icons.min.css"
+    ],
+    "js": [
+      "integration.min.js",
+      "charts.min.js",
+      "enhanced_3d_anatomy.min.js",
+      "advanced_medical_visualization.min.js",
+      "mobile_integration_hub.min.js",
+      "mobile_3d_viewer.min.js",
+      "mobile_gestures.min.js",
+      "accessibility-system.min.js",
+      "lazy-load-manager.min.js",
+      "service-worker.min.js"
+    ],
+    "html": [
+      "visualization_hub.min.html",
+      "medical_dashboard.min.html",
+      "enhanced_3d_anatomy.min.html",
+      "performance-dashboard.min.html",
+      "mobile_demo.min.html",
+      "ar_viewer.min.html"
+    ]
+  },
+  "stats": {
+    "originalSize": 596406,
+    "optimizedSize": 381735,
+    "compressionRatio": "35.99"
+  }
+}

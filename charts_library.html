@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>绛唇解语花 - 医美数据可视化</title>
+    <link rel="stylesheet" href="charts.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <section id="case-statistics">
+            <h2>案例统计</h2>
+            <div class="chart-grid">
+                <canvas id="age-distribution-pie"></canvas>
+                <canvas id="treatment-frequency-bar"></canvas>
+                <canvas id="monthly-cases-line"></canvas>
+                <canvas id="success-rate-stacked"></canvas>
+                <div id="satisfaction-scatter"></div>
+            </div>
+        </section>
+
+        <section id="satisfaction-survey">
+            <h2>满意度调查</h2>
+            <div class="chart-grid">
+                <canvas id="multi-dimension-radar"></canvas>
+                <div id="doctor-rating-heatmap"></div>
+                <canvas id="satisfaction-boxplot"></canvas>
+                <div id="satisfaction-gauge"></div>
+                <div id="feedback-wordcloud"></div>
+            </div>
+        </section>
+
+        <section id="technology-analysis">
+            <h2>技术对比分析</h2>
+            <div class="chart-grid">
+                <div id="tech-parallel-coordinates"></div>
+                <div id="tech-hierarchy-tree"></div>
+                <div id="tech-network-graph"></div>
+                <div id="tech-timeline"></div>
+                <div id="tech-effect-matrix"></div>
+            </div>
+        </section>
+
+        <section id="risk-assessment">
+            <h2>风险评估</h2>
+            <div class="chart-grid">
+                <div id="risk-reward-quadrant"></div>
+                <div id="treatment-risk-funnel"></div>
+                <div id="complication-sankey"></div>
+                <div id="risk-warning-gauge"></div>
+                <div id="risk-decision-tree"></div>
+            </div>
+        </section>
+
+        <section id="learning-tracking">
+            <h2>学习进度追踪</h2>
+            <div class="chart-grid">
+                <div id="course-progress-bars"></div>
+                <div id="learning-timeline-gantt"></div>
+                <div id="skill-achievement-system"></div>
+                <div id="learner-ranking"></div>
+                <div id="personalized-learning-path"></div>
+            </div>
+        </section>
+
+        <section id="global-distribution">
+            <h2>全球分布</h2>
+            <div class="chart-grid">
+                <div id="world-map-interactive"></div>
+                <div id="doctor-density-heatmap"></div>
+                <div id="technology-region-comparison"></div>
+                <div id="market-size-geo"></div>
+                <div id="training-centers-map"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="charts.js"></script>
+</body>
+</html>

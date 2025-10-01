@@ -1,0 +1,389 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Vascular and Nerve Distribution SVG -->
+    <!-- Medical-grade illustration of blood vessels and nerve pathways -->
+
+    <defs>
+        <!-- Animated pulse for arteries -->
+        <animate id="arterialPulse" attributeName="stroke-width" values="3;5;3" dur="1.2s" repeatCount="indefinite"/>
+
+        <!-- Gradient for depth perception -->
+        <radialGradient id="tissueGrad">
+            <stop offset="0%" style="stop-color:#fdbcb4;stop-opacity:0.4" />
+            <stop offset="100%" style="stop-color:#e89690;stop-opacity:0.2" />
+        </radialGradient>
+
+        <!-- Shadow filter -->
+        <filter id="vesselShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+            <feOffset dx="1" dy="1" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.2"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- Pattern for danger zones -->
+        <pattern id="dangerPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="#ff000020"/>
+            <line x1="0" y1="0" x2="10" y2="10" stroke="#ff000040" stroke-width="1"/>
+            <line x1="10" y1="0" x2="0" y2="10" stroke="#ff000040" stroke-width="1"/>
+        </pattern>
+
+        <!-- Pattern for safe zones -->
+        <pattern id="safePattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="#00ff0010"/>
+            <circle cx="5" cy="5" r="2" fill="#00ff0020"/>
+        </pattern>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="600" fill="#f5f7fa"/>
+
+    <!-- Title -->
+    <text x="400" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#2c3e50">
+        血管神经分布图
+    </text>
+    <text x="400" y="55" text-anchor="middle" font-size="13" fill="#7f8c8d">
+        动脉分支 • 静脉回流 • 神经支配 • 危险区域标识
+    </text>
+
+    <!-- Main anatomical structure -->
+    <g id="mainStructure" transform="translate(400,320)">
+
+        <!-- Face outline (background) -->
+        <ellipse cx="0" cy="-20" rx="185" ry="250" fill="url(#tissueGrad)" stroke="#e8a090" stroke-width="2"/>
+
+        <!-- Lip structure outline -->
+        <g id="lipOutline" opacity="0.6">
+            <path d="M -65,55 Q -35,45 0,50 Q 35,45 65,55 Q 35,60 0,62 Q -35,60 -65,55 Z"
+                  fill="#f4a6a0" stroke="#e8a090" stroke-width="2"/>
+            <path d="M -65,55 Q -35,75 0,80 Q 35,75 65,55 Q 35,65 0,67 Q -35,65 -65,55 Z"
+                  fill="#f2a896" stroke="#e8a090" stroke-width="2"/>
+        </g>
+
+        <!-- Major Arterial System -->
+        <g id="arterialSystem">
+            <!-- External carotid branches -->
+            <g stroke="#cc0000" fill="none" opacity="0.9">
+                <!-- Facial artery main trunk (left) -->
+                <path d="M -250,200 Q -220,150 -200,100 Q -180,50 -165,0 Q -150,-50 -130,-100"
+                      stroke-width="4" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="4;5;4" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+
+                <!-- Facial artery main trunk (right) -->
+                <path d="M 250,200 Q 220,150 200,100 Q 180,50 165,0 Q 150,-50 130,-100"
+                      stroke-width="4" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="4;5;4" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+            </g>
+
+            <!-- Superior labial artery -->
+            <g stroke="#ff3333" fill="none">
+                <!-- Left branch -->
+                <path d="M -165,50 Q -120,48 -65,55"
+                      stroke-width="3" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="3;4;3" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+                <!-- Right branch -->
+                <path d="M 165,50 Q 120,48 65,55"
+                      stroke-width="3" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="3;4;3" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+                <!-- Anastomosis at midline -->
+                <circle cx="0" cy="52" r="4" fill="#ff4444" opacity="0.8">
+                    <animate attributeName="r" values="4;5;4" dur="1.2s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+
+            <!-- Inferior labial artery -->
+            <g stroke="#ff3333" fill="none">
+                <!-- Left branch -->
+                <path d="M -165,55 Q -120,68 -65,55"
+                      stroke-width="3" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="3;4;3" dur="1.4s" repeatCount="indefinite"/>
+                </path>
+                <!-- Right branch -->
+                <path d="M 165,55 Q 120,68 65,55"
+                      stroke-width="3" filter="url(#vesselShadow)">
+                    <animate attributeName="stroke-width" values="3;4;3" dur="1.4s" repeatCount="indefinite"/>
+                </path>
+                <!-- Anastomosis at midline -->
+                <circle cx="0" cy="65" r="4" fill="#ff4444" opacity="0.8">
+                    <animate attributeName="r" values="4;5;4" dur="1.4s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+
+            <!-- Angular artery -->
+            <g stroke="#ff5555" stroke-width="2.5" fill="none" opacity="0.8">
+                <path d="M -130,-100 Q -110,-50 -100,0"/>
+                <path d="M 130,-100 Q 110,-50 100,0"/>
+            </g>
+
+            <!-- Smaller arterial branches -->
+            <g stroke="#ff7777" stroke-width="1.5" fill="none" opacity="0.7">
+                <!-- Septal branches -->
+                <path d="M 0,-20 L 0,30"/>
+                <path d="M -10,-15 L -5,25"/>
+                <path d="M 10,-15 L 5,25"/>
+
+                <!-- Lateral branches -->
+                <path d="M -65,55 L -60,45"/>
+                <path d="M -45,53 L -42,43"/>
+                <path d="M -25,51 L -23,41"/>
+                <path d="M 25,51 L 23,41"/>
+                <path d="M 45,53 L 42,43"/>
+                <path d="M 65,55 L 60,45"/>
+            </g>
+
+            <!-- Capillary bed visualization -->
+            <g fill="#ff888860">
+                <circle cx="-40" cy="50" r="8"/>
+                <circle cx="-20" cy="52" r="7"/>
+                <circle cx="0" cy="55" r="8"/>
+                <circle cx="20" cy="52" r="7"/>
+                <circle cx="40" cy="50" r="8"/>
+            </g>
+        </g>
+
+        <!-- Venous System -->
+        <g id="venousSystem" opacity="0.8">
+            <!-- Facial vein -->
+            <g stroke="#0000cc" stroke-width="3.5" fill="none">
+                <path d="M -245,190 Q -215,140 -195,90 Q -175,40 -160,-10 Q -145,-60 -125,-110"/>
+                <path d="M 245,190 Q 215,140 195,90 Q 175,40 160,-10 Q 145,-60 125,-110"/>
+            </g>
+
+            <!-- Labial veins -->
+            <g stroke="#3333ff" stroke-width="2.5" fill="none" opacity="0.8">
+                <!-- Superior labial vein -->
+                <path d="M -160,48 Q -115,45 -60,50"/>
+                <path d="M 160,48 Q 115,45 60,50"/>
+
+                <!-- Inferior labial vein -->
+                <path d="M -160,58 Q -115,70 -60,58"/>
+                <path d="M 160,58 Q 115,70 60,58"/>
+            </g>
+
+            <!-- Venous drainage network -->
+            <g stroke="#6666ff" stroke-width="1.2" fill="none" opacity="0.6">
+                <path d="M -55,54 L -52,60 L -50,54"/>
+                <path d="M -35,56 L -33,62 L -30,56"/>
+                <path d="M -15,55 L -13,61 L -10,55"/>
+                <path d="M 15,55 L 13,61 L 10,55"/>
+                <path d="M 35,56 L 33,62 L 30,56"/>
+                <path d="M 55,54 L 52,60 L 50,54"/>
+            </g>
+
+            <!-- Deep venous plexus -->
+            <g fill="#4444ff30">
+                <ellipse cx="-30" cy="60" rx="25" ry="15"/>
+                <ellipse cx="30" cy="60" rx="25" ry="15"/>
+            </g>
+        </g>
+
+        <!-- Nerve Distribution -->
+        <g id="nerveSystem">
+            <!-- Trigeminal nerve branches -->
+            <!-- Infraorbital nerve (V2) -->
+            <g stroke="#ffcc00" stroke-width="3" fill="none">
+                <path d="M -110,-110 L -95,-70 L -85,-30 L -75,10 L -65,40">
+                    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite"/>
+                </path>
+                <path d="M 110,-110 L 95,-70 L 85,-30 L 75,10 L 65,40">
+                    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite"/>
+                </path>
+
+                <!-- Branches -->
+                <path d="M -85,-30 L -105,-25" stroke-width="2"/>
+                <path d="M -85,-30 L -65,-25" stroke-width="2"/>
+                <path d="M 85,-30 L 105,-25" stroke-width="2"/>
+                <path d="M 85,-30 L 65,-25" stroke-width="2"/>
+            </g>
+
+            <!-- Mental nerve (V3) -->
+            <g stroke="#ffcc00" stroke-width="3" fill="none">
+                <path d="M -110,130 L -95,90 L -85,65 L -75,55">
+                    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite"/>
+                </path>
+                <path d="M 110,130 L 95,90 L 85,65 L 75,55">
+                    <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite"/>
+                </path>
+
+                <!-- Branches -->
+                <path d="M -85,65 L -105,70" stroke-width="2"/>
+                <path d="M -85,65 L -65,70" stroke-width="2"/>
+                <path d="M 85,65 L 105,70" stroke-width="2"/>
+                <path d="M 85,65 L 65,70" stroke-width="2"/>
+            </g>
+
+            <!-- Nerve endpoints and sensory distribution -->
+            <g fill="#ff9900">
+                <!-- Major nerve terminals -->
+                <circle cx="-75" cy="10" r="4"/>
+                <circle cx="75" cy="10" r="4"/>
+                <circle cx="-75" cy="55" r="4"/>
+                <circle cx="75" cy="55" r="4"/>
+                <circle cx="-45" cy="35" r="3"/>
+                <circle cx="45" cy="35" r="3"/>
+                <circle cx="0" cy="30" r="3"/>
+                <circle cx="0" cy="70" r="3"/>
+
+                <!-- Minor nerve terminals -->
+                <g opacity="0.6">
+                    <circle cx="-55" cy="45" r="2"/>
+                    <circle cx="-35" cy="48" r="2"/>
+                    <circle cx="-15" cy="46" r="2"/>
+                    <circle cx="15" cy="46" r="2"/>
+                    <circle cx="35" cy="48" r="2"/>
+                    <circle cx="55" cy="45" r="2"/>
+                </g>
+            </g>
+
+            <!-- Nerve field representation -->
+            <g fill="#ffcc0020">
+                <ellipse cx="-40" cy="40" rx="35" ry="25"/>
+                <ellipse cx="40" cy="40" rx="35" ry="25"/>
+                <ellipse cx="0" cy="50" rx="30" ry="30"/>
+            </g>
+        </g>
+
+        <!-- Danger Zones -->
+        <g id="dangerZones">
+            <!-- High risk vascular areas -->
+            <g fill="url(#dangerPattern)" stroke="#ff0000" stroke-width="2" stroke-dasharray="5,3" opacity="0.7">
+                <!-- Central anastomosis zone -->
+                <ellipse cx="0" cy="58" rx="20" ry="12"/>
+                <text x="0" y="35" text-anchor="middle" font-size="11" fill="#ff0000" font-weight="bold">
+                    高风险区
+                </text>
+
+                <!-- Lateral vascular zones -->
+                <ellipse cx="-65" cy="55" rx="15" ry="10"/>
+                <ellipse cx="65" cy="55" rx="15" ry="10"/>
+                <text x="-65" y="80" text-anchor="middle" font-size="10" fill="#ff9900">
+                    中风险
+                </text>
+                <text x="65" y="80" text-anchor="middle" font-size="10" fill="#ff9900">
+                    中风险
+                </text>
+            </g>
+
+            <!-- Angular artery danger zone -->
+            <g fill="#ff990020" stroke="#ff9900" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.6">
+                <circle cx="-100" cy="0" r="18"/>
+                <circle cx="100" cy="0" r="18"/>
+            </g>
+        </g>
+
+        <!-- Safe Zones -->
+        <g id="safeZones" opacity="0.5">
+            <g fill="url(#safePattern)" stroke="#00aa00" stroke-width="2" stroke-dasharray="8,4">
+                <!-- Safe injection areas -->
+                <rect x="-45" y="38" width="90" height="15" rx="7"/>
+                <text x="0" y="100" text-anchor="middle" font-size="11" fill="#00aa00" font-weight="bold">
+                    相对安全区
+                </text>
+
+                <!-- Lateral safe zones -->
+                <rect x="-120" y="45" width="35" height="20" rx="10"/>
+                <rect x="85" y="45" width="35" height="20" rx="10"/>
+            </g>
+        </g>
+
+        <!-- Clinical annotations -->
+        <g id="clinicalNotes" font-size="10" fill="#2c3e50">
+            <!-- Important anatomical landmarks -->
+            <g>
+                <line x1="0" y1="52" x2="50" y2="20" stroke="#666" stroke-width="0.5"/>
+                <text x="55" y="20">上下唇动脉吻合处</text>
+
+                <line x1="-165" y1="50" x2="-200" y2="30" stroke="#666" stroke-width="0.5"/>
+                <text x="-200" y="25" text-anchor="end">面动脉分支</text>
+
+                <line x1="165" y1="50" x2="200" y2="30" stroke="#666" stroke-width="0.5"/>
+                <text x="200" y="25">面动脉分支</text>
+
+                <line x1="-75" y1="10" x2="-120" y2="-20" stroke="#666" stroke-width="0.5"/>
+                <text x="-120" y="-25" text-anchor="end">眶下神经</text>
+
+                <line x1="75" y1="55" x2="120" y2="85" stroke="#666" stroke-width="0.5"/>
+                <text x="120" y="90">颏神经</text>
+            </g>
+        </g>
+    </g>
+
+    <!-- Legend and Information Panel -->
+    <g transform="translate(50,480)">
+        <rect x="0" y="0" width="700" height="100" fill="white" stroke="#dee2e6" stroke-width="1" rx="8" opacity="0.95"/>
+
+        <text x="10" y="20" font-size="13" font-weight="bold" fill="#2c3e50">图例说明</text>
+
+        <!-- Artery legend -->
+        <line x1="10" y1="35" x2="40" y2="35" stroke="#ff3333" stroke-width="3"/>
+        <text x="45" y="39" font-size="11" fill="#666">动脉</text>
+
+        <!-- Vein legend -->
+        <line x1="10" y1="50" x2="40" y2="50" stroke="#3333ff" stroke-width="3"/>
+        <text x="45" y="54" font-size="11" fill="#666">静脉</text>
+
+        <!-- Nerve legend -->
+        <line x1="10" y1="65" x2="40" y2="65" stroke="#ffcc00" stroke-width="3"/>
+        <text x="45" y="69" font-size="11" fill="#666">神经</text>
+
+        <!-- Danger zone legend -->
+        <rect x="100" y="30" width="25" height="15" fill="#ff000030" stroke="#ff0000" stroke-width="1"/>
+        <text x="130" y="41" font-size="11" fill="#666">危险区</text>
+
+        <!-- Safe zone legend -->
+        <rect x="100" y="50" width="25" height="15" fill="#00ff0020" stroke="#00aa00" stroke-width="1"/>
+        <text x="130" y="61" font-size="11" fill="#666">安全区</text>
+
+        <!-- Clinical notes -->
+        <text x="250" y="20" font-size="12" font-weight="bold" fill="#2c3e50">临床要点</text>
+        <text x="250" y="38" font-size="10" fill="#495057">• 中线处血管吻合丰富，注射需谨慎</text>
+        <text x="250" y="53" font-size="10" fill="#495057">• 避免深层注射防止血管栓塞</text>
+        <text x="250" y="68" font-size="10" fill="#495057">• 注射前必须回抽确认</text>
+        <text x="250" y="83" font-size="10" fill="#495057">• 了解个体解剖变异</text>
+
+        <text x="480" y="38" font-size="10" fill="#495057">• 口角区域血管密集</text>
+        <text x="480" y="53" font-size="10" fill="#495057">• 神经损伤可致感觉异常</text>
+        <text x="480" y="68" font-size="10" fill="#495057">• 少量多点注射原则</text>
+        <text x="480" y="83" font-size="10" fill="#495057">• 钝针技术降低风险</text>
+    </g>
+
+    <!-- Risk level indicator -->
+    <g transform="translate(650,100)">
+        <rect x="0" y="0" width="120" height="150" fill="white" stroke="#dee2e6" stroke-width="1" rx="8" opacity="0.95"/>
+
+        <text x="60" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">
+            风险等级
+        </text>
+
+        <rect x="10" y="35" width="100" height="20" fill="#ff0000" opacity="0.3"/>
+        <text x="60" y="48" text-anchor="middle" font-size="11" fill="#ff0000" font-weight="bold">
+            高风险
+        </text>
+        <text x="60" y="63" text-anchor="middle" font-size="9" fill="#666">
+            血管吻合区
+        </text>
+
+        <rect x="10" y="70" width="100" height="20" fill="#ff9900" opacity="0.3"/>
+        <text x="60" y="83" text-anchor="middle" font-size="11" fill="#ff9900" font-weight="bold">
+            中风险
+        </text>
+        <text x="60" y="98" text-anchor="middle" font-size="9" fill="#666">
+            主干血管区
+        </text>
+
+        <rect x="10" y="105" width="100" height="20" fill="#00aa00" opacity="0.3"/>
+        <text x="60" y="118" text-anchor="middle" font-size="11" fill="#00aa00" font-weight="bold">
+            低风险
+        </text>
+        <text x="60" y="133" text-anchor="middle" font-size="9" fill="#666">
+            相对安全区
+        </text>
+    </g>
+</svg>

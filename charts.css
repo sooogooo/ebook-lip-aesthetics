@@ -1,0 +1,66 @@
+/* 绛唇解语花 - 图表样式 */
+:root {
+    --primary-color: #8B0000;  /* 深红色，呼应绛唇 */
+    --secondary-color: #FFB6C1;  /* 浅粉色 */
+    --text-color: #333;
+    --background-color: #FFF;
+    --chart-background: #F9F5F0;
+}
+
+body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.dashboard {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+section {
+    background-color: var(--chart-background);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+canvas, .chart {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px;
+}
+
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+/* 深色/浅色主题切换 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #1A1A1A;
+        --chart-background: #2C2C2C;
+        --text-color: #E0E0E0;
+    }
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}

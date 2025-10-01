@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发文档 - 绛唇解语花组件系统</title>
+    <meta name="description" content="完整的组件开发文档和API参考">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+
+    <!-- Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #E91E63;
+            --primary-light: #F8BBD0;
+            --primary-dark: #AD1457;
+            --secondary: #FF6B9D;
+            --accent: #FF1744;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --info: #2196F3;
+
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F7FA;
+            --bg-dark: #1E1E2E;
+            --bg-code: #2D2D2D;
+
+            --text-primary: #2C3E50;
+            --text-secondary: #64748B;
+            --text-light: #94A3B8;
+            --text-on-primary: #FFFFFF;
+
+            --border: #E2E8F0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+            --font-mono: "Fira Code", "SF Mono", Monaco, Consolas, monospace;
+
+            --radius: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .nav-header {
+            padding: 2rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-on-primary);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-section {
+            padding: 1.5rem 0;
+        }
+
+        .nav-title {
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(233, 30, 99, 0.1), transparent);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.125rem;
+            width: 1.5rem;
+            text-align: center;
+        }
+
+        .nav-submenu {
+            list-style: none;
+            background: var(--bg-secondary);
+            display: none;
+        }
+
+        .nav-submenu.active {
+            display: block;
+        }
+
+        .nav-submenu .nav-link {
+            padding-left: 3.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--text-on-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: var(--text-on-primary);
+        }
+
+        /* Content Sections */
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Code Examples */
+        .code-example {
+            background: var(--bg-code);
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-title {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .code-btn {
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .code-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            padding: 1rem;
+            background: transparent;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* API Reference */
+        .api-method {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .api-badge.get {
+            background: var(--success);
+            color: white;
+        }
+
+        .api-badge.post {
+            background: var(--info);
+            color: white;
+        }
+
+        .api-badge.put {
+            background: var(--warning);
+            color: white;
+        }
+
+        .api-badge.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .api-name {
+            font-family: var(--font-mono);
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .api-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .api-params {
+            margin-top: 1rem;
+        }
+
+        .api-param {
+            display: grid;
+            grid-template-columns: 150px 100px 1fr;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-param:last-child {
+            border-bottom: none;
+        }
+
+        .param-name {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .param-type {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .param-desc {
+            color: var(--text-secondary);
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin: 1.5rem 0;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Live Demo */
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .demo-preview {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Search */
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main {
+                margin-left: 0;
+            }
+
+            .nav {
+                transform: translateX(-100%);
+                transition: var(--transition);
+            }
+
+            .nav.active {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .api-param {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-title {
+                font-size: 1.75rem;
+            }
+
+            .main {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav,
+            .mobile-toggle,
+            .header-actions {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Navigation -->
+        <nav class="nav" id="nav">
+            <div class="nav-header">
+                <div class="nav-logo">
+                    <span>📖</span>
+                    <span>开发文档</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">快速开始</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#introduction" class="nav-link active">
+                            <span class="nav-icon">🚀</span>
+                            <span>介绍</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#installation" class="nav-link">
+                            <span class="nav-icon">📦</span>
+                            <span>安装</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#usage" class="nav-link">
+                            <span class="nav-icon">💡</span>
+                            <span>使用指南</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">组件系统</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#base-component" class="nav-link">
+                            <span class="nav-icon">🧩</span>
+                            <span>基础组件</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#visualization" class="nav-link">
+                            <span class="nav-icon">📊</span>
+                            <span>可视化组件</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#3d-components" class="nav-link">
+                            <span class="nav-icon">🎮</span>
+                            <span>3D组件</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#form-components" class="nav-link">
+                            <span class="nav-icon">📝</span>
+                            <span>表单组件</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">API参考</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#api-overview" class="nav-link">
+                            <span class="nav-icon">🔌</span>
+                            <span>API概览</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#rest-api" class="nav-link">
+                            <span class="nav-icon">🌐</span>
+                            <span>REST API</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#websocket" class="nav-link">
+                            <span class="nav-icon">⚡</span>
+                            <span>WebSocket</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">高级主题</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#state-management" class="nav-link">
+                            <span class="nav-icon">🔄</span>
+                            <span>状态管理</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#theme-system" class="nav-link">
+                            <span class="nav-icon">🎨</span>
+                            <span>主题系统</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#performance" class="nav-link">
+                            <span class="nav-icon">⚡</span>
+                            <span>性能优化</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#testing" class="nav-link">
+                            <span class="nav-icon">🧪</span>
+                            <span>测试</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">资源</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <span class="nav-icon">🏠</span>
+                            <span>返回首页</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/document-viewer.html" class="nav-link">
+                            <span class="nav-icon">📚</span>
+                            <span>文档阅读器</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleNav()">
+            <span>☰</span>
+        </button>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Header -->
+                <header class="header">
+                    <h1 class="header-title">绛唇解语花 组件系统文档</h1>
+                    <p class="header-subtitle">专业的医疗美学可视化平台开发文档</p>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <span>⬇</span>
+                            <span>下载文档</span>
+                        </button>
+                        <button class="btn">
+                            <span>⭐</span>
+                            <span>GitHub</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Search -->
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="搜索文档...">
+                </div>
+
+                <!-- Introduction Section -->
+                <section id="introduction" class="section">
+                    <div class="section-header">
+                        <span class="section-icon">🚀</span>
+                        <h2 class="section-title">介绍</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>绛唇解语花是一个专业的医疗美学可视化平台，提供了完整的组件系统和开发工具，用于构建现代化的医疗应用。</p>
+
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">🧩</div>
+                                <h3 class="feature-title">模块化设计</h3>
+                                <p class="feature-desc">基于ES6模块的组件化架构，支持按需加载和代码分割</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📊</div>
+                                <h3 class="feature-title">丰富的可视化</h3>
+                                <p class="feature-desc">集成D3.js、Three.js等库，提供专业的数据可视化能力</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🎨</div>
+                                <h3 class="feature-title">主题定制</h3>
+                                <p class="feature-desc">灵活的主题系统，支持深色模式和自定义配色方案</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📱</div>
+                                <h3 class="feature-title">响应式设计</h3>
+                                <p class="feature-desc">完美适配各种设备，提供一致的用户体验</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">⚡</div>
+                                <h3 class="feature-title">高性能</h3>
+                                <p class="feature-desc">优化的渲染引擎，支持大数据量的流畅展示</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🔐</div>
+                                <h3 class="feature-title">安全可靠</h3>
+                                <p class="feature-desc">遵循医疗行业安全标准，保护患者数据隐私</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Section -->
+                <section id="installation" class="section">
+                    <div class="section-header">
+                        <span class="section-icon">📦</span>
+                        <h2 class="section-title">安装</h2>
+                    </div>
+                    <div class="section-content">
+                        <h3>使用NPM安装</h3>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-title">终端</span>
+                                <div class="code-actions">
+                                    <button class="code-btn" onclick="copyCode(this)">复制</button>
+                                </div>
+                            </div>
+                            <pre><code class="language-bash">npm install @lips-aesthetics/components
+npm install @lips-aesthetics/visualization
+npm install @lips-aesthetics/3d-viewer</code></pre>
+                        </div>
+
+                        <h3>使用CDN</h3>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-title">HTML</span>
+                                <div class="code-actions">
+                                    <button class="code-btn" onclick="copyCode(this)">复制</button>
+                                </div>
+                            </div>
+                            <pre><code class="language-html">&lt;!-- 核心组件库 --&gt;
+&lt;script src="https://cdn.lips-aesthetics.com/core.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 可视化组件 --&gt;
+&lt;script src="https://cdn.lips-aesthetics.com/visualization.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 3D查看器 --&gt;
+&lt;script src="https://cdn.lips-aesthetics.com/3d-viewer.min.js"&gt;&lt;/script&gt;</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Base Component Section -->
+                <section id="base-component" class="section">
+                    <div class="section-header">
+                        <span class="section-icon">🧩</span>
+                        <h2 class="section-title">基础组件</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>所有组件都继承自BaseComponent类，提供统一的生命周期管理和事件系统。</p>
+
+                        <h3>创建自定义组件</h3>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-title">JavaScript</span>
+                                <div class="code-actions">
+                                    <button class="code-btn" onclick="runCode(this)">运行</button>
+                                    <button class="code-btn" onclick="copyCode(this)">复制</button>
+                                </div>
+                            </div>
+                            <pre><code class="language-javascript">// 导入基础组件
+import { BaseComponent } from '@lips-aesthetics/components';
+
+// 创建自定义组件
+class MyCustomChart extends BaseComponent {
+    constructor(container, options = {}) {
+        super(container, options);
+
+        // 定义组件接口
+        this.defineInterface({
+            data: { type: 'array', required: true },
+            title: { type: 'string', default: 'Chart Title' },
+            theme: { type: 'string', default: 'light' },
+            height: { type: 'number', default: 400 }
+        });
+    }
+
+    // 生命周期：渲染前
+    beforeRender() {
+        console.log('准备渲染组件');
+        this.validateData();
+    }
+
+    // 主渲染方法
+    render() {
+        const { data, title, theme } = this.props;
+
+        this.container.innerHTML = `
+            &lt;div class="chart-wrapper ${theme}"&gt;
+                &lt;h3&gt;${title}&lt;/h3&gt;
+                &lt;div class="chart-content"&gt;
+                    ${this.renderChart(data)}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+    }
+
+    // 生命周期：渲染后
+    afterRender() {
+        console.log('组件渲染完成');
+        this.attachEventListeners();
+    }
+
+    // 自定义方法
+    renderChart(data) {
+        return data.map(item =>
+            `&lt;div class="bar" style="height: ${item.value}px"&gt;
+                ${item.label}
+            &lt;/div&gt;`
+        ).join('');
+    }
+
+    // 事件处理
+    attachEventListeners() {
+        this.container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('bar')) {
+                this.emit('barClick', e.target);
+            }
+        });
+    }
+
+    // 更新数据
+    update(newData) {
+        this.props.data = newData;
+        this.render();
+    }
+
+    // 销毁组件
+    destroy() {
+        super.destroy();
+        console.log('组件已销毁');
+    }
+}
+
+// 使用组件
+const container = document.getElementById('chart-container');
+const chart = new MyCustomChart(container, {
+    data: [
+        { label: 'Q1', value: 100 },
+        { label: 'Q2', value: 150 },
+        { label: 'Q3', value: 120 },
+        { label: 'Q4', value: 180 }
+    ],
+    title: '季度销售数据',
+    theme: 'dark'
+});
+
+// 监听事件
+chart.on('barClick', (target) => {
+    console.log('点击了柱状图:', target);
+});</code></pre>
+                        </div>
+
+                        <h3>组件生命周期</h3>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>方法</th>
+                                        <th>描述</th>
+                                        <th>时机</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>constructor()</code></td>
+                                        <td>组件初始化</td>
+                                        <td>创建实例时</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>beforeRender()</code></td>
+                                        <td>渲染前的准备工作</td>
+                                        <td>render()方法执行前</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>render()</code></td>
+                                        <td>主渲染方法</td>
+                                        <td>需要更新视图时</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>afterRender()</code></td>
+                                        <td>渲染后的处理</td>
+                                        <td>DOM更新完成后</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>update()</code></td>
+                                        <td>更新组件</td>
+                                        <td>数据或属性变化时</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>destroy()</code></td>
+                                        <td>销毁组件</td>
+                                        <td>组件不再使用时</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API Reference Section -->
+                <section id="rest-api" class="section">
+                    <div class="section-header">
+                        <span class="section-icon">🌐</span>
+                        <h2 class="section-title">REST API</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>平台提供RESTful API接口，支持数据的增删改查操作。</p>
+
+                        <div class="api-method">
+                            <div class="api-header">
+                                <span class="api-badge get">GET</span>
+                                <span class="api-name">/api/patients</span>
+                            </div>
+                            <p class="api-description">获取患者列表</p>
+                            <div class="api-params">
+                                <div class="api-param">
+                                    <span class="param-name">page</span>
+                                    <span class="param-type">number</span>
+                                    <span class="param-desc">页码，默认为1</span>
+                                </div>
+                                <div class="api-param">
+                                    <span class="param-name">limit</span>
+                                    <span class="param-type">number</span>
+                                    <span class="param-desc">每页数量，默认为20</span>
+                                </div>
+                                <div class="api-param">
+                                    <span class="param-name">search</span>
+                                    <span class="param-type">string</span>
+                                    <span class="param-desc">搜索关键词</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="api-method">
+                            <div class="api-header">
+                                <span class="api-badge post">POST</span>
+                                <span class="api-name">/api/treatments</span>
+                            </div>
+                            <p class="api-description">创建新的治疗记录</p>
+                            <div class="api-params">
+                                <div class="api-param">
+                                    <span class="param-name">patientId</span>
+                                    <span class="param-type">string</span>
+                                    <span class="param-desc">患者ID (必需)</span>
+                                </div>
+                                <div class="api-param">
+                                    <span class="param-name">type</span>
+                                    <span class="param-type">string</span>
+                                    <span class="param-desc">治疗类型 (必需)</span>
+                                </div>
+                                <div class="api-param">
+                                    <span class="param-name">data</span>
+                                    <span class="param-type">object</span>
+                                    <span class="param-desc">治疗数据</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>请求示例</h3>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-title">JavaScript - Fetch API</span>
+                                <div class="code-actions">
+                                    <button class="code-btn" onclick="copyCode(this)">复制</button>
+                                </div>
+                            </div>
+                            <pre><code class="language-javascript">// 获取患者列表
+async function getPatients(page = 1, limit = 20) {
+    try {
+        const response = await fetch(`/api/patients?page=${page}&limit=${limit}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch patients');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// 创建治疗记录
+async function createTreatment(patientId, treatmentData) {
+    try {
+        const response = await fetch('/api/treatments', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                patientId,
+                type: treatmentData.type,
+                data: treatmentData
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create treatment');
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Live Demo Section -->
+                <section id="demo" class="section">
+                    <div class="section-header">
+                        <span class="section-icon">🎮</span>
+                        <h2 class="section-title">在线演示</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="tabs">
+                            <div class="tab-nav">
+                                <button class="tab-btn active" onclick="switchTab('chart')">图表组件</button>
+                                <button class="tab-btn" onclick="switchTab('form')">表单组件</button>
+                                <button class="tab-btn" onclick="switchTab('3d')">3D查看器</button>
+                            </div>
+
+                            <div id="chart-tab" class="tab-content active">
+                                <div class="demo-container">
+                                    <div class="demo-preview" id="chart-demo">
+                                        <canvas id="demo-canvas"></canvas>
+                                    </div>
+                                    <div class="demo-controls">
+                                        <button class="btn" onclick="updateChart('bar')">柱状图</button>
+                                        <button class="btn" onclick="updateChart('line')">折线图</button>
+                                        <button class="btn" onclick="updateChart('pie')">饼图</button>
+                                        <button class="btn btn-primary" onclick="randomData()">随机数据</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="form-tab" class="tab-content">
+                                <div class="demo-container">
+                                    <div class="demo-preview">
+                                        <form id="demo-form">
+                                            <input type="text" placeholder="患者姓名" class="search-input">
+                                            <input type="date" class="search-input" style="margin-top: 1rem;">
+                                            <select class="search-input" style="margin-top: 1rem;">
+                                                <option>选择治疗类型</option>
+                                                <option>注射美容</option>
+                                                <option>激光治疗</option>
+                                                <option>手术治疗</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="3d-tab" class="tab-content">
+                                <div class="demo-container">
+                                    <div class="demo-preview" id="3d-demo">
+                                        <p>3D模型加载中...</p>
+                                    </div>
+                                    <div class="demo-controls">
+                                        <button class="btn" onclick="rotate3D()">旋转</button>
+                                        <button class="btn" onclick="zoom3D('in')">放大</button>
+                                        <button class="btn" onclick="zoom3D('out')">缩小</button>
+                                        <button class="btn btn-primary" onclick="reset3D()">重置</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Navigation toggle
+        function toggleNav() {
+            document.getElementById('nav').classList.toggle('active');
+        }
+
+        // Copy code
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-example').querySelector('code');
+            const text = codeBlock.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '已复制';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Run code
+        function runCode(btn) {
+            const codeBlock = btn.closest('.code-example').querySelector('code');
+            const code = codeBlock.textContent;
+            try {
+                console.log('运行代码示例:');
+                eval(code);
+                alert('代码已在控制台中执行，请打开开发者工具查看结果');
+            } catch (error) {
+                console.error('代码执行错误:', error);
+                alert('代码执行出错，请查看控制台');
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Remove active class from all tabs and buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        // Demo functions
+        function updateChart(type) {
+            console.log('切换图表类型:', type);
+            // Implementation would go here
+        }
+
+        function randomData() {
+            console.log('生成随机数据');
+            // Implementation would go here
+        }
+
+        function rotate3D() {
+            console.log('旋转3D模型');
+            // Implementation would go here
+        }
+
+        function zoom3D(direction) {
+            console.log('缩放3D模型:', direction);
+            // Implementation would go here
+        }
+
+        function reset3D() {
+            console.log('重置3D视图');
+            // Implementation would go here
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').slice(1);
+                const target = document.getElementById(targetId);
+
+                if (target) {
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Scroll to target
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Initialize Prism for syntax highlighting
+        if (window.Prism) {
+            Prism.highlightAll();
+        }
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                console.log('搜索:', query);
+                // Implement search functionality
+            });
+        }
+
+        // Load component documentation dynamically
+        async function loadComponentDocs() {
+            try {
+                const script = document.createElement('script');
+                script.src = '/component-documentation.js';
+                script.onload = () => {
+                    console.log('组件文档已加载');
+                    // Initialize documentation system if available
+                    if (window.DocumentationSystem) {
+                        const docs = new window.DocumentationSystem();
+                        console.log('文档系统已初始化');
+                    }
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.error('加载组件文档失败:', error);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponentDocs();
+        });
+    </script>
+</body>
+</html>

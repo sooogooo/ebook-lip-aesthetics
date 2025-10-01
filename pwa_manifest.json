@@ -1,0 +1,218 @@
+{
+  "name": "绛唇解语花 - 专业唇部美学系统",
+  "short_name": "唇部美学",
+  "description": "专业唇部美学可视化系统，提供3D模型、AR体验、案例分析等功能",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "start_url": "/gallery.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#d4af37",
+  "background_color": "#1e1e2e",
+  "lang": "zh-CN",
+  "dir": "ltr",
+
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%23d4af37'%3E%3Cpath d='M96 16c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 144c-35.35 0-64-28.65-64-64s28.65-64 64-64 64 28.65 64 64-28.65 64-64 64z'/%3E%3Cpath d='M96 64c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32zm0 48c-8.84 0-16-7.16-16-16s7.16-16 16-16 16 7.16 16 16-7.16 16-16 16z'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%23d4af37'%3E%3Cpath d='M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm0 384c-88.4 0-160-71.6-160-160S167.6 96 256 96s160 71.6 160 160-71.6 160-160 160z'/%3E%3Cpath d='M256 160c-53.02 0-96 42.98-96 96s42.98 96 96 96 96-42.98 96-96-42.98-96-96-96zm0 144c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48z'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 144 144' fill='%23d4af37'%3E%3Cpath d='M72 12c-33.14 0-60 26.86-60 60s26.86 60 60 60 60-26.86 60-60-26.86-60-60-60zm0 108c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48z'/%3E%3Cpath d='M72 48c-13.26 0-24 10.74-24 24s10.74 24 24 24 24-10.74 24-24-10.74-24-24-24zm0 36c-6.63 0-12-5.37-12-12s5.37-12 12-12 12 5.37 12 12-5.37 12-12 12z'/%3E%3C/svg%3E",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96' fill='%23d4af37'%3E%3Cpath d='M48 8c-22.09 0-40 17.91-40 40s17.91 40 40 40 40-17.91 40-40S70.09 8 48 8zm0 72c-17.67 0-32-14.33-32-32S30.33 16 48 16s32 14.33 32 32-14.33 32-32 32z'/%3E%3Cpath d='M48 32c-8.84 0-16 7.16-16 16s7.16 16 16 16 16-7.16 16-16-7.16-16-16-16zm0 24c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z'/%3E%3C/svg%3E",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='%23d4af37'%3E%3Cpath d='M36 6c-16.57 0-30 13.43-30 30s13.43 30 30 30 30-13.43 30-30S52.57 6 36 6zm0 54c-13.26 0-24-10.74-24-24S22.74 12 36 12s24 10.74 24 24-10.74 24-24 24z'/%3E%3Cpath d='M36 24c-6.63 0-12 5.37-12 12s5.37 12 12 12 12-5.37 12-12-5.37-12-12-12zm0 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z'/%3E%3C/svg%3E",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720' fill='%231e1e2e'%3E%3Crect width='540' height='720' fill='%231e1e2e'/%3E%3Crect x='20' y='60' width='500' height='60' rx='8' fill='%232d2d44'/%3E%3Ctext x='40' y='100' fill='%23d4af37' font-family='sans-serif' font-size='18'%3E绛唇解语花 - 专业唇部美学案例画廊%3C/text%3E%3Crect x='20' y='140' width='240' height='160' rx='12' fill='%232a2a40'/%3E%3Crect x='280' y='140' width='240' height='160' rx='12' fill='%232a2a40'/%3E%3Crect x='20' y='320' width='240' height='160' rx='12' fill='%232a2a40'/%3E%3Crect x='280' y='320' width='240' height='160' rx='12' fill='%232a2a40'/%3E%3Crect x='20' y='500' width='500' height='160' rx='12' fill='%232a2a40'/%3E%3Ctext x='270' y='590' fill='%23ffffff' font-family='sans-serif' font-size='16' text-anchor='middle'%3E3D 解剖模型%3C/text%3E%3C/svg%3E",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "label": "主画廊界面展示多种案例类型"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720' fill='%231e1e2e'%3E%3Crect width='540' height='720' fill='%231e1e2e'/%3E%3Ccircle cx='270' cy='360' r='150' fill='%232a2a40' stroke='%23d4af37' stroke-width='2'/%3E%3Ctext x='270' y='370' fill='%23ffffff' font-family='sans-serif' font-size='14' text-anchor='middle'%3E3D 模型视图%3C/text%3E%3Crect x='20' y='560' width='100' height='40' rx='8' fill='%23d4af37'/%3E%3Ctext x='70' y='585' fill='%23ffffff' font-family='sans-serif' font-size='12' text-anchor='middle'%3E旋转%3C/text%3E%3Crect x='140' y='560' width='100' height='40' rx='8' fill='%23d4af37'/%3E%3Ctext x='190' y='585' fill='%23ffffff' font-family='sans-serif' font-size='12' text-anchor='middle'%3E缩放%3C/text%3E%3Crect x='260' y='560' width='100' height='40' rx='8' fill='%23d4af37'/%3E%3Ctext x='310' y='585' fill='%23ffffff' font-family='sans-serif' font-size='12' text-anchor='middle'%3EAR%3C/text%3E%3Crect x='380' y='560' width='100' height='40' rx='8' fill='%23d4af37'/%3E%3Ctext x='430' y='585' fill='%23ffffff' font-family='sans-serif' font-size='12' text-anchor='middle'%3E分析%3C/text%3E%3C/svg%3E",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "label": "3D模型交互界面支持多种手势操作"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "案例画廊",
+      "short_name": "画廊",
+      "description": "浏览专业唇部美学案例",
+      "url": "/gallery.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "3D模型",
+      "short_name": "3D",
+      "description": "查看3D解剖模型",
+      "url": "/3d_viewer.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "AR体验",
+      "short_name": "AR",
+      "description": "增强现实唇部体验",
+      "url": "/ar_viewer.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-4-4h-2v2h2V7zm0-4h-2v2h2V3zm4 4h-2v2h2V7zm0 8h-2v2h2v-2zm-8-8H7v2h2V7zm0 8H7v2h2v-2z'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "专业工具",
+      "short_name": "工具",
+      "description": "专业分析工具",
+      "url": "/admin.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M22.61 19.39l-3.54-3.54c-.81-.81-.81-2.13 0-2.94l.94-.94c.81-.81.81-2.13 0-2.94L19.07 8.1c-.39-.39-.9-.59-1.41-.59s-1.02.2-1.41.59l-.94.94c-.81.81-2.13.81-2.94 0L8.83 5.5c-.39-.39-.39-1.02 0-1.41l.94-.94c.81-.81.81-2.13 0-2.94L8.84.28C8.45-.11 7.95-.11 7.56.28L4.44 3.4c-.39.39-.39 1.02 0 1.41l.94.94c.81.81.81 2.13 0 2.94l-.94.94c-.81.81-.81 2.13 0 2.94l3.54 3.54c.81.81 2.13.81 2.94 0l.94-.94c.81-.81 2.13-.81 2.94 0l3.54 3.54c.39.39 1.02.39 1.41 0l3.12-3.12c.4-.39.4-1.02.01-1.41z'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+
+  "categories": ["medical", "education", "healthcare", "beauty", "lifestyle"],
+
+  "prefer_related_applications": false,
+
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://lips-aesthetics.com"
+    }
+  ],
+
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+
+  "file_handlers": [
+    {
+      "action": "/gallery.html",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
+        "application/json": [".json"]
+      }
+    }
+  ],
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+lips",
+      "url": "/gallery.html?protocol=%s"
+    }
+  ],
+
+  "share_target": {
+    "action": "/gallery.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "images",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+
+  "permissions": [
+    "camera",
+    "microphone",
+    "geolocation",
+    "notifications",
+    "background-sync",
+    "persistent-storage"
+  ],
+
+  "features": [
+    "Camera API",
+    "WebRTC",
+    "WebGL",
+    "WebXR",
+    "Service Worker",
+    "Web Share API",
+    "File System Access API",
+    "Background Sync",
+    "Push Notifications"
+  ],
+
+  "gcm_sender_id": "103953800507",
+
+  "gcm_user_visible_only": true,
+
+  "custom": {
+    "offline_support": true,
+    "ar_support": true,
+    "voice_control": true,
+    "gesture_recognition": true,
+    "3d_models": true,
+    "multi_language": ["zh-CN", "en-US"],
+    "accessibility": {
+      "screen_reader": true,
+      "high_contrast": true,
+      "reduced_motion": true,
+      "voice_control": true
+    },
+    "performance": {
+      "lazy_loading": true,
+      "image_optimization": true,
+      "code_splitting": true,
+      "service_worker_caching": true
+    },
+    "analytics": {
+      "user_engagement": true,
+      "performance_monitoring": true,
+      "error_tracking": true
+    }
+  }
+}

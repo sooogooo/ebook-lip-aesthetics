@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优化版3D解剖模型 - 高性能WebGL渲染</title>
+
+    <!-- Critical inline CSS for faster first paint -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #e8e8e8;
+            overflow: hidden;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(212,175,55,0.2);
+            border-top-color: #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .performance-stats {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 100;
+        }
+        .control-panel {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(22,33,62,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 300px;
+            z-index: 100;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #d4af37;
+            font-size: 14px;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+        .control-group button {
+            background: #d4af37;
+            border: none;
+            color: #1a1a2e;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .control-group button:hover {
+            background: #ff6b9d;
+            transform: translateY(-2px);
+        }
+        .control-group button.active {
+            background: #ff6b9d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Performance Stats -->
+    <div id="performance-stats" class="performance-stats">
+        <div>FPS: <span id="fps">60</span></div>
+        <div>Triangles: <span id="triangles">0</span></div>
+        <div>Draw Calls: <span id="drawcalls">0</span></div>
+        <div>Memory: <span id="memory">0</span> MB</div>
+        <div>Quality: <span id="quality">Auto</span></div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <div class="control-group">
+            <label>渲染质量</label>
+            <button onclick="setQuality('low')">低</button>
+            <button onclick="setQuality('medium')" class="active">中</button>
+            <button onclick="setQuality('high')">高</button>
+            <button onclick="setQuality('ultra')">超高</button>
+        </div>
+
+        <div class="control-group">
+            <label>图层控制</label>
+            <button onclick="toggleLayer('skin')">皮肤</button>
+            <button onclick="toggleLayer('muscle')">肌肉</button>
+            <button onclick="toggleLayer('vessel')">血管</button>
+            <button onclick="toggleLayer('nerve')">神经</button>
+        </div>
+
+        <div class="control-group">
+            <label>透明度: <span id="opacity-value">100%</span></label>
+            <input type="range" id="opacity" min="0" max="100" value="100" oninput="updateOpacity(this.value)">
+        </div>
+
+        <div class="control-group">
+            <label>旋转速度: <span id="rotation-value">1.0x</span></label>
+            <input type="range" id="rotation" min="0" max="200" value="100" oninput="updateRotationSpeed(this.value)">
+        </div>
+
+        <div class="control-group">
+            <button onclick="resetCamera()">重置视角</button>
+            <button onclick="toggleAutoRotate()">自动旋转</button>
+            <button onclick="takeScreenshot()">截图</button>
+        </div>
+    </div>
+
+    <!-- Optimized Three.js implementation with module loading -->
+    <script type="module">
+        // Import Three.js from CDN with module syntax
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+        import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+        import { DRACOLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/DRACOLoader.js';
+
+        class Optimized3DViewer {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.meshes = new Map();
+                this.clock = new THREE.Clock();
+
+                // Performance settings
+                this.quality = 'medium';
+                this.targetFPS = 60;
+                this.autoRotate = false;
+                this.rotationSpeed = 1.0;
+
+                // Performance monitoring
+                this.stats = {
+                    fps: 60,
+                    frameTime: 0,
+                    triangles: 0,
+                    drawCalls: 0,
+                    memory: 0,
+                    lastTime: performance.now(),
+                    frames: 0
+                };
+
+                // LOD settings for performance
+                this.lodDistances = {
+                    low: [0, 50],
+                    medium: [0, 30],
+                    high: [0, 20],
+                    ultra: [0, 10]
+                };
+
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // Setup scene with optimizations
+                    this.setupScene();
+                    this.setupCamera();
+                    this.setupRenderer();
+                    this.setupLights();
+                    this.setupControls();
+
+                    // Load optimized models
+                    await this.loadOptimizedModels();
+
+                    // Start render loop
+                    this.animate();
+
+                    // Hide loading screen
+                    this.hideLoading();
+
+                    // Setup performance monitoring
+                    this.startPerformanceMonitoring();
+
+                } catch (error) {
+                    console.error('Failed to initialize 3D viewer:', error);
+                }
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x1a1a2e);
+
+                // Add fog for depth perception and performance
+                this.scene.fog = new THREE.Fog(0x1a1a2e, 10, 100);
+
+                // Enable frustum culling
+                this.scene.traverse(obj => {
+                    if (obj.isMesh) {
+                        obj.frustumCulled = true;
+                    }
+                });
+            }
+
+            setupCamera() {
+                const aspect = window.innerWidth / window.innerHeight;
+                this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+                this.camera.position.set(0, 0, 5);
+
+                // Enable camera layers for selective rendering
+                this.camera.layers.enableAll();
+            }
+
+            setupRenderer() {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('webgl2', {
+                    alpha: false,
+                    antialias: this.quality !== 'low',
+                    powerPreference: 'high-performance',
+                    preserveDrawingBuffer: false,
+                    stencil: false,
+                    depth: true
+                });
+
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas,
+                    context,
+                    logarithmicDepthBuffer: false
+                });
+
+                // Optimize renderer settings
+                this.renderer.setPixelRatio(this.getOptimalPixelRatio());
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = this.quality !== 'low';
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.0;
+
+                // Enable renderer optimizations
+                this.renderer.physicallyCorrectLights = true;
+                this.renderer.sortObjects = true;
+
+                // Add to DOM
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+            }
+
+            getOptimalPixelRatio() {
+                const qualitySettings = {
+                    low: 0.5,
+                    medium: Math.min(window.devicePixelRatio, 1.5),
+                    high: Math.min(window.devicePixelRatio, 2),
+                    ultra: window.devicePixelRatio
+                };
+                return qualitySettings[this.quality] || 1;
+            }
+
+            setupLights() {
+                // Optimized lighting setup
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                // Key light
+                const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                keyLight.position.set(5, 5, 5);
+                keyLight.castShadow = this.quality !== 'low';
+
+                if (keyLight.castShadow) {
+                    keyLight.shadow.mapSize.width = this.quality === 'ultra' ? 2048 : 1024;
+                    keyLight.shadow.mapSize.height = keyLight.shadow.mapSize.width;
+                    keyLight.shadow.camera.near = 0.5;
+                    keyLight.shadow.camera.far = 50;
+                    keyLight.shadow.bias = -0.001;
+                }
+
+                this.scene.add(keyLight);
+
+                // Fill light (only for high quality)
+                if (this.quality === 'high' || this.quality === 'ultra') {
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+                    fillLight.position.set(-5, 3, -5);
+                    this.scene.add(fillLight);
+                }
+            }
+
+            setupControls() {
+                this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.05;
+                this.controls.screenSpacePanning = false;
+                this.controls.minDistance = 2;
+                this.controls.maxDistance = 10;
+                this.controls.maxPolarAngle = Math.PI / 1.5;
+                this.controls.autoRotate = this.autoRotate;
+                this.controls.autoRotateSpeed = this.rotationSpeed;
+            }
+
+            async loadOptimizedModels() {
+                // For demo, create procedural geometry with LOD
+                const geometries = {
+                    high: new THREE.SphereGeometry(1, 64, 64),
+                    medium: new THREE.SphereGeometry(1, 32, 32),
+                    low: new THREE.SphereGeometry(1, 16, 16)
+                };
+
+                // Create lip model with LOD
+                const lipModel = new THREE.LOD();
+
+                // Create materials with quality-based settings
+                const material = new THREE.MeshPhysicalMaterial({
+                    color: 0xff6b9d,
+                    roughness: 0.4,
+                    metalness: 0.1,
+                    clearcoat: this.quality === 'ultra' ? 0.3 : 0,
+                    clearcoatRoughness: 0.2,
+                    emissive: 0xff6b9d,
+                    emissiveIntensity: 0.05
+                });
+
+                // Add LOD levels
+                const highMesh = new THREE.Mesh(geometries.high, material);
+                const mediumMesh = new THREE.Mesh(geometries.medium, material);
+                const lowMesh = new THREE.Mesh(geometries.low, material);
+
+                lipModel.addLevel(highMesh, this.lodDistances[this.quality][0]);
+                lipModel.addLevel(mediumMesh, this.lodDistances[this.quality][1]);
+                lipModel.addLevel(lowMesh, 100);
+
+                this.scene.add(lipModel);
+                this.meshes.set('lip', lipModel);
+
+                // Update triangle count
+                this.updateTriangleCount();
+            }
+
+            updateTriangleCount() {
+                let triangles = 0;
+                this.scene.traverse(obj => {
+                    if (obj.isMesh && obj.geometry) {
+                        const geometry = obj.geometry;
+                        if (geometry.index) {
+                            triangles += geometry.index.count / 3;
+                        } else {
+                            triangles += geometry.attributes.position.count / 3;
+                        }
+                    }
+                });
+                this.stats.triangles = Math.round(triangles);
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                // Update controls
+                this.controls.update();
+
+                // Render scene
+                this.renderer.render(this.scene, this.camera);
+
+                // Update performance stats
+                this.updatePerformanceStats();
+            }
+
+            updatePerformanceStats() {
+                this.stats.frames++;
+                const now = performance.now();
+
+                if (now >= this.stats.lastTime + 1000) {
+                    this.stats.fps = Math.round(this.stats.frames * 1000 / (now - this.stats.lastTime));
+                    this.stats.frames = 0;
+                    this.stats.lastTime = now;
+
+                    // Update UI
+                    document.getElementById('fps').textContent = this.stats.fps;
+                    document.getElementById('triangles').textContent = this.stats.triangles;
+                    document.getElementById('drawcalls').textContent = this.renderer.info.render.calls;
+
+                    // Update memory if available
+                    if (performance.memory) {
+                        const memory = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                        document.getElementById('memory').textContent = memory;
+                        this.stats.memory = memory;
+                    }
+
+                    // Auto-adjust quality based on FPS
+                    if (this.quality === 'auto') {
+                        this.autoAdjustQuality();
+                    }
+                }
+            }
+
+            autoAdjustQuality() {
+                if (this.stats.fps < 30 && this.quality !== 'low') {
+                    this.setQuality('low');
+                } else if (this.stats.fps < 45 && this.quality === 'high') {
+                    this.setQuality('medium');
+                } else if (this.stats.fps > 55 && this.quality === 'low') {
+                    this.setQuality('medium');
+                }
+            }
+
+            setQuality(quality) {
+                this.quality = quality;
+
+                // Update renderer settings
+                this.renderer.setPixelRatio(this.getOptimalPixelRatio());
+                this.renderer.shadowMap.enabled = quality !== 'low';
+
+                // Update material quality
+                this.scene.traverse(obj => {
+                    if (obj.isMesh && obj.material) {
+                        if (obj.material.isMeshPhysicalMaterial) {
+                            obj.material.clearcoat = quality === 'ultra' ? 0.3 : 0;
+                            obj.material.needsUpdate = true;
+                        }
+                    }
+                });
+
+                // Update UI
+                document.getElementById('quality').textContent = quality.charAt(0).toUpperCase() + quality.slice(1);
+
+                // Update button states
+                document.querySelectorAll('.control-group button').forEach(btn => {
+                    if (btn.textContent.toLowerCase() === quality ||
+                        (btn.textContent === '低' && quality === 'low') ||
+                        (btn.textContent === '中' && quality === 'medium') ||
+                        (btn.textContent === '高' && quality === 'high') ||
+                        (btn.textContent === '超高' && quality === 'ultra')) {
+                        btn.classList.add('active');
+                    } else if (btn.onclick && btn.onclick.toString().includes('setQuality')) {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            startPerformanceMonitoring() {
+                // Monitor for performance issues
+                setInterval(() => {
+                    if (this.stats.fps < 30) {
+                        console.warn('Low FPS detected:', this.stats.fps);
+                    }
+
+                    if (this.stats.memory > 500) {
+                        console.warn('High memory usage:', this.stats.memory, 'MB');
+                    }
+                }, 5000);
+            }
+
+            hideLoading() {
+                const loadingScreen = document.getElementById('loading');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 300);
+            }
+
+            // Public methods for UI controls
+            toggleLayer(layerName) {
+                const mesh = this.meshes.get(layerName);
+                if (mesh) {
+                    mesh.visible = !mesh.visible;
+                }
+            }
+
+            updateOpacity(value) {
+                const opacity = value / 100;
+                document.getElementById('opacity-value').textContent = value + '%';
+
+                this.scene.traverse(obj => {
+                    if (obj.isMesh && obj.material) {
+                        obj.material.opacity = opacity;
+                        obj.material.transparent = opacity < 1;
+                        obj.material.needsUpdate = true;
+                    }
+                });
+            }
+
+            updateRotationSpeed(value) {
+                this.rotationSpeed = value / 100;
+                document.getElementById('rotation-value').textContent = this.rotationSpeed.toFixed(1) + 'x';
+                if (this.controls) {
+                    this.controls.autoRotateSpeed = this.rotationSpeed * 2;
+                }
+            }
+
+            toggleAutoRotate() {
+                this.autoRotate = !this.autoRotate;
+                if (this.controls) {
+                    this.controls.autoRotate = this.autoRotate;
+                }
+            }
+
+            resetCamera() {
+                if (this.camera && this.controls) {
+                    this.camera.position.set(0, 0, 5);
+                    this.controls.target.set(0, 0, 0);
+                    this.controls.update();
+                }
+            }
+
+            takeScreenshot() {
+                this.renderer.render(this.scene, this.camera);
+                const dataURL = this.renderer.domElement.toDataURL('image/png');
+
+                // Download screenshot
+                const link = document.createElement('a');
+                link.href = dataURL;
+                link.download = '3d-model-screenshot.png';
+                link.click();
+            }
+
+            // Handle window resize
+            handleResize() {
+                if (this.camera && this.renderer) {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            }
+        }
+
+        // Initialize the viewer
+        const viewer = new Optimized3DViewer();
+
+        // Expose methods to global scope for UI controls
+        window.setQuality = (quality) => viewer.setQuality(quality);
+        window.toggleLayer = (layer) => viewer.toggleLayer(layer);
+        window.updateOpacity = (value) => viewer.updateOpacity(value);
+        window.updateRotationSpeed = (value) => viewer.updateRotationSpeed(value);
+        window.toggleAutoRotate = () => viewer.toggleAutoRotate();
+        window.resetCamera = () => viewer.resetCamera();
+        window.takeScreenshot = () => viewer.takeScreenshot();
+
+        // Handle window resize
+        window.addEventListener('resize', () => viewer.handleResize());
+
+        // Optimize for mobile
+        if ('ontouchstart' in window) {
+            viewer.setQuality('low');
+        }
+    </script>
+</body>
+</html>

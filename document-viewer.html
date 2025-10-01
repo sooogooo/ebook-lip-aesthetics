@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档阅读器 - 绛唇解语花</title>
+    <meta name="description" content="专业的医学文档阅读系统，支持Markdown渲染和中文显示">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Color Scheme */
+            --primary-color: #E91E63;
+            --primary-light: #F8BBD0;
+            --primary-dark: #AD1457;
+            --secondary-color: #FF6B9D;
+            --accent-color: #FF1744;
+
+            /* Background */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-sidebar: #FAFBFC;
+
+            /* Text Colors */
+            --text-primary: #24292E;
+            --text-secondary: #586069;
+            --text-muted: #6A737D;
+
+            /* Borders */
+            --border-color: #E1E4E8;
+            --border-radius: 8px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+
+            /* Typography */
+            --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "微软雅黑", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            --font-family-mono: "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --font-family-heading: "PingFang SC", "Microsoft YaHei", "微软雅黑", system-ui, sans-serif;
+
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+
+            /* Layout */
+            --sidebar-width: 280px;
+            --header-height: 60px;
+            --content-max-width: 900px;
+        }
+
+        /* Base Styles */
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-icon {
+            font-size: 1.5rem;
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+
+        .sidebar-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .sidebar-link:hover {
+            background: var(--bg-primary);
+            color: var(--primary-color);
+        }
+
+        .sidebar-link.active {
+            background: rgba(233, 30, 99, 0.1);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: var(--spacing-2xl);
+            max-width: calc(var(--sidebar-width) + var(--content-max-width));
+            width: 100%;
+        }
+
+        .markdown-container {
+            display: flex;
+            gap: var(--spacing-2xl);
+        }
+
+        .markdown-content {
+            flex: 1;
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-md);
+            min-height: 600px;
+        }
+
+        /* Markdown TOC Sidebar */
+        .markdown-sidebar {
+            position: sticky;
+            top: calc(var(--header-height) + var(--spacing-xl));
+            width: 220px;
+            height: fit-content;
+            max-height: calc(100vh - var(--header-height) - var(--spacing-2xl));
+            overflow-y: auto;
+        }
+
+        .markdown-toc {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-sublist {
+            list-style: none;
+            margin-left: var(--spacing-md);
+        }
+
+        .toc-item {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: var(--spacing-xs) 0;
+            transition: color 0.2s;
+        }
+
+        .toc-link:hover {
+            color: var(--primary-color);
+        }
+
+        .toc-item.level-1 > .toc-link {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toc-item.level-2 > .toc-link {
+            font-size: 0.8125rem;
+        }
+
+        /* Markdown Typography */
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            font-family: var(--font-family-heading);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .markdown-content h1 {
+            font-size: 2.5rem;
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .markdown-content h2 {
+            font-size: 2rem;
+            margin-top: var(--spacing-2xl);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .markdown-content h3 {
+            font-size: 1.5rem;
+        }
+
+        .markdown-content h4 {
+            font-size: 1.25rem;
+        }
+
+        .markdown-content h5 {
+            font-size: 1.125rem;
+        }
+
+        .markdown-content h6 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .heading-anchor {
+            position: absolute;
+            left: -1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .markdown-heading:hover .heading-anchor {
+            opacity: 1;
+        }
+
+        .markdown-paragraph {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .markdown-content strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .markdown-content em {
+            font-style: italic;
+        }
+
+        .markdown-content del {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        /* Links */
+        .markdown-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .markdown-link:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Lists */
+        .markdown-list {
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-xl);
+        }
+
+        .markdown-list li {
+            margin-bottom: var(--spacing-xs);
+            line-height: 1.7;
+        }
+
+        .markdown-list ul,
+        .markdown-list ol {
+            margin-top: var(--spacing-xs);
+            margin-bottom: 0;
+        }
+
+        /* Blockquotes */
+        .markdown-blockquote {
+            margin: var(--spacing-lg) 0;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .markdown-blockquote p {
+            margin: 0;
+        }
+
+        /* Code */
+        .inline-code {
+            padding: 0.2em 0.4em;
+            background: rgba(27, 31, 35, 0.05);
+            border-radius: 3px;
+            font-family: var(--font-family-mono);
+            font-size: 0.875em;
+            color: var(--text-primary);
+        }
+
+        .code-block {
+            margin: var(--spacing-lg) 0;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .code-block code {
+            display: block;
+            padding: var(--spacing-lg);
+            overflow-x: auto;
+            font-family: var(--font-family-mono);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Tables */
+        .markdown-table {
+            width: 100%;
+            margin: var(--spacing-lg) 0;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .markdown-table th,
+        .markdown-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .markdown-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .markdown-table tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        /* Images */
+        .markdown-image {
+            max-width: 100%;
+            height: auto;
+            margin: var(--spacing-lg) 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: var(--spacing-md);
+            font-size: 0.875rem;
+        }
+
+        /* Error State */
+        .markdown-error {
+            background: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            color: #991B1B;
+        }
+
+        .markdown-error h3 {
+            margin-bottom: var(--spacing-sm);
+            color: #991B1B;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            right: var(--spacing-xl);
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.3);
+        }
+
+        /* Print Styles */
+        @media print {
+            .header,
+            .sidebar,
+            .markdown-sidebar,
+            .theme-toggle {
+                display: none;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                max-width: 100%;
+            }
+
+            .markdown-content {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .markdown-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                padding: var(--spacing-lg);
+            }
+
+            .markdown-content {
+                padding: var(--spacing-lg);
+            }
+
+            .markdown-content h1 {
+                font-size: 2rem;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C0C0C0;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A0A0A0;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(233, 30, 99, 0.2);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-title">
+            <span class="header-icon">📚</span>
+            <span>文档阅读器 - 绛唇解语花</span>
+        </div>
+        <div class="header-actions">
+            <button class="btn" onclick="window.location.href='/'">
+                <span>🏠</span>
+                <span>返回首页</span>
+            </button>
+            <button class="btn" onclick="exportToPDF()">
+                <span>📥</span>
+                <span>导出PDF</span>
+            </button>
+            <button class="btn btn-primary" onclick="toggleFullscreen()">
+                <span>🖥️</span>
+                <span>全屏</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">医学专著章节</h3>
+                <ul class="sidebar-menu" id="chapters-menu">
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/00_preface.md">序言：岁月如歌</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/01_cultural_aesthetics_enhanced.md">第一章：文化美学</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/02_scientific_principles.md">第二章：科学原理</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/03_case_studies.md">第三章：案例研究</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/04_technical_mastery_international.md">第四章：技术精进</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/05_comprehensive_strategy.md">第五章：综合策略</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/06_functional_reconstruction.md">第六章：功能重建</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/07_doctor_selection.md">第七章：医生选择</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/08_cosmetics_tattoo.md">第八章：唇部纹绣</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/09_aftercare.md">第九章：术后护理</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/10_risk_aesthetics.md">第十章：风险美学</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/11_appendix_enhanced.md">附录：参考资料</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">技术文档</h3>
+                <ul class="sidebar-menu" id="docs-menu">
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/API.md">API文档</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/SVG_INDEX.md">SVG索引</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/international_strategy.md">国际化策略</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/VISUAL_TODO_LIST.md">开发任务</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">扩展专题</h3>
+                <ul class="sidebar-menu" id="extended-menu">
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/ai_assessment_system.md">AI评估系统</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/visual_design_guide.md">视觉设计指南</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/digital_ecosystem.md">数字生态系统</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/vr_ar_training.md">VR/AR培训</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/blockchain_certification.md">区块链认证</a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" data-file="/global_partnership.md">全球合作</a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <div id="document-container">
+                <div class="markdown-content">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">正在加载文档...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+    </button>
+
+    <!-- Load Markdown Renderer -->
+    <script src="/markdown-renderer.js"></script>
+
+    <!-- Document Viewer Script -->
+    <script>
+        // Initialize markdown renderer
+        const renderer = new MarkdownRenderer();
+        let currentDocument = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup sidebar links
+            setupSidebarLinks();
+
+            // Load initial document from URL or default
+            const hash = window.location.hash.slice(1);
+            const initialDoc = hash ? decodeURIComponent(hash) : '/00_preface.md';
+            loadDocument(initialDoc);
+
+            // Setup keyboard shortcuts
+            setupKeyboardShortcuts();
+        });
+
+        // Setup sidebar links
+        function setupSidebarLinks() {
+            const links = document.querySelectorAll('.sidebar-link[data-file]');
+
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const file = this.dataset.file;
+                    loadDocument(file);
+
+                    // Update active state
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // Load document
+        async function loadDocument(filepath) {
+            const container = document.getElementById('document-container');
+
+            // Show loading state
+            container.innerHTML = `
+                <div class="markdown-content">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">正在加载文档...</div>
+                    </div>
+                </div>
+            `;
+
+            try {
+                // Fetch and render markdown
+                const response = await fetch(filepath);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const markdown = await response.text();
+                const html = renderer.render(markdown);
+                const toc = renderer.generateTOC();
+
+                // Update container with rendered content
+                container.innerHTML = `
+                    <div class="markdown-container">
+                        ${renderer.config.enableTOC && toc ? `<aside class="markdown-sidebar">${toc}</aside>` : ''}
+                        <article class="markdown-content">
+                            ${html}
+                        </article>
+                    </div>
+                `;
+
+                // Post-processing
+                renderer.highlightCode(container);
+                renderer.setupSmoothScroll(container);
+
+                // Update URL
+                window.location.hash = filepath;
+                currentDocument = filepath;
+
+                // Update active link
+                updateActiveLink(filepath);
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+            } catch (error) {
+                console.error('Error loading document:', error);
+                container.innerHTML = `
+                    <div class="markdown-content">
+                        <div class="markdown-error">
+                            <h3>📚 加载失败</h3>
+                            <p>无法加载文档: ${filepath}</p>
+                            <p>错误信息: ${error.message}</p>
+                            <br>
+                            <button class="btn btn-primary" onclick="loadDocument('/00_preface.md')">返回序言</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Update active sidebar link
+        function updateActiveLink(filepath) {
+            const links = document.querySelectorAll('.sidebar-link');
+            links.forEach(link => {
+                if (link.dataset.file === filepath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Export to PDF (placeholder)
+        function exportToPDF() {
+            alert('PDF导出功能正在开发中...\n您可以使用浏览器的打印功能（Ctrl+P）来保存为PDF。');
+            window.print();
+        }
+
+        // Toggle theme (placeholder for future dark mode)
+        function toggleTheme() {
+            // This is a placeholder for future dark mode implementation
+            const icon = document.getElementById('theme-icon');
+            if (icon.textContent === '🌙') {
+                icon.textContent = '☀️';
+                alert('深色主题正在开发中...');
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+
+        // Setup keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Ctrl/Cmd + K: Search
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    // Implement search functionality
+                }
+
+                // Ctrl/Cmd + P: Print
+                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                    e.preventDefault();
+                    window.print();
+                }
+
+                // F11: Toggle fullscreen
+                if (e.key === 'F11') {
+                    e.preventDefault();
+                    toggleFullscreen();
+                }
+
+                // Escape: Exit fullscreen
+                if (e.key === 'Escape' && document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            });
+        }
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', function() {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                loadDocument(decodeURIComponent(hash));
+            }
+        });
+    </script>
+</body>
+</html>

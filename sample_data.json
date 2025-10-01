@@ -1,0 +1,62 @@
+{
+    "case_statistics": {
+        "age_distribution": {
+            "0-18": 5,
+            "19-25": 35,
+            "26-35": 40,
+            "36-45": 15,
+            "46+": 5
+        },
+        "treatment_frequency": {
+            "唇部填充": 45,
+            "唇部雕刻": 30,
+            "纹唇": 20,
+            "唇部修复": 5
+        },
+        "monthly_cases": [
+            { "month": "2024-01", "cases": 50 },
+            { "month": "2024-02", "cases": 65 },
+            { "month": "2024-03", "cases": 80 },
+            { "month": "2024-04", "cases": 90 },
+            { "month": "2024-05", "cases": 100 }
+        ],
+        "success_rate": {
+            "成功率": 92,
+            "并发症率": 8
+        }
+    },
+    "satisfaction_survey": {
+        "multi_dimension_satisfaction": {
+            "效果": 4.7,
+            "安全性": 4.5,
+            "医生专业度": 4.8,
+            "沟通体验": 4.6,
+            "恢复速度": 4.4
+        },
+        "doctor_ratings": [
+            {"doctor": "张医生", "rating": 4.9},
+            {"doctor": "李医生", "rating": 4.7},
+            {"doctor": "王医生", "rating": 4.6}
+        ],
+        "feedback_keywords": [
+            {"text": "自然", "weight": 50},
+            {"text": "精致", "weight": 45},
+            {"text": "安全", "weight": 40},
+            {"text": "专业", "weight": 35},
+            {"text": "舒适", "weight": 30}
+        ]
+    },
+    "technology_analysis": {
+        "tech_comparison": [
+            {"name": "传统填充", "precision": 0.7, "recovery": 0.6, "naturalness": 0.5},
+            {"name": "精细雕刻", "precision": 0.9, "recovery": 0.8, "naturalness": 0.9}
+        ]
+    },
+    "risk_assessment": {
+        "risk_levels": {
+            "低风险": 70,
+            "中风险": 25,
+            "高风险": 5
+        }
+    }
+}

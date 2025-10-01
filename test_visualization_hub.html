@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可视化中心测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>绛唇解语花 - 可视化中心测试</h1>
+
+    <div class="test-section">
+        <h2>1. 文件存在性检查</h2>
+        <div id="fileCheck">正在检查文件...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. JavaScript 功能测试</h2>
+        <button class="test-button" onclick="testJavaScriptFeatures()">测试 JavaScript 功能</button>
+        <div id="jsTest"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. PWA 功能测试</h2>
+        <button class="test-button" onclick="testPWAFeatures()">测试 PWA 功能</button>
+        <div id="pwaTest"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. 响应式设计测试</h2>
+        <button class="test-button" onclick="testResponsiveDesign()">测试响应式设计</button>
+        <div id="responsiveTest"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. 可视化中心预览</h2>
+        <button class="test-button" onclick="loadVisualizationHub()">加载可视化中心</button>
+        <div id="hubPreview"></div>
+    </div>
+
+    <script>
+        // 检查文件是否存在
+        async function checkFileExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // 文件存在性检查
+        async function checkFiles() {
+            const files = [
+                'visualization_hub.html',
+                'unified_styles.css',
+                'integration.js',
+                'manifest.json',
+                'sw.js'
+            ];
+
+            let results = '';
+            for (const file of files) {
+                const exists = await checkFileExists(file);
+                const status = exists ? 'success' : 'error';
+                const symbol = exists ? '✅' : '❌';
+                results += `<div class="test-result ${status}">${symbol} ${file}</div>`;
+            }
+
+            document.getElementById('fileCheck').innerHTML = results;
+        }
+
+        // JavaScript 功能测试
+        function testJavaScriptFeatures() {
+            let results = '';
+
+            // 测试基本 JavaScript 特性
+            const tests = [
+                {
+                    name: 'ES6 Classes',
+                    test: () => {
+                        class Test {}
+                        return new Test() instanceof Test;
+                    }
+                },
+                {
+                    name: 'Arrow Functions',
+                    test: () => {
+                        const fn = () => true;
+                        return fn();
+                    }
+                },
+                {
+                    name: 'Promise Support',
+                    test: () => typeof Promise !== 'undefined'
+                },
+                {
+                    name: 'Fetch API',
+                    test: () => typeof fetch !== 'undefined'
+                },
+                {
+                    name: 'LocalStorage',
+                    test: () => typeof localStorage !== 'undefined'
+                },
+                {
+                    name: 'Service Worker Support',
+                    test: () => 'serviceWorker' in navigator
+                },
+                {
+                    name: 'Web Manifest Support',
+                    test: () => 'serviceWorker' in navigator && 'PushManager' in window
+                }
+            ];
+
+            tests.forEach(({ name, test }) => {
+                try {
+                    const result = test();
+                    const status = result ? 'success' : 'warning';
+                    const symbol = result ? '✅' : '⚠️';
+                    results += `<div class="test-result ${status}">${symbol} ${name}</div>`;
+                } catch (error) {
+                    results += `<div class="test-result error">❌ ${name} - Error: ${error.message}</div>`;
+                }
+            });
+
+            document.getElementById('jsTest').innerHTML = results;
+        }
+
+        // PWA 功能测试
+        async function testPWAFeatures() {
+            let results = '';
+
+            // 检查 Service Worker
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('./sw.js');
+                    results += '<div class="test-result success">✅ Service Worker 注册成功</div>';
+                } catch (error) {
+                    results += `<div class="test-result error">❌ Service Worker 注册失败: ${error.message}</div>`;
+                }
+            } else {
+                results += '<div class="test-result error">❌ 浏览器不支持 Service Worker</div>';
+            }
+
+            // 检查 Web App Manifest
+            try {
+                const response = await fetch('./manifest.json');
+                if (response.ok) {
+                    const manifest = await response.json();
+                    results += '<div class="test-result success">✅ Web App Manifest 加载成功</div>';
+                    results += `<div class="test-result success">📱 应用名称: ${manifest.name}</div>`;
+                } else {
+                    results += '<div class="test-result error">❌ Web App Manifest 加载失败</div>';
+                }
+            } catch (error) {
+                results += `<div class="test-result error">❌ Manifest 错误: ${error.message}</div>`;
+            }
+
+            document.getElementById('pwaTest').innerHTML = results;
+        }
+
+        // 响应式设计测试
+        function testResponsiveDesign() {
+            let results = '';
+
+            const breakpoints = [
+                { name: '手机端', width: 375 },
+                { name: '平板端', width: 768 },
+                { name: '桌面端', width: 1024 },
+                { name: '大屏幕', width: 1440 }
+            ];
+
+            breakpoints.forEach(({ name, width }) => {
+                // 模拟不同屏幕尺寸
+                const mediaQuery = window.matchMedia(`(min-width: ${width}px)`);
+                const matches = mediaQuery.matches;
+                const status = matches ? 'success' : 'warning';
+                const symbol = matches ? '✅' : '📱';
+                results += `<div class="test-result ${status}">${symbol} ${name} (${width}px): ${matches ? '适配' : '不适配当前窗口'}</div>`;
+            });
+
+            // 检查触摸支持
+            const touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const touchStatus = touchSupport ? 'success' : 'warning';
+            const touchSymbol = touchSupport ? '👆' : '🖱️';
+            results += `<div class="test-result ${touchStatus}">${touchSymbol} 触摸支持: ${touchSupport ? '支持' : '不支持'}</div>`;
+
+            document.getElementById('responsiveTest').innerHTML = results;
+        }
+
+        // 加载可视化中心
+        function loadVisualizationHub() {
+            const iframe = document.createElement('iframe');
+            iframe.src = './visualization_hub.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            iframe.style.border = '1px solid #ddd';
+            iframe.style.borderRadius = '8px';
+
+            iframe.onload = () => {
+                document.getElementById('hubPreview').innerHTML =
+                    '<div class="test-result success">✅ 可视化中心加载成功</div>';
+                document.getElementById('hubPreview').appendChild(iframe);
+            };
+
+            iframe.onerror = () => {
+                document.getElementById('hubPreview').innerHTML =
+                    '<div class="test-result error">❌ 可视化中心加载失败</div>';
+            };
+
+            document.getElementById('hubPreview').innerHTML =
+                '<div class="test-result warning">⏳ 正在加载可视化中心...</div>';
+            document.getElementById('hubPreview').appendChild(iframe);
+        }
+
+        // 页面加载时自动检查文件
+        window.addEventListener('load', () => {
+            checkFiles();
+        });
+    </script>
+</body>
+</html>

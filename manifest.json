@@ -1,0 +1,93 @@
+{
+  "name": "绛唇解语花 - 可视化集成中心",
+  "short_name": "绛唇解语花",
+  "description": "专业唇部美学可视化工具集成平台，统一访问所有专业工具",
+  "start_url": "./visualization_hub.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#E91E63",
+  "background_color": "#FAFAFA",
+  "scope": "./",
+  "lang": "zh-CN",
+  "categories": ["medical", "business", "education"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' fill='%23E91E63'%3E%3Cpath d='M96 16C43.2 16 0 59.2 0 112s43.2 96 96 96 96-43.2 96-96S148.8 16 96 16zm-16 120l-40-40 11.3-11.3L72 105.4l60.7-60.7L144 56l-64 64z'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%23E91E63'%3E%3Cpath d='M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm-32 240l-80-80 22.6-22.6L224 226.9l121.4-121.4L368 128l-128 128z'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 800' fill='%23FAFAFA'%3E%3Crect width='1280' height='800' fill='%23FAFAFA'/%3E%3Ctext x='640' y='400' text-anchor='middle' font-family='system-ui' font-size='48' fill='%23E91E63'%3E绛唇解语花%3C/text%3E%3C/svg%3E",
+      "sizes": "1280x800",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "主界面"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "3D解剖模型",
+      "short_name": "3D模型",
+      "description": "打开3D解剖模型查看器",
+      "url": "./3d_viewer.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E91E63'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "AR预览",
+      "short_name": "AR",
+      "description": "打开AR增强现实预览",
+      "url": "./ar_viewer.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E91E63'%3E%3Cpath d='M17.5 12c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zM9.5 12c0 .83-.67 1.5-1.5 1.5S6.5 12.83 6.5 12s.67-1.5 1.5-1.5 1.5.67 1.5 1.5zM12 17.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "案例画廊",
+      "short_name": "画廊",
+      "description": "打开案例展示画廊",
+      "url": "./gallery.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E91E63'%3E%3Cpath d='M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11.5-6L8 13h12l-3.5-4.5-2.5 3.01L10.5 10zm-8.5 4v6c0 1.1.9 2 2 2h16v-2H4v-6H2z'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "管理后台",
+      "short_name": "管理",
+      "description": "打开系统管理后台",
+      "url": "./admin.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E91E63'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+}

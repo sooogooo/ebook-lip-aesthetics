@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 显微镜图标 -->
+  <path d="M6 18H5A2 2 0 0 1 3 16V11A2 2 0 0 1 5 9H9A2 2 0 0 1 11 11V16A2 2 0 0 1 9 18H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6 9V5A2 2 0 0 1 8 3H10A2 2 0 0 1 12 5V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="15" cy="9" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M19.4 15A1.65 1.65 0 0 0 21 13.75A1.65 1.65 0 0 0 19.4 12.5L19 12.19A2.5 2.5 0 0 0 19 11.81" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="2" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>

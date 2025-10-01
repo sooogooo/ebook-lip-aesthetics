@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绛唇解语花 - 图标设计系统</title>
+    <link rel="stylesheet" href="icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--neutral-800);
+            background-color: var(--neutral-100);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 48px 24px;
+            background: linear-gradient(135deg, var(--primary-rose), var(--rose-dark));
+            color: white;
+            border-radius: 16px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--primary-rose);
+            border-bottom: 2px solid var(--rose-light);
+            padding-bottom: 8px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .icon-item:hover {
+            border-color: var(--primary-rose);
+            background-color: var(--rose-light);
+            transform: translateY(-2px);
+        }
+
+        .icon-preview {
+            margin-bottom: 12px;
+        }
+
+        .icon-name {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            color: var(--neutral-700);
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .logo-item {
+            text-align: center;
+            padding: 32px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            background: white;
+        }
+
+        .demo-section {
+            background: var(--neutral-50);
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 32px;
+        }
+
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primary-blue);
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .color-item {
+            text-align: center;
+        }
+
+        .color-swatch {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            margin: 0 auto 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .color-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .color-code {
+            font-size: 10px;
+            color: var(--neutral-600);
+            font-family: monospace;
+        }
+
+        .usage-example {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--neutral-200);
+            margin-bottom: 16px;
+        }
+
+        .code-block {
+            background: var(--neutral-900);
+            color: var(--neutral-100);
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .icon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>绛唇解语花</h1>
+            <p>专业医美图标设计系统 · Icon Design System</p>
+        </header>
+
+        <!-- 品牌Logo展示 -->
+        <section class="section">
+            <h2 class="section-title">品牌Logo设计</h2>
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <h3>主Logo</h3>
+                    <div class="lips-p-3">
+                        <svg class="lips-logo lips-logo--main" viewBox="0 0 48 48">
+                            <use href="icons/brand/logo-main.svg#main"></use>
+                        </svg>
+                    </div>
+                    <p>融合唇部元素和花卉图案，适用于主要品牌展示</p>
+                </div>
+                <div class="logo-item">
+                    <h3>简化版</h3>
+                    <div class="lips-p-3">
+                        <svg class="lips-logo lips-logo--simplified" viewBox="0 0 24 24">
+                            <use href="icons/brand/logo-simplified.svg#simplified"></use>
+                        </svg>
+                    </div>
+                    <p>简化设计，适用于小尺寸显示和应用图标</p>
+                </div>
+                <div class="logo-item">
+                    <h3>单色版</h3>
+                    <div class="lips-p-3">
+                        <svg class="lips-logo lips-logo--monochrome" viewBox="0 0 24 24">
+                            <use href="icons/brand/logo-monochrome.svg#monochrome"></use>
+                        </svg>
+                    </div>
+                    <p>单色设计，适用于单色印刷和水印应用</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 色彩系统 -->
+        <section class="section">
+            <h2 class="section-title">色彩系统</h2>
+            <div class="color-palette">
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #E91E63;"></div>
+                    <div class="color-name">主玫瑰红</div>
+                    <div class="color-code">#E91E63</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #2196F3;"></div>
+                    <div class="color-name">主蓝色</div>
+                    <div class="color-code">#2196F3</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #4CAF50;"></div>
+                    <div class="color-name">主绿色</div>
+                    <div class="color-code">#4CAF50</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #FCE4EC;"></div>
+                    <div class="color-name">浅玫瑰</div>
+                    <div class="color-code">#FCE4EC</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #AD1457;"></div>
+                    <div class="color-name">深玫瑰</div>
+                    <div class="color-code">#AD1457</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #9E9E9E;"></div>
+                    <div class="color-name">中性灰</div>
+                    <div class="color-code">#9E9E9E</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 导航功能图标 -->
+        <section class="section">
+            <h2 class="section-title">导航功能图标</h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">home.svg<br>首页</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">menu.svg<br>目录</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">search.svg<br>搜索</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M19.4 15A1.65 1.65 0 0 0 21 13.75A1.65 1.65 0 0 0 19.4 12.5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="icon-name">settings.svg<br>设置</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><path d="M20 21V19A4 4 0 0 0 16 15H8A4 4 0 0 0 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="icon-name">user.svg<br>用户</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--interactive"><path d="M20.84 4.61A5.5 5.5 0 0 0 12 4.61A5.5 5.5 0 0 0 3.16 4.61C1.73 6.04 1.73 8.35 3.16 9.78L12 18.62L20.84 9.78C22.27 8.35 22.27 6.04 20.84 4.61Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">favorite.svg<br>收藏</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 章节主题图标 -->
+        <section class="section">
+            <h2 class="section-title">章节主题图标</h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--rose"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 14H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="icon-name">cultural-heritage.svg<br>文化传承</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--blue"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="icon-name">scientific-principles.svg<br>科学原理</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--green"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">case-studies.svg<br>案例研究</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-icon--rose"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">technical-mastery.svg<br>技术精髓</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 医学专业图标 -->
+        <section class="section">
+            <h2 class="section-title">医学专业图标</h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical"><path d="M9 9V5A2 2 0 0 1 11 3H13A2 2 0 0 1 15 5V9M8 9H16V21H8V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="10" y1="13" x2="14" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="icon-name">syringe.svg<br>注射器</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical--equipment"><path d="M9.06 12.44L1.64 20.36A2.15 2.15 0 1 0 4.64 23.36L12.56 15.94M15 8L17 6C18.66 4.34 21.34 4.34 23 6C21.34 7.66 21.34 10.34 19 12L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div class="icon-name">scalpel.svg<br>手术刀</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical--equipment"><path d="M6 18H5A2 2 0 0 1 3 16V11A2 2 0 0 1 5 9H9A2 2 0 0 1 11 11V16A2 2 0 0 1 9 18H8M6 9V5A2 2 0 0 1 8 3H10A2 2 0 0 1 12 5V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="9" r="3" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="icon-name">microscope.svg<br>显微镜</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical--anatomy"><path d="M3 12S6 8 12 8S21 12 21 12S18 16 12 16S3 12 3 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="icon-name">blood-vessel.svg<br>血管</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="1.5" stroke="currentColor" stroke-width="1" fill="currentColor"/></svg>
+                    </div>
+                    <div class="icon-name">cell.svg<br>细胞</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-preview">
+                        <svg class="lips-icon lips-icon--lg lips-medical"><path d="M12 2V22M5 5C8 8 12 12 19 19M19 5C16 8 12 12 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="9" r="1" stroke="currentColor" stroke-width="1" fill="currentColor"/></svg>
+                    </div>
+                    <div class="icon-name">dna.svg<br>DNA</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用示例 -->
+        <section class="section">
+            <h2 class="section-title">使用示例</h2>
+
+            <div class="demo-section">
+                <h3 class="demo-title">基础用法</h3>
+                <div class="usage-example">
+                    <p>简单的图标使用：</p>
+                    <div style="margin: 16px 0;">
+                        <svg class="lips-icon"><path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span style="margin-left: 8px;">首页</span>
+                    </div>
+                    <div class="code-block">&lt;svg class="lips-icon"&gt;...&lt;/svg&gt;</div>
+                </div>
+
+                <div class="usage-example">
+                    <p>不同尺寸的图标：</p>
+                    <div style="margin: 16px 0; display: flex; align-items: center; gap: 16px;">
+                        <svg class="lips-icon lips-icon--xs lips-icon--rose"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        <svg class="lips-icon lips-icon--sm lips-icon--blue"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        <svg class="lips-icon lips-icon--md lips-icon--green"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        <svg class="lips-icon lips-icon--lg lips-icon--rose"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        <svg class="lips-icon lips-icon--xl lips-icon--blue"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="code-block">&lt;svg class="lips-icon lips-icon--xs lips-icon--rose"&gt;...&lt;/svg&gt;
+&lt;svg class="lips-icon lips-icon--sm lips-icon--blue"&gt;...&lt;/svg&gt;
+&lt;svg class="lips-icon lips-icon--md lips-icon--green"&gt;...&lt;/svg&gt;</div>
+                </div>
+
+                <div class="usage-example">
+                    <p>按钮中的图标：</p>
+                    <div style="margin: 16px 0; display: flex; gap: 12px;">
+                        <button class="lips-btn lips-btn--primary">
+                            <svg class="lips-icon lips-icon--sm"><path d="M21 15V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            下载
+                        </button>
+                        <button class="lips-btn lips-btn--secondary">
+                            <svg class="lips-icon lips-icon--sm"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                            分享
+                        </button>
+                        <button class="lips-btn lips-btn--ghost">
+                            <svg class="lips-icon lips-icon--sm"><polyline points="6,9 6,2 18,2 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            打印
+                        </button>
+                    </div>
+                    <div class="code-block">&lt;button class="lips-btn lips-btn--primary"&gt;
+  &lt;svg class="lips-icon lips-icon--sm"&gt;...&lt;/svg&gt;
+  下载
+&lt;/button&gt;</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术规范 -->
+        <section class="section">
+            <h2 class="section-title">技术规范</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary-blue);">图标规格</h4>
+                    <ul style="list-style: none; color: var(--neutral-600);">
+                        <li>• SVG格式，矢量可缩放</li>
+                        <li>• 24x24px基础网格</li>
+                        <li>• 线条粗细：2px</li>
+                        <li>• 圆角半径：2px/4px</li>
+                        <li>• 支持深色/浅色主题</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary-blue);">色彩标准</h4>
+                    <ul style="list-style: none; color: var(--neutral-600);">
+                        <li>• 主色：#E91E63 (玫瑰红)</li>
+                        <li>• 辅色：#2196F3 (蓝色)</li>
+                        <li>• 强调：#4CAF50 (绿色)</li>
+                        <li>• 中性：#9E9E9E (灰色)</li>
+                        <li>• 响应式颜色变量</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 12px; color: var(--primary-blue);">使用原则</h4>
+                    <ul style="list-style: none; color: var(--neutral-600);">
+                        <li>• 保持一致的视觉风格</li>
+                        <li>• 优先考虑可访问性</li>
+                        <li>• 支持多设备适配</li>
+                        <li>• 语义化图标命名</li>
+                        <li>• 模块化组件设计</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

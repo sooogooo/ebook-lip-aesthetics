@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绛唇解语花 - 唇部美学智能平台</title>
+    <meta name="description" content="专业的唇部美学医疗平台，提供3D可视化、AR预览、数据分析等先进功能">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💋</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #E91E63;
+            --primary-light: #F8BBD9;
+            --primary-dark: #AD1457;
+            --secondary-color: #FF6B9D;
+            --accent-color: #FF1744;
+            --bg-gradient: linear-gradient(135deg, #ffeef7 0%, #fff5f8 50%, #f8e8f3 100%);
+            --card-shadow: 0 10px 30px rgba(233, 30, 99, 0.1);
+            --card-shadow-hover: 0 20px 60px rgba(233, 30, 99, 0.2);
+            --text-primary: #2C1810;
+            --text-secondary: #8D6E63;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: relative;
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.05) 0%, rgba(255, 107, 157, 0.03) 100%);
+            border-bottom: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        .feature-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-light), #fff);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .platform-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .platform-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features li {
+            padding: 0.3rem 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .card-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            margin: 4rem 0;
+            text-align: center;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(233, 30, 99, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        .book-section {
+            margin: 4rem 0;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .book-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .extended-section {
+            margin: 4rem 0;
+        }
+
+        .extended-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .extended-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid rgba(233, 30, 99, 0.08);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.08);
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .extended-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .extended-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.15);
+        }
+
+        .extended-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .extended-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .extended-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .extended-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float-around 20s infinite linear;
+        }
+
+        @keyframes float-around {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -100px) rotate(90deg); }
+            50% { transform: translate(-50px, -200px) rotate(180deg); }
+            75% { transform: translate(-150px, -50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .header {
+                padding: 2rem 1rem 1rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 10%;">💋</div>
+        <div class="floating-element" style="top: 20%; right: 15%;">✨</div>
+        <div class="floating-element" style="bottom: 30%; left: 20%;">🌸</div>
+        <div class="floating-element" style="bottom: 20%; right: 25%;">💄</div>
+        <div class="floating-element" style="top: 40%; left: 5%;">🎨</div>
+        <div class="floating-element" style="top: 60%; right: 10%;">🔬</div>
+    </div>
+
+    <header class="header">
+        <div class="logo">💋</div>
+        <h1 class="title">绛唇解语花</h1>
+        <p class="subtitle">专业唇部美学智能医疗平台</p>
+        <div class="feature-badge">
+            <span>🚀</span>
+            <span>AI驱动 · 3D可视化 · 专业医疗</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="platform-grid">
+            <div class="platform-card" onclick="window.open('/test_basic.html', '_blank')">
+                <div class="card-icon">🔧</div>
+                <h3 class="card-title">系统诊断</h3>
+                <p class="card-description">全面诊断所有功能模块的运行状态和问题排查</p>
+                <ul class="card-features">
+                    <li>功能状态检查</li>
+                    <li>资源加载验证</li>
+                    <li>兼容性测试</li>
+                    <li>错误诊断报告</li>
+                </ul>
+                <a href="/test_basic.html" class="card-button">
+                    <span>开始诊断</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/visualization_hub.html', '_blank')">
+                <div class="card-icon">🎨</div>
+                <h3 class="card-title">可视化中心</h3>
+                <p class="card-description">全方位的可视化工具集合，提供交互式界面和专业数据展示</p>
+                <ul class="card-features">
+                    <li>交互式数据看板</li>
+                    <li>实时图表分析</li>
+                    <li>多维度可视化</li>
+                    <li>响应式设计</li>
+                </ul>
+                <a href="/visualization_hub.html" class="card-button">
+                    <span>进入中心</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/simple_3d_test.html', '_blank')">
+                <div class="card-icon">🧬</div>
+                <h3 class="card-title">3D解剖模型</h3>
+                <p class="card-description">高精度3D唇部解剖模型，支持多层次交互和专业标注</p>
+                <ul class="card-features">
+                    <li>简化版本 (稳定)</li>
+                    <li>基础WebGL渲染</li>
+                    <li>交互式操作</li>
+                    <li>专业标注</li>
+                </ul>
+                <a href="/simple_3d_test.html" class="card-button">
+                    <span>查看模型</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/simple_ar_test.html', '_blank')">
+                <div class="card-icon">📱</div>
+                <h3 class="card-title">移动AR体验</h3>
+                <p class="card-description">移动端AR增强现实体验，支持实时预览和智能分析</p>
+                <ul class="card-features">
+                    <li>摄像头实时预览</li>
+                    <li>面部检测模拟</li>
+                    <li>移动端优化</li>
+                    <li>手势控制</li>
+                </ul>
+                <a href="/simple_ar_test.html" class="card-button">
+                    <span>AR体验</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/medical_dashboard.html', '_blank')">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">医疗数据中心</h3>
+                <p class="card-description">专业医疗数据分析与管理平台，提供全面的数据洞察</p>
+                <ul class="card-features">
+                    <li>数据分析</li>
+                    <li>趋势预测</li>
+                    <li>报告生成</li>
+                    <li>安全管理</li>
+                </ul>
+                <a href="/medical_dashboard.html" class="card-button">
+                    <span>数据中心</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/gallery.html', '_blank')">
+                <div class="card-icon">🖼️</div>
+                <h3 class="card-title">医学图库</h3>
+                <p class="card-description">专业医学图像库，包含案例对比、解剖图谱和教学资源</p>
+                <ul class="card-features">
+                    <li>案例对比</li>
+                    <li>解剖图谱</li>
+                    <li>教学资源</li>
+                    <li>高清图像</li>
+                </ul>
+                <a href="/gallery.html" class="card-button">
+                    <span>浏览图库</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="platform-card" onclick="window.open('/component-docs.html', '_blank')">
+                <div class="card-icon">📚</div>
+                <h3 class="card-title">开发文档</h3>
+                <p class="card-description">完整的开发文档和API参考，支持二次开发和集成</p>
+                <ul class="card-features">
+                    <li>API文档</li>
+                    <li>组件库</li>
+                    <li>示例代码</li>
+                    <li>最佳实践</li>
+                </ul>
+                <a href="/component-docs.html" class="card-button">
+                    <span>查看文档</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+
+        <section class="book-section">
+            <h2 style="text-align: center; font-size: 2.5rem; color: var(--text-primary); margin-bottom: 1rem;">📖 医学专著章节</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">《绛唇解语花 - 美容医生的唇部美学笔记》完整章节内容</p>
+
+            <div class="book-grid">
+                <div class="book-card" onclick="window.open('/document-viewer.html#/00_preface.md', '_blank')">
+                    <div class="book-number">序</div>
+                    <h4 class="book-title">前言</h4>
+                    <p class="book-desc">唇部美学的艺术与科学</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/01_cultural_aesthetics_enhanced.md', '_blank')">
+                    <div class="book-number">01</div>
+                    <h4 class="book-title">文化美学</h4>
+                    <p class="book-desc">东西方唇部美学理念对比</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/02_scientific_principles.md', '_blank')">
+                    <div class="book-number">02</div>
+                    <h4 class="book-title">科学原理</h4>
+                    <p class="book-desc">唇部解剖与生理学基础</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/03_case_studies.md', '_blank')">
+                    <div class="book-number">03</div>
+                    <h4 class="book-title">案例研究</h4>
+                    <p class="book-desc">经典案例分析与技术解读</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/04_technical_mastery_international.md', '_blank')">
+                    <div class="book-number">04</div>
+                    <h4 class="book-title">技术精进</h4>
+                    <p class="book-desc">国际先进技术与实践</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/05_comprehensive_strategy.md', '_blank')">
+                    <div class="book-number">05</div>
+                    <h4 class="book-title">综合策略</h4>
+                    <p class="book-desc">全方位治疗方案设计</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/06_functional_reconstruction.md', '_blank')">
+                    <div class="book-number">06</div>
+                    <h4 class="book-title">功能重建</h4>
+                    <p class="book-desc">唇部功能性修复技术</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/07_doctor_selection.md', '_blank')">
+                    <div class="book-number">07</div>
+                    <h4 class="book-title">医生选择</h4>
+                    <p class="book-desc">专业医生的评估标准</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/08_cosmetics_tattoo.md', '_blank')">
+                    <div class="book-number">08</div>
+                    <h4 class="book-title">唇部纹绣</h4>
+                    <p class="book-desc">纹绣技术与美学结合</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/09_aftercare.md', '_blank')">
+                    <div class="book-number">09</div>
+                    <h4 class="book-title">术后护理</h4>
+                    <p class="book-desc">科学的护理指导方案</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/10_risk_aesthetics.md', '_blank')">
+                    <div class="book-number">10</div>
+                    <h4 class="book-title">风险美学</h4>
+                    <p class="book-desc">风险评估与管理策略</p>
+                </div>
+
+                <div class="book-card" onclick="window.open('/document-viewer.html#/11_appendix_enhanced.md', '_blank')">
+                    <div class="book-number">附</div>
+                    <h4 class="book-title">附录</h4>
+                    <p class="book-desc">参考资料与技术规范</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="extended-section">
+            <h2 style="text-align: center; font-size: 2.2rem; color: var(--text-primary); margin-bottom: 1rem;">🔬 扩展专题研究</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1rem;">前沿技术与创新应用专题</p>
+
+            <div class="extended-grid">
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/ai_assessment_system.md', '_blank')">
+                    <div class="extended-icon">🤖</div>
+                    <h4 class="extended-title">AI评估系统</h4>
+                    <p class="extended-desc">人工智能驱动的美学评估技术</p>
+                </div>
+
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/visual_design_guide.md', '_blank')">
+                    <div class="extended-icon">🎨</div>
+                    <h4 class="extended-title">视觉设计指南</h4>
+                    <p class="extended-desc">专业的美学设计标准与规范</p>
+                </div>
+
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/digital_ecosystem.md', '_blank')">
+                    <div class="extended-icon">🌐</div>
+                    <h4 class="extended-title">数字生态系统</h4>
+                    <p class="extended-desc">数字化医疗美学生态建设</p>
+                </div>
+
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/vr_ar_training.md', '_blank')">
+                    <div class="extended-icon">🥽</div>
+                    <h4 class="extended-title">VR/AR培训</h4>
+                    <p class="extended-desc">虚拟现实医疗培训系统</p>
+                </div>
+
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/blockchain_certification.md', '_blank')">
+                    <div class="extended-icon">🔐</div>
+                    <h4 class="extended-title">区块链认证</h4>
+                    <p class="extended-desc">医疗资质区块链认证体系</p>
+                </div>
+
+                <div class="extended-card" onclick="window.open('/document-viewer.html#/global_partnership.md', '_blank')">
+                    <div class="extended-icon">🌍</div>
+                    <h4 class="extended-title">全球合作</h4>
+                    <p class="extended-desc">国际医疗美学合作网络</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <h2 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem;">平台核心数据</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">基于AI驱动的专业医疗美学平台</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">12+</span>
+                    <div class="stat-label">医学章节</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6+</span>
+                    <div class="stat-label">扩展专题</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <div class="stat-label">可视化组件</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <div class="stat-label">核心功能模块</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Three.js</span>
+                <span class="tech-item">WebGL</span>
+                <span class="tech-item">WebXR</span>
+                <span class="tech-item">PWA</span>
+                <span class="tech-item">D3.js</span>
+                <span class="tech-item">Chart.js</span>
+                <span class="tech-item">AI/ML</span>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 2rem;">
+                © 2025 绛唇解语花 - 专业唇部美学智能医疗平台<br>
+                🚀 基于先进AI技术 · 🎨 专业医学可视化 · 💋 美学医疗专业服务
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 添加平滑滚动和交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 给所有卡片添加点击效果
+            const cards = document.querySelectorAll('.platform-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // 统计数字动画
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const observerOptions = {
+                threshold: 0.7
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalText = target.textContent;
+                        const isNumeric = !isNaN(parseInt(finalText));
+
+                        if (isNumeric) {
+                            const finalNumber = parseInt(finalText);
+                            let currentNumber = 0;
+                            const increment = finalNumber / 30;
+
+                            const timer = setInterval(() => {
+                                currentNumber += increment;
+                                if (currentNumber >= finalNumber) {
+                                    target.textContent = finalNumber + '+';
+                                    clearInterval(timer);
+                                } else {
+                                    target.textContent = Math.floor(currentNumber) + '+';
+                                }
+                            }, 50);
+                        }
+                        observer.unobserve(target);
+                    }
+                });
+            }, observerOptions);
+
+            statNumbers.forEach(stat => {
+                observer.observe(stat);
+            });
+        });
+    </script>
+</body>
+</html>

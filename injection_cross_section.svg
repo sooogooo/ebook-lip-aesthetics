@@ -1,0 +1,265 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Injection Cross-section Anatomical Illustration -->
+    <!-- Professional medical visualization of injection layers and safety zones -->
+
+    <defs>
+        <!-- Layer gradients -->
+        <linearGradient id="epidermisGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#fdbcb4;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f4a6a0;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="dermisGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#f4a6a0;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#e89690;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="hypodermisGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffe4b5;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffd4a5;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="muscleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff9999;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff6666;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Filler material patterns -->
+        <pattern id="haPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+            <circle cx="4" cy="4" r="2" fill="#66b3ff" opacity="0.7"/>
+        </pattern>
+
+        <pattern id="fatPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+            <circle cx="5" cy="5" r="3" fill="#ffeb99" opacity="0.6"/>
+        </pattern>
+
+        <!-- Needle gradient -->
+        <linearGradient id="needleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#c0c0c0;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#c0c0c0;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Cross-hatch pattern for tissue texture -->
+        <pattern id="tissueTexture" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="4" y2="4" stroke="#00000020" stroke-width="0.5"/>
+            <line x1="4" y1="0" x2="0" y2="4" stroke="#00000020" stroke-width="0.5"/>
+        </pattern>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="600" fill="#f5f7fa"/>
+
+    <!-- Title -->
+    <text x="400" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#2c3e50">
+        注射层次剖面图
+    </text>
+    <text x="400" y="55" text-anchor="middle" font-size="13" fill="#7f8c8d">
+        横截面视图 • 精确深度标识 • 安全注射指导
+    </text>
+
+    <!-- Main cross-section view -->
+    <g id="crossSection" transform="translate(400,340)">
+
+        <!-- Layer structure visualization -->
+        <!-- Epidermis layer (0-0.1mm) -->
+        <rect x="-320" y="-200" width="640" height="35" fill="url(#epidermisGrad)" stroke="#d49690" stroke-width="1.5"/>
+        <rect x="-320" y="-200" width="640" height="35" fill="url(#tissueTexture)" opacity="0.3"/>
+        <text x="-310" y="-180" font-size="13" font-weight="bold" fill="#8b4513">表皮层</text>
+        <text x="-310" y="-165" font-size="11" fill="#8b4513">Epidermis</text>
+        <text x="310" y="-180" text-anchor="end" font-size="12" fill="#8b4513">0-0.1mm</text>
+
+        <!-- Dermis layer (0.1-2mm) -->
+        <rect x="-320" y="-165" width="640" height="85" fill="url(#dermisGrad)" stroke="#c48680" stroke-width="1.5"/>
+        <rect x="-320" y="-165" width="640" height="85" fill="url(#tissueTexture)" opacity="0.3"/>
+        <text x="-310" y="-135" font-size="13" font-weight="bold" fill="#8b4513">真皮层</text>
+        <text x="-310" y="-120" font-size="11" fill="#8b4513">Dermis</text>
+        <text x="310" y="-135" text-anchor="end" font-size="12" fill="#8b4513">0.1-2mm</text>
+
+        <!-- Blood vessels in dermis -->
+        <g id="dermisVessels" opacity="0.8">
+            <!-- Arterioles -->
+            <ellipse cx="-180" cy="-120" rx="18" ry="10" fill="#ff4444" opacity="0.7"/>
+            <ellipse cx="-60" cy="-110" rx="15" ry="8" fill="#ff4444" opacity="0.7"/>
+            <ellipse cx="60" cy="-125" rx="16" ry="9" fill="#ff4444" opacity="0.7"/>
+            <ellipse cx="180" cy="-115" rx="17" ry="9" fill="#ff4444" opacity="0.7"/>
+
+            <!-- Venules -->
+            <ellipse cx="-120" cy="-105" rx="14" ry="7" fill="#4444ff" opacity="0.6"/>
+            <ellipse cx="0" cy="-115" rx="13" ry="7" fill="#4444ff" opacity="0.6"/>
+            <ellipse cx="120" cy="-108" rx="14" ry="8" fill="#4444ff" opacity="0.6"/>
+
+            <!-- Capillary network -->
+            <g stroke="#ff8888" stroke-width="0.5" fill="none" opacity="0.5">
+                <path d="M -200,-100 Q -180,-95 -160,-100"/>
+                <path d="M -100,-100 Q -80,-95 -60,-100"/>
+                <path d="M 0,-105 Q 20,-100 40,-105"/>
+                <path d="M 100,-102 Q 120,-97 140,-102"/>
+            </g>
+        </g>
+
+        <!-- Hypodermis/Subcutaneous layer (2-5mm) -->
+        <rect x="-320" y="-80" width="640" height="110" fill="url(#hypodermisGrad)" stroke="#e5c495" stroke-width="1.5"/>
+        <rect x="-320" y="-80" width="640" height="110" fill="url(#tissueTexture)" opacity="0.2"/>
+        <text x="-310" y="-50" font-size="13" font-weight="bold" fill="#8b4513">皮下组织</text>
+        <text x="-310" y="-35" font-size="11" fill="#8b4513">Hypodermis</text>
+        <text x="310" y="-50" text-anchor="end" font-size="12" fill="#8b4513">2-5mm</text>
+
+        <!-- Fat lobules in hypodermis -->
+        <g id="fatLobules" opacity="0.4">
+            <ellipse cx="-200" cy="-25" rx="25" ry="20" fill="#ffeb99"/>
+            <ellipse cx="-150" cy="-30" rx="22" ry="18" fill="#ffeb99"/>
+            <ellipse cx="-100" cy="-20" rx="24" ry="19" fill="#ffeb99"/>
+            <ellipse cx="-50" cy="-28" rx="23" ry="20" fill="#ffeb99"/>
+            <ellipse cx="0" cy="-22" rx="25" ry="21" fill="#ffeb99"/>
+            <ellipse cx="50" cy="-30" rx="22" ry="18" fill="#ffeb99"/>
+            <ellipse cx="100" cy="-25" rx="24" ry="20" fill="#ffeb99"/>
+            <ellipse cx="150" cy="-20" rx="23" ry="19" fill="#ffeb99"/>
+            <ellipse cx="200" cy="-28" rx="25" ry="20" fill="#ffeb99"/>
+        </g>
+
+        <!-- Muscle layer (>5mm) -->
+        <rect x="-320" y="30" width="640" height="130" fill="url(#muscleGrad)" stroke="#ff4444" stroke-width="1.5"/>
+        <text x="-310" y="70" font-size="13" font-weight="bold" fill="#8b0000">肌肉层</text>
+        <text x="-310" y="85" font-size="11" fill="#8b0000">Muscle</text>
+        <text x="310" y="70" text-anchor="end" font-size="12" fill="#8b0000">&gt;5mm</text>
+
+        <!-- Muscle fiber pattern -->
+        <g stroke="#cc4444" stroke-width="1" opacity="0.5">
+            <line x1="-320" y1="50" x2="320" y2="50"/>
+            <line x1="-320" y1="70" x2="320" y2="70"/>
+            <line x1="-320" y1="90" x2="320" y2="90"/>
+            <line x1="-320" y1="110" x2="320" y2="110"/>
+            <line x1="-320" y1="130" x2="320" y2="130"/>
+        </g>
+
+        <!-- Nerve fibers -->
+        <g id="nerveDistribution" stroke="#ffcc00" stroke-width="2" fill="none" opacity="0.7">
+            <path d="M -250,-100 L -230,-80 L -210,-60 L -190,-40">
+                <animate attributeName="stroke-dasharray" values="0 50;50 0" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <path d="M 250,-100 L 230,-80 L 210,-60 L 190,-40">
+                <animate attributeName="stroke-dasharray" values="0 50;50 0" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <path d="M 0,-100 L 0,-60 L 20,-40 L 0,-20">
+                <animate attributeName="stroke-dasharray" values="0 50;50 0" dur="2s" repeatCount="indefinite"/>
+            </path>
+        </g>
+
+        <!-- Injection demonstrations -->
+        <g id="injectionExamples">
+            <!-- Superficial injection (dermis) -->
+            <g id="superficialInjection" transform="translate(-200,0)">
+                <rect x="-5" y="-280" width="6" height="120" fill="url(#needleGrad)" transform="rotate(-15 -2 -220)"/>
+                <polygon points="-2,-138 -5,-133 1,-133" fill="#c0c0c0"/>
+                <ellipse cx="0" cy="-130" rx="35" ry="20" fill="url(#haPattern)" opacity="0.7"/>
+                <text x="0" y="-290" text-anchor="middle" font-size="11" fill="#2980b9">浅层注射</text>
+                <text x="0" y="-275" text-anchor="middle" font-size="10" fill="#666">真皮层填充</text>
+            </g>
+
+            <!-- Medium depth injection (hypodermis) -->
+            <g id="mediumInjection" transform="translate(0,0)">
+                <rect x="-3" y="-280" width="6" height="180" fill="url(#needleGrad)" transform="rotate(-5 0 -190)"/>
+                <polygon points="0,-58 -3,-53 3,-53" fill="#c0c0c0"/>
+                <ellipse cx="0" cy="-35" rx="45" ry="28" fill="url(#haPattern)" opacity="0.7"/>
+                <text x="0" y="-290" text-anchor="middle" font-size="11" fill="#2980b9">中层注射</text>
+                <text x="0" y="-275" text-anchor="middle" font-size="10" fill="#666">皮下填充</text>
+            </g>
+
+            <!-- Deep injection (muscle) -->
+            <g id="deepInjection" transform="translate(200,0)">
+                <rect x="-3" y="-280" width="6" height="250" fill="url(#needleGrad)"/>
+                <polygon points="0,45 -3,50 3,50" fill="#c0c0c0"/>
+                <ellipse cx="0" cy="65" rx="50" ry="30" fill="url(#haPattern)" opacity="0.7"/>
+                <text x="0" y="-290" text-anchor="middle" font-size="11" fill="#2980b9">深层注射</text>
+                <text x="0" y="-275" text-anchor="middle" font-size="10" fill="#666">肌层塑形</text>
+            </g>
+        </g>
+
+        <!-- Depth markers and scale -->
+        <g id="depthScale" stroke="#333" stroke-width="1.5">
+            <line x1="-340" y1="-200" x2="-325" y2="-200"/>
+            <line x1="-340" y1="-165" x2="-325" y2="-165"/>
+            <line x1="-340" y1="-80" x2="-325" y2="-80"/>
+            <line x1="-340" y1="30" x2="-325" y2="30"/>
+            <line x1="-340" y1="160" x2="-325" y2="160"/>
+
+            <!-- Vertical scale line -->
+            <line x1="-340" y1="-200" x2="-340" y2="160"/>
+        </g>
+
+        <!-- Depth labels -->
+        <g font-size="11" fill="#666">
+            <text x="-360" y="-195" text-anchor="end">0mm</text>
+            <text x="-360" y="-160" text-anchor="end">0.1mm</text>
+            <text x="-360" y="-75" text-anchor="end">2mm</text>
+            <text x="-360" y="35" text-anchor="end">5mm</text>
+            <text x="-360" y="165" text-anchor="end">10mm</text>
+        </g>
+
+        <!-- Safety zones -->
+        <g id="safetyZones">
+            <!-- Safe injection areas -->
+            <rect x="-280" y="-80" width="160" height="70" fill="#00ff00" opacity="0.15" stroke="#00aa00" stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="-200" y="-45" font-size="12" fill="#00aa00" text-anchor="middle" font-weight="bold">安全区</text>
+
+            <rect x="120" y="-80" width="160" height="70" fill="#00ff00" opacity="0.15" stroke="#00aa00" stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="200" y="-45" font-size="12" fill="#00aa00" text-anchor="middle" font-weight="bold">安全区</text>
+
+            <!-- Danger zones (vascular areas) -->
+            <ellipse cx="-60" cy="-110" rx="30" ry="20" fill="#ff0000" opacity="0.2" stroke="#ff0000" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="-60" y="-145" font-size="10" fill="#ff0000" text-anchor="middle">血管危险区</text>
+
+            <ellipse cx="60" cy="-125" rx="32" ry="20" fill="#ff0000" opacity="0.2" stroke="#ff0000" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="60" y="-155" font-size="10" fill="#ff0000" text-anchor="middle">血管危险区</text>
+        </g>
+    </g>
+
+    <!-- Legend and information panel -->
+    <g transform="translate(50,520)">
+        <rect x="0" y="0" width="700" height="60" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="5"/>
+
+        <text x="10" y="20" font-size="13" font-weight="bold" fill="#2c3e50">注射技术要点：</text>
+
+        <g font-size="11" fill="#495057">
+            <text x="10" y="38">• 表皮层：仅用于表面麻醉</text>
+            <text x="180" y="38">• 真皮层：细纹填充/水光针</text>
+            <text x="350" y="38">• 皮下层：主要填充区域</text>
+            <text x="500" y="38">• 肌肉层：深层塑形</text>
+
+            <text x="10" y="52">• 注射前回抽确认无血</text>
+            <text x="180" y="52">• 避开血管密集区域</text>
+            <text x="350" y="52">• 少量多点注射原则</text>
+            <text x="500" y="52">• 缓慢推注减少疼痛</text>
+        </g>
+    </g>
+
+    <!-- Color coding legend -->
+    <g transform="translate(680,90)" font-size="10">
+        <text x="0" y="0" font-size="12" font-weight="bold" fill="#2c3e50">图例</text>
+
+        <rect x="0" y="10" width="15" height="10" fill="#fdbcb4"/>
+        <text x="20" y="18" fill="#666">表皮</text>
+
+        <rect x="0" y="25" width="15" height="10" fill="#f4a6a0"/>
+        <text x="20" y="33" fill="#666">真皮</text>
+
+        <rect x="0" y="40" width="15" height="10" fill="#ffe4b5"/>
+        <text x="20" y="48" fill="#666">皮下</text>
+
+        <rect x="0" y="55" width="15" height="10" fill="#ff9999"/>
+        <text x="20" y="63" fill="#666">肌肉</text>
+
+        <circle cx="7" cy="75" r="5" fill="#ff4444"/>
+        <text x="20" y="78" fill="#666">动脉</text>
+
+        <circle cx="7" cy="90" r="5" fill="#4444ff"/>
+        <text x="20" y="93" fill="#666">静脉</text>
+
+        <line x1="0" y1="105" x2="15" y2="105" stroke="#ffcc00" stroke-width="2"/>
+        <text x="20" y="108" fill="#666">神经</text>
+
+        <rect x="0" y="118" width="15" height="10" fill="#66b3ff" opacity="0.7"/>
+        <text x="20" y="126" fill="#666">填充物</text>
+    </g>
+</svg>

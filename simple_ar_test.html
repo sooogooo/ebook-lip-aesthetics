@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简化AR测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+        }
+
+        #video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        button:hover {
+            background: rgba(41, 128, 185, 0.9);
+        }
+
+        .status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.9);
+        }
+
+        .success {
+            background: rgba(46, 204, 113, 0.9);
+        }
+
+        .ar-marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+
+        .face-outline {
+            position: absolute;
+            border: 2px solid #3498db;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div>正在启动摄像头...</div>
+    </div>
+
+    <video id="video" autoplay playsinline></video>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="status" id="status">
+        <div>📱 移动AR唇部分析系统</div>
+        <div id="status-text">正在初始化...</div>
+    </div>
+
+    <div class="controls">
+        <button onclick="startCamera()">🎥 启动摄像头</button>
+        <button onclick="toggleAnalysis()">🔍 切换分析</button>
+        <button onclick="captureFrame()">📸 截图</button>
+        <button onclick="toggleCamera()">🔄 切换摄像头</button>
+    </div>
+
+    <script>
+        let video, stream, isAnalyzing = false, currentCamera = 'user';
+        let faceDetectionInterval;
+
+        const config = {
+            video: {
+                facingMode: currentCamera,
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        };
+
+        async function startCamera() {
+            try {
+                updateStatus('正在请求摄像头权限...', 'info');
+
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
+                stream = await navigator.mediaDevices.getUserMedia(config);
+                video = document.getElementById('video');
+                video.srcObject = stream;
+
+                video.onloadedmetadata = () => {
+                    video.play();
+                    document.getElementById('loading').style.display = 'none';
+                    updateStatus('摄像头启动成功！点击"切换分析"开始面部检测', 'success');
+                };
+
+            } catch (error) {
+                handleCameraError(error);
+            }
+        }
+
+        function handleCameraError(error) {
+            document.getElementById('loading').style.display = 'none';
+            let message = '摄像头启动失败: ';
+
+            switch (error.name) {
+                case 'NotAllowedError':
+                    message += '用户拒绝了摄像头权限';
+                    break;
+                case 'NotFoundError':
+                    message += '未找到摄像头设备';
+                    break;
+                case 'NotSupportedError':
+                    message += '浏览器不支持摄像头功能';
+                    break;
+                default:
+                    message += error.message;
+            }
+
+            updateStatus(message, 'error');
+        }
+
+        function toggleAnalysis() {
+            isAnalyzing = !isAnalyzing;
+
+            if (isAnalyzing) {
+                startFaceDetection();
+                updateStatus('AI面部分析已启动 - 检测唇部特征中...', 'success');
+            } else {
+                stopFaceDetection();
+                updateStatus('面部分析已停止', 'info');
+            }
+        }
+
+        function startFaceDetection() {
+            const overlay = document.getElementById('overlay');
+            overlay.innerHTML = '';
+
+            // 模拟面部检测
+            faceDetectionInterval = setInterval(() => {
+                if (!isAnalyzing) return;
+
+                // 模拟检测到的面部
+                simulateFaceDetection();
+            }, 100);
+        }
+
+        function simulateFaceDetection() {
+            const overlay = document.getElementById('overlay');
+            overlay.innerHTML = '';
+
+            // 模拟面部轮廓
+            const faceOutline = document.createElement('div');
+            faceOutline.className = 'face-outline';
+
+            // 随机位置模拟面部检测
+            const centerX = window.innerWidth * (0.3 + Math.random() * 0.4);
+            const centerY = window.innerHeight * (0.2 + Math.random() * 0.4);
+            const size = 200 + Math.random() * 100;
+
+            faceOutline.style.left = (centerX - size/2) + 'px';
+            faceOutline.style.top = (centerY - size/2) + 'px';
+            faceOutline.style.width = size + 'px';
+            faceOutline.style.height = size + 'px';
+
+            overlay.appendChild(faceOutline);
+
+            // 模拟唇部特征点
+            addLipMarkers(centerX, centerY + size * 0.2);
+        }
+
+        function addLipMarkers(centerX, centerY) {
+            const overlay = document.getElementById('overlay');
+
+            // 上唇特征点
+            const upperLipPoints = [
+                { x: centerX - 30, y: centerY - 10 },
+                { x: centerX, y: centerY - 15 },
+                { x: centerX + 30, y: centerY - 10 }
+            ];
+
+            // 下唇特征点
+            const lowerLipPoints = [
+                { x: centerX - 25, y: centerY + 10 },
+                { x: centerX, y: centerY + 15 },
+                { x: centerX + 25, y: centerY + 10 }
+            ];
+
+            [...upperLipPoints, ...lowerLipPoints].forEach((point, index) => {
+                const marker = document.createElement('div');
+                marker.className = 'ar-marker';
+                marker.style.left = point.x + 'px';
+                marker.style.top = point.y + 'px';
+                marker.title = `特征点 ${index + 1}`;
+                overlay.appendChild(marker);
+            });
+        }
+
+        function stopFaceDetection() {
+            if (faceDetectionInterval) {
+                clearInterval(faceDetectionInterval);
+            }
+            document.getElementById('overlay').innerHTML = '';
+        }
+
+        function captureFrame() {
+            if (!video || !video.videoWidth) {
+                updateStatus('请先启动摄像头', 'error');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+
+            // 创建下载链接
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `lip_analysis_${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            updateStatus('截图已保存', 'success');
+        }
+
+        function toggleCamera() {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            config.video.facingMode = currentCamera;
+
+            updateStatus(`切换到${currentCamera === 'user' ? '前' : '后'}置摄像头`, 'info');
+            startCamera();
+        }
+
+        function updateStatus(message, type = 'info') {
+            const statusElement = document.getElementById('status');
+            document.getElementById('status-text').textContent = message;
+
+            statusElement.className = 'status';
+            if (type === 'error') statusElement.classList.add('error');
+            if (type === 'success') statusElement.classList.add('success');
+        }
+
+        // 检查浏览器支持
+        function checkSupport() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                updateStatus('浏览器不支持摄像头功能', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        // 页面加载时自动检查支持并提示
+        window.onload = function() {
+            if (checkSupport()) {
+                updateStatus('点击"启动摄像头"开始AR体验', 'info');
+                document.getElementById('loading').style.display = 'none';
+            }
+        };
+
+        // 处理页面可见性变化
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isAnalyzing) {
+                stopFaceDetection();
+            }
+        });
+    </script>
+</body>
+</html>

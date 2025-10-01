@@ -1,0 +1,373 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Age-related Changes Comparison SVG -->
+    <!-- Medical illustration showing lip aging progression and structural changes -->
+
+    <defs>
+        <!-- Collagen density patterns for different ages -->
+        <pattern id="collagen20" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+            <circle cx="5" cy="1" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+            <circle cx="3" cy="4" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+            <circle cx="7" cy="4" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+            <circle cx="1" cy="7" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+            <circle cx="5" cy="7" r="1.5" fill="#ffaaaa" opacity="0.9"/>
+        </pattern>
+
+        <pattern id="collagen30" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.3" fill="#ffaaaa" opacity="0.7"/>
+            <circle cx="8" cy="2" r="1.3" fill="#ffaaaa" opacity="0.7"/>
+            <circle cx="5" cy="6" r="1.3" fill="#ffaaaa" opacity="0.7"/>
+            <circle cx="2" cy="9" r="1.3" fill="#ffaaaa" opacity="0.7"/>
+        </pattern>
+
+        <pattern id="collagen40" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+            <circle cx="3" cy="3" r="1" fill="#ffaaaa" opacity="0.5"/>
+            <circle cx="9" cy="3" r="1" fill="#ffaaaa" opacity="0.5"/>
+            <circle cx="6" cy="9" r="1" fill="#ffaaaa" opacity="0.5"/>
+        </pattern>
+
+        <pattern id="collagen50" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+            <circle cx="5" cy="5" r="0.8" fill="#ffaaaa" opacity="0.3"/>
+            <circle cx="12" cy="12" r="0.8" fill="#ffaaaa" opacity="0.3"/>
+        </pattern>
+
+        <!-- Gradient for lip color changes -->
+        <linearGradient id="lipColor20" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff6b7a;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff7b8a;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="lipColor30" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff7585;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff8595;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="lipColor40" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff8090;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff90a0;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="lipColor50" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff90a0;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffa0b0;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Shadow filter for depth -->
+        <filter id="ageShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+            <feOffset dx="2" dy="2" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.2"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Background -->
+    <rect width="800" height="600" fill="#f8f9fa"/>
+
+    <!-- Title -->
+    <text x="400" y="35" text-anchor="middle" font-size="24" font-weight="bold" fill="#2c3e50">
+        年龄相关唇部变化
+    </text>
+    <text x="400" y="55" text-anchor="middle" font-size="13" fill="#7f8c8d">
+        胶原蛋白流失 • 体积变化 • 轮廓演变 • 结构性老化
+    </text>
+
+    <!-- Age 20 Profile -->
+    <g id="age20Profile" transform="translate(150,200)">
+        <text x="0" y="-90" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">20岁</text>
+        <text x="0" y="-70" text-anchor="middle" font-size="11" fill="#7f8c8d">青春期</text>
+
+        <!-- Face outline -->
+        <ellipse cx="0" cy="-10" rx="70" ry="90" fill="#fdbcb4" opacity="0.3" stroke="#e8a090" stroke-width="1"/>
+
+        <!-- Lip structure - full and defined -->
+        <g filter="url(#ageShadow)">
+            <!-- Upper lip -->
+            <path d="M -65,0 Q -35,-18 0,-15 Q 35,-18 65,0 Q 35,-5 0,-3 Q -35,-5 -65,0 Z"
+                  fill="url(#lipColor20)" stroke="#e74c5e" stroke-width="2"/>
+            <!-- Lower lip -->
+            <path d="M -65,0 Q -35,22 0,25 Q 35,22 65,0 Q 35,10 0,12 Q -35,10 -65,0 Z"
+                  fill="url(#lipColor20)" stroke="#e74c5e" stroke-width="2"/>
+            <!-- Cupid's bow - well defined -->
+            <path d="M -25,-8 Q -12,-12 0,-10 Q 12,-12 25,-8" fill="none" stroke="#e74c5e" stroke-width="1.5"/>
+        </g>
+
+        <!-- Collagen density visualization -->
+        <rect x="-75" y="-25" width="150" height="60" fill="url(#collagen20)" opacity="0.6"/>
+
+        <!-- Volume indicator -->
+        <ellipse cx="0" cy="5" rx="70" ry="30" fill="#ffcccc" opacity="0.25"/>
+
+        <!-- Characteristics -->
+        <g font-size="10" fill="#495057">
+            <text x="0" y="65" text-anchor="middle">饱满度: 100%</text>
+            <text x="0" y="78" text-anchor="middle">胶原密度: 最高</text>
+            <text x="0" y="91" text-anchor="middle">轮廓: 清晰锐利</text>
+            <text x="0" y="104" text-anchor="middle">唇纹: 几乎无</text>
+        </g>
+
+        <!-- Visual markers -->
+        <circle cx="0" cy="120" r="15" fill="#4CAF50" opacity="0.3"/>
+        <text x="0" y="125" text-anchor="middle" font-size="12" fill="#4CAF50" font-weight="bold">A+</text>
+    </g>
+
+    <!-- Age 30 Profile -->
+    <g id="age30Profile" transform="translate(325,200)">
+        <text x="0" y="-90" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">30岁</text>
+        <text x="0" y="-70" text-anchor="middle" font-size="11" fill="#7f8c8d">成熟期</text>
+
+        <!-- Face outline -->
+        <ellipse cx="0" cy="-10" rx="70" ry="90" fill="#fdbcb4" opacity="0.3" stroke="#e8a090" stroke-width="1"/>
+
+        <!-- Lip structure - slightly less volume -->
+        <g filter="url(#ageShadow)">
+            <!-- Upper lip -->
+            <path d="M -62,0 Q -33,-15 0,-13 Q 33,-15 62,0 Q 33,-4 0,-2 Q -33,-4 -62,0 Z"
+                  fill="url(#lipColor30)" stroke="#e75565" stroke-width="2"/>
+            <!-- Lower lip -->
+            <path d="M -62,0 Q -33,19 0,22 Q 33,19 62,0 Q 33,9 0,11 Q -33,9 -62,0 Z"
+                  fill="url(#lipColor30)" stroke="#e75565" stroke-width="2"/>
+            <!-- Cupid's bow - slightly less defined -->
+            <path d="M -23,-7 Q -11,-10 0,-9 Q 11,-10 23,-7" fill="none" stroke="#e75565" stroke-width="1.3"/>
+        </g>
+
+        <!-- Collagen density visualization -->
+        <rect x="-72" y="-23" width="144" height="57" fill="url(#collagen30)" opacity="0.6"/>
+
+        <!-- Fine lines appearing -->
+        <g stroke="#cc9999" stroke-width="0.5" opacity="0.4">
+            <line x1="-62" y1="-2" x2="-57" y2="-2"/>
+            <line x1="57" y1="-2" x2="62" y2="-2"/>
+            <line x1="-60" y1="2" x2="-55" y2="2"/>
+            <line x1="55" y1="2" x2="60" y2="2"/>
+        </g>
+
+        <!-- Volume indicator -->
+        <ellipse cx="0" cy="5" rx="66" ry="28" fill="#ffcccc" opacity="0.25"/>
+
+        <!-- Characteristics -->
+        <g font-size="10" fill="#495057">
+            <text x="0" y="65" text-anchor="middle">饱满度: 90%</text>
+            <text x="0" y="78" text-anchor="middle">胶原流失: 10%</text>
+            <text x="0" y="91" text-anchor="middle">轮廓: 轻微模糊</text>
+            <text x="0" y="104" text-anchor="middle">唇纹: 细纹出现</text>
+        </g>
+
+        <!-- Visual markers -->
+        <circle cx="0" cy="120" r="15" fill="#8BC34A" opacity="0.3"/>
+        <text x="0" y="125" text-anchor="middle" font-size="12" fill="#8BC34A" font-weight="bold">A</text>
+    </g>
+
+    <!-- Age 40 Profile -->
+    <g id="age40Profile" transform="translate(500,200)">
+        <text x="0" y="-90" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">40岁</text>
+        <text x="0" y="-70" text-anchor="middle" font-size="11" fill="#7f8c8d">过渡期</text>
+
+        <!-- Face outline -->
+        <ellipse cx="0" cy="-10" rx="70" ry="90" fill="#fdbcb4" opacity="0.3" stroke="#e8a090" stroke-width="1"/>
+
+        <!-- Lip structure - noticeable volume loss -->
+        <g filter="url(#ageShadow)">
+            <!-- Upper lip -->
+            <path d="M -58,0 Q -30,-12 0,-10 Q 30,-12 58,0 Q 30,-3 0,-1 Q -30,-3 -58,0 Z"
+                  fill="url(#lipColor40)" stroke="#e76070" stroke-width="2"/>
+            <!-- Lower lip -->
+            <path d="M -58,0 Q -30,16 0,18 Q 30,16 58,0 Q 30,7 0,9 Q -30,7 -58,0 Z"
+                  fill="url(#lipColor40)" stroke="#e76070" stroke-width="2"/>
+            <!-- Cupid's bow - less pronounced -->
+            <path d="M -20,-5 Q -10,-8 0,-7 Q 10,-8 20,-5" fill="none" stroke="#e76070" stroke-width="1"/>
+        </g>
+
+        <!-- Collagen density visualization -->
+        <rect x="-68" y="-20" width="136" height="52" fill="url(#collagen40)" opacity="0.6"/>
+
+        <!-- Wrinkles and lines -->
+        <g stroke="#aa8888" stroke-width="0.8" opacity="0.6">
+            <line x1="-58" y1="-3" x2="-51" y2="-3"/>
+            <line x1="51" y1="-3" x2="58" y2="-3"/>
+            <line x1="-55" y1="0" x2="-48" y2="0"/>
+            <line x1="48" y1="0" x2="55" y2="0"/>
+            <line x1="-56" y1="3" x2="-49" y2="3"/>
+            <line x1="49" y1="3" x2="56" y2="3"/>
+        </g>
+
+        <!-- Volume indicator -->
+        <ellipse cx="0" cy="5" rx="60" ry="24" fill="#ffcccc" opacity="0.25"/>
+
+        <!-- Characteristics -->
+        <g font-size="10" fill="#495057">
+            <text x="0" y="65" text-anchor="middle">饱满度: 75%</text>
+            <text x="0" y="78" text-anchor="middle">胶原流失: 25%</text>
+            <text x="0" y="91" text-anchor="middle">轮廓: 模糊</text>
+            <text x="0" y="104" text-anchor="middle">唇纹: 明显</text>
+        </g>
+
+        <!-- Visual markers -->
+        <circle cx="0" cy="120" r="15" fill="#FFC107" opacity="0.3"/>
+        <text x="0" y="125" text-anchor="middle" font-size="12" fill="#FFC107" font-weight="bold">B</text>
+    </g>
+
+    <!-- Age 50+ Profile -->
+    <g id="age50Profile" transform="translate(675,200)">
+        <text x="0" y="-90" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">50+岁</text>
+        <text x="0" y="-70" text-anchor="middle" font-size="11" fill="#7f8c8d">老化期</text>
+
+        <!-- Face outline -->
+        <ellipse cx="0" cy="-10" rx="70" ry="90" fill="#fdbcb4" opacity="0.3" stroke="#e8a090" stroke-width="1"/>
+
+        <!-- Lip structure - significant volume loss -->
+        <g filter="url(#ageShadow)">
+            <!-- Upper lip - thinner -->
+            <path d="M -53,0 Q -27,-9 0,-8 Q 27,-9 53,0 Q 27,-2 0,0 Q -27,-2 -53,0 Z"
+                  fill="url(#lipColor50)" stroke="#e77080" stroke-width="2"/>
+            <!-- Lower lip - thinner -->
+            <path d="M -53,0 Q -27,13 0,15 Q 27,13 53,0 Q 27,6 0,7 Q -27,6 -53,0 Z"
+                  fill="url(#lipColor50)" stroke="#e77080" stroke-width="2"/>
+            <!-- Cupid's bow - flattened -->
+            <path d="M -18,-4 Q -9,-6 0,-5 Q 9,-6 18,-4" fill="none" stroke="#e77080" stroke-width="0.8"/>
+        </g>
+
+        <!-- Collagen density visualization -->
+        <rect x="-63" y="-17" width="126" height="47" fill="url(#collagen50)" opacity="0.6"/>
+
+        <!-- Deep wrinkles and lines -->
+        <g stroke="#997777" stroke-width="1" opacity="0.7">
+            <line x1="-53" y1="-4" x2="-45" y2="-4"/>
+            <line x1="45" y1="-4" x2="53" y2="-4"/>
+            <line x1="-50" y1="-1" x2="-42" y2="-1"/>
+            <line x1="42" y1="-1" x2="50" y2="-1"/>
+            <line x1="-51" y1="2" x2="-43" y2="2"/>
+            <line x1="43" y1="2" x2="51" y2="2"/>
+            <line x1="-49" y1="5" x2="-41" y2="5"/>
+            <line x1="41" y1="5" x2="49" y2="5"/>
+        </g>
+
+        <!-- Volume indicator -->
+        <ellipse cx="0" cy="5" rx="54" ry="20" fill="#ffcccc" opacity="0.25"/>
+
+        <!-- Characteristics -->
+        <g font-size="10" fill="#495057">
+            <text x="0" y="65" text-anchor="middle">饱满度: 60%</text>
+            <text x="0" y="78" text-anchor="middle">胶原流失: 40%+</text>
+            <text x="0" y="91" text-anchor="middle">轮廓: 不清晰</text>
+            <text x="0" y="104" text-anchor="middle">唇纹: 深刻</text>
+        </g>
+
+        <!-- Visual markers -->
+        <circle cx="0" cy="120" r="15" fill="#FF5722" opacity="0.3"/>
+        <text x="0" y="125" text-anchor="middle" font-size="12" fill="#FF5722" font-weight="bold">C</text>
+    </g>
+
+    <!-- Progression arrows -->
+    <g id="progressionArrows" opacity="0.6">
+        <defs>
+            <marker id="progressArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#666"/>
+            </marker>
+        </defs>
+
+        <path d="M 220,200 L 255,200" stroke="#666" stroke-width="2" marker-end="url(#progressArrow)"/>
+        <path d="M 395,200 L 430,200" stroke="#666" stroke-width="2" marker-end="url(#progressArrow)"/>
+        <path d="M 570,200 L 605,200" stroke="#666" stroke-width="2" marker-end="url(#progressArrow)"/>
+    </g>
+
+    <!-- Comparative Analysis Chart -->
+    <g transform="translate(100,380)">
+        <rect x="0" y="0" width="600" height="180" fill="white" stroke="#dee2e6" stroke-width="1" rx="8" opacity="0.95"/>
+
+        <text x="300" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#2c3e50">
+            年龄相关变化对比
+        </text>
+
+        <!-- Chart axes -->
+        <line x1="50" y1="140" x2="550" y2="140" stroke="#333" stroke-width="1"/>
+        <line x1="50" y1="40" x2="50" y2="140" stroke="#333" stroke-width="1"/>
+
+        <!-- Data visualization -->
+        <!-- Collagen levels -->
+        <g id="collagenChart">
+            <polyline points="125,50 225,60 325,80 425,110 525,120"
+                      fill="none" stroke="#ff6666" stroke-width="2"/>
+            <g fill="#ff6666">
+                <circle cx="125" cy="50" r="4"/>
+                <circle cx="225" cy="60" r="4"/>
+                <circle cx="325" cy="80" r="4"/>
+                <circle cx="425" cy="110" r="4"/>
+                <circle cx="525" cy="120" r="4"/>
+            </g>
+            <text x="540" y="125" font-size="10" fill="#ff6666">胶原蛋白</text>
+        </g>
+
+        <!-- Volume levels -->
+        <g id="volumeChart">
+            <polyline points="125,50 225,55 325,70 425,85 525,100"
+                      fill="none" stroke="#66b3ff" stroke-width="2"/>
+            <g fill="#66b3ff">
+                <circle cx="125" cy="50" r="4"/>
+                <circle cx="225" cy="55" r="4"/>
+                <circle cx="325" cy="70" r="4"/>
+                <circle cx="425" cy="85" r="4"/>
+                <circle cx="525" cy="100" r="4"/>
+            </g>
+            <text x="540" y="105" font-size="10" fill="#66b3ff">唇部体积</text>
+        </g>
+
+        <!-- Definition levels -->
+        <g id="definitionChart">
+            <polyline points="125,50 225,58 325,75 425,95 525,110"
+                      fill="none" stroke="#66cc66" stroke-width="2"/>
+            <g fill="#66cc66">
+                <circle cx="125" cy="50" r="4"/>
+                <circle cx="225" cy="58" r="4"/>
+                <circle cx="325" cy="75" r="4"/>
+                <circle cx="425" cy="95" r="4"/>
+                <circle cx="525" cy="110" r="4"/>
+            </g>
+            <text x="540" y="115" font-size="10" fill="#66cc66">轮廓清晰</text>
+        </g>
+
+        <!-- X-axis labels -->
+        <g font-size="11" fill="#666">
+            <text x="125" y="155" text-anchor="middle">20岁</text>
+            <text x="225" y="155" text-anchor="middle">25岁</text>
+            <text x="325" y="155" text-anchor="middle">35岁</text>
+            <text x="425" y="155" text-anchor="middle">45岁</text>
+            <text x="525" y="155" text-anchor="middle">55岁</text>
+        </g>
+
+        <!-- Y-axis labels -->
+        <g font-size="10" fill="#666">
+            <text x="45" y="54" text-anchor="end">100%</text>
+            <text x="45" y="84" text-anchor="end">75%</text>
+            <text x="45" y="114" text-anchor="end">50%</text>
+            <text x="45" y="144" text-anchor="end">25%</text>
+        </g>
+    </g>
+
+    <!-- Treatment Recommendations -->
+    <g transform="translate(50,80)">
+        <rect x="0" y="0" width="140" height="100" fill="white" stroke="#dee2e6" stroke-width="1" rx="8" opacity="0.95"/>
+
+        <text x="70" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c3e50">
+            治疗建议
+        </text>
+
+        <g font-size="10" fill="#495057">
+            <text x="10" y="35" font-weight="bold">20-30岁:</text>
+            <text x="15" y="48">预防保养为主</text>
+
+            <text x="10" y="63" font-weight="bold">30-40岁:</text>
+            <text x="15" y="76">轻度填充修复</text>
+
+            <text x="75" y="35" font-weight="bold">40-50岁:</text>
+            <text x="80" y="48">综合抗衰治疗</text>
+
+            <text x="75" y="63" font-weight="bold">50岁+:</text>
+            <text x="80" y="76">全面重塑方案</text>
+        </g>
+    </g>
+</svg>
