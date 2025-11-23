@@ -82,6 +82,12 @@ export { default as PushNotifications } from './pwa/push-notifications.js';
 export { default as PerformanceMonitor } from './performance/monitor.js';
 
 // ==========================================
+// 国际化模块 (i18n Modules)
+// ==========================================
+export { default as i18n, t, setLocale, getLocale, onLocaleChange } from './i18n/index.js';
+export { default as LanguageSwitcher } from './i18n/LanguageSwitcher.js';
+
+// ==========================================
 // 版本信息 (Version Info)
 // ==========================================
 export const VERSION = '1.0.0';
@@ -99,10 +105,22 @@ export async function initializeApp(config = {}) {
         ui: null,
         analytics: null,
         mobile: null,
-        pwa: null
+        pwa: null,
+        i18n: null
     };
 
     try {
+        // 初始化国际化模块
+        if (config.i18n !== false) {
+            const i18nModule = await import('./i18n/index.js');
+            modules.i18n = i18nModule.default;
+
+            // 设置初始语言
+            if (config.locale) {
+                i18nModule.setLocale(config.locale);
+            }
+        }
+
         // 初始化核心模块
         if (config.core !== false) {
             const { StateManager, HookSystem } = await import('./core/state-management.js');
